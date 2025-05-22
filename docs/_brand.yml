@@ -15,10 +15,12 @@ logo:
 
 typography:
   fonts:
-    - family: Inter
+    - family: Open Sans
       source: google
-    - family: JetBrains Mono
+    - family: Roboto Slab
       source: google
-  base: Inter
-  headings: Inter
-  monospace: JetBrains Mono
+    - family: Fira Code
+      source: google
+  base: Open Sans
+  headings: Roboto Slab
+  monospace: Fira Code
