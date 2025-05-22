@@ -1,13 +1,24 @@
-title: polarstate
-logo: assets/logo.png  # optional - place your logo in this path if you have one
-favicon: assets/favicon.ico  # optional
-theme:
-  light: flatly
-  dark: darkly
-colors:
-  primary: "#2e86ab"   # icy blue
-  secondary: "#1e1e2f" # midnight
-  accent: "#56cfe1"    # glacier accent
-  text: "#1a1a1a"
-  background: "#ffffff"
-  link: "#008cba"
+color:
+  palette:
+    ice-blue: "#e8f4f8"
+    steel-grey: "#3a4750"
+    frost-white: "#f7fbfc"
+    arctic-blue: "#c7d9e1"
+    midnight: "#1a1d23"
+    glacier: "#d1e7ed"
+  background: ice-blue
+  foreground: steel-grey
+  primary: midnight
+
+logo: 
+  medium: logo.png
+
+typography:
+  fonts:
+    - family: Inter
+      source: google
+    - family: JetBrains Mono
+      source: google
+  base: Inter
+  headings: Inter
+  monospace: JetBrains Mono
