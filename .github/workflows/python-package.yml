@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        python-version: ["3.9", "3.10", "3.11"]
 
     steps:
       - uses: actions/checkout@v4
@@ -20,8 +18,11 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
-      - name: Set up Python
+      - name: Set up Python using uv
         run: uv python install
+
+      - name: Install test dependencies
+        run: uv pip install pytest  # optional if needed just for tests
 
       - name: Run tests
         run: uv run pytest tests
@@ -33,7 +34,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     environment: pypi
     permissions:
-      id-token: write  # required for Trusted Publishing
+      id-token: write  # Required for Trusted Publishing
 
     steps:
       - uses: actions/checkout@v4
@@ -41,11 +42,8 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
-      - name: Set up Python
+      - name: Set up Python using uv
         run: uv python install
 
-      - name: Build package
-        run: uv pip install build && uv run python -m build
-
-      - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish package to PyPI using uv
+        run: uv publish
