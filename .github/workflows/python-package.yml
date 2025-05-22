@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
 name: Python package
 
 on:
@@ -11,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -19,27 +15,37 @@ jobs:
         python-version: ["3.9", "3.10", "3.11"]
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install uv
-      uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v4
 
-    - name: Set up Python 
-      run: uv python install
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-    - name: Run tests
-      run: uv run pytest tests
-      
-  pypi-publish:
-    name: upload release to PyPI
+      - name: Set up Python
+        run: uv python install
+
+      - name: Run tests
+        run: uv run pytest tests
+
+  publish:
+    name: Upload release to PyPI
     runs-on: ubuntu-latest
-    # Specifying a GitHub environment is optional, but strongly encouraged
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     environment: pypi
     permissions:
-      # IMPORTANT: this permission is mandatory for Trusted Publishing
-      id-token: write
-    steps:
-      # retrieve your distributions here
+      id-token: write  # required for Trusted Publishing
 
-      - name: Publish package distributions to PyPI
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Build package
+        run: uv pip install build && uv run python -m build
+
+      - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
