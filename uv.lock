@@ -62,6 +62,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "polars" },
     { name = "pytest" },
 ]
 
@@ -69,7 +70,10 @@ dev = [
 requires-dist = [{ name = "polars", specifier = ">=1.29.0" }]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3.5" }]
+dev = [
+    { name = "polars", specifier = ">=1.29.0" },
+    { name = "pytest", specifier = ">=8.3.5" },
+]
 
 [[package]]
 name = "pytest"
