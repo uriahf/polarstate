@@ -1,0 +1,18 @@
+# aj { #polarstate.aj }
+
+`aj`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [aalen_johansen](#polarstate.aj.aalen_johansen) |  |
+
+### aalen_johansen { #polarstate.aj.aalen_johansen }
+
+```python
+aj.aalen_johansen(times, reals, event_of_interest=1, competing_events=[2])
+```
+
