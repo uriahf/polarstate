@@ -24,7 +24,7 @@
     "href": "reference/aj.html",
     "title": "aj",
     "section": "",
-    "text": "aj\n\n\n\n\n\nName\nDescription\n\n\n\n\naalen_johansen\n\n\n\n\n\n\naj.aalen_johansen(times, reals, event_of_interest=1, competing_events=[2])",
+    "text": "aj\n\n\n\n\n\nName\nDescription\n\n\n\n\naalen_johansen\nCompute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.\n\n\n\n\n\naj.aalen_johansen(times, reals, event_of_interest=1, competing_events=None)\nCompute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntimes\npl.Series\nEvent or censoring times for each observation.\nrequired\n\n\nreals\npl.Series\nEvent type for each observation (0 for censored, event codes otherwise).\nrequired\n\n\nevent_of_interest\nint\nThe event code for the event of interest (default is 1).\n1\n\n\ncompeting_events\nlist of int\nList of event codes considered as competing events. If None, defaults to [2].\nNone\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\npl.DataFrame\nDataFrame with columns: - ‘time’: unique event times - ‘cuminc’: cumulative incidence estimate at each time\n\n\n\n\n\n\nThis implementation assumes that event codes are integers, with 0 indicating censoring.",
     "crumbs": [
       "Some functions",
       "aj"
@@ -35,7 +35,7 @@
     "href": "reference/aj.html#functions",
     "title": "aj",
     "section": "",
-    "text": "Name\nDescription\n\n\n\n\naalen_johansen\n\n\n\n\n\n\naj.aalen_johansen(times, reals, event_of_interest=1, competing_events=[2])",
+    "text": "Name\nDescription\n\n\n\n\naalen_johansen\nCompute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.\n\n\n\n\n\naj.aalen_johansen(times, reals, event_of_interest=1, competing_events=None)\nCompute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntimes\npl.Series\nEvent or censoring times for each observation.\nrequired\n\n\nreals\npl.Series\nEvent type for each observation (0 for censored, event codes otherwise).\nrequired\n\n\nevent_of_interest\nint\nThe event code for the event of interest (default is 1).\n1\n\n\ncompeting_events\nlist of int\nList of event codes considered as competing events. If None, defaults to [2].\nNone\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\npl.DataFrame\nDataFrame with columns: - ‘time’: unique event times - ‘cuminc’: cumulative incidence estimate at each time\n\n\n\n\n\n\nThis implementation assumes that event codes are integers, with 0 indicating censoring.",
     "crumbs": [
       "Some functions",
       "aj"
