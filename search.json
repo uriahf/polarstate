@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "Function reference",
+    "section": "",
+    "text": "Functions to inspect docstrings.\n\n\n\naj",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#some-functions",
+    "href": "reference/index.html#some-functions",
+    "title": "Function reference",
+    "section": "",
+    "text": "Functions to inspect docstrings.\n\n\n\naj",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/aj.html",
+    "href": "reference/aj.html",
+    "title": "aj",
+    "section": "",
+    "text": "aj\n\n\n\n\n\nName\nDescription\n\n\n\n\naalen_johansen\n\n\n\n\n\n\naj.aalen_johansen(times, reals, event_of_interest=1, competing_events=[2])",
+    "crumbs": [
+      "Some functions",
+      "aj"
+    ]
+  },
+  {
+    "objectID": "reference/aj.html#functions",
+    "href": "reference/aj.html#functions",
+    "title": "aj",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\naalen_johansen\n\n\n\n\n\n\naj.aalen_johansen(times, reals, event_of_interest=1, competing_events=[2])",
+    "crumbs": [
+      "Some functions",
+      "aj"
+    ]
+  }
+]
