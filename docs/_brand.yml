@@ -1,0 +1,13 @@
+title: polarstate
+logo: assets/logo.png  # optional - place your logo in this path if you have one
+favicon: assets/favicon.ico  # optional
+theme:
+  light: flatly
+  dark: darkly
+colors:
+  primary: "#2e86ab"   # icy blue
+  secondary: "#1e1e2f" # midnight
+  accent: "#56cfe1"    # glacier accent
+  text: "#1a1a1a"
+  background: "#ffffff"
+  link: "#008cba"
