@@ -8,11 +8,31 @@
 
 | Name | Description |
 | --- | --- |
-| [aalen_johansen](#polarstate.aj.aalen_johansen) |  |
+| [aalen_johansen](#polarstate.aj.aalen_johansen) | Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks. |
 
 ### aalen_johansen { #polarstate.aj.aalen_johansen }
 
 ```python
-aj.aalen_johansen(times, reals, event_of_interest=1, competing_events=[2])
+aj.aalen_johansen(times, reals, event_of_interest=1, competing_events=None)
 ```
 
+Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name              | Type        | Description                                                                   | Default    |
+|-------------------|-------------|-------------------------------------------------------------------------------|------------|
+| times             | pl.Series   | Event or censoring times for each observation.                                | _required_ |
+| reals             | pl.Series   | Event type for each observation (0 for censored, event codes otherwise).      | _required_ |
+| event_of_interest | int         | The event code for the event of interest (default is 1).                      | `1`        |
+| competing_events  | list of int | List of event codes considered as competing events. If None, defaults to [2]. | `None`     |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type         | Description                                                                                                 |
+|--------|--------------|-------------------------------------------------------------------------------------------------------------|
+|        | pl.DataFrame | DataFrame with columns: - 'time': unique event times - 'cuminc': cumulative incidence estimate at each time |
+
+#### Notes {.doc-section .doc-section-notes}
+
+This implementation assumes that event codes are integers, with 0 indicating censoring.

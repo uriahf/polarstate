@@ -11,16 +11,16 @@ color:
   primary: midnight
 
 logo: 
-  medium: logo.png
+  large: logo.png
 
 typography:
   fonts:
     - family: Open Sans
       source: google
-    - family: Roboto Slab
+    - family: Fraunces
       source: google
     - family: Fira Code
       source: google
   base: Open Sans
-  headings: Roboto Slab
+  headings: Fraunces
   monospace: Fira Code

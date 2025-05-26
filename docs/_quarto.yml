@@ -16,7 +16,19 @@ quartodoc:
   package: polarstate
 
   # write sidebar and style data
-  sidebar: reference/_sidebar.yml
+  sidebar: 
+    file: "_sidebar.yml"
+    style: docked
+    search: true
+    collapse-level: 2
+    contents:
+      - text: "Introduction"
+        href: introduction.qmd
+      - section: "Reference"
+        contents:
+          - "{{ contents }}"
+      - text: "Basics"
+        href: basics-summary.qmd
   css: reference/_styles-quartodoc.css
 
   sections:
