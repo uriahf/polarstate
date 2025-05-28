@@ -1,0 +1,59 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: Get started with polarstate\n",
+        "jupyter: python3\n",
+        "---"
+      ],
+      "id": "8d61975e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import polars as pl\n",
+        "from polarstate.aj import aalen_johansen"
+      ],
+      "id": "265bf6ef",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Get starteds with polarstate\n"
+      ],
+      "id": "6af17a29"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "times = pl.Series([1, 2, 3, 4, 5])\n",
+        "reals = pl.Series([1, 0, 2, 1, 0])\n",
+        "\n",
+        "result = aalen_johansen(times, reals)\n",
+        "\n",
+        "print(result)"
+      ],
+      "id": "98450b4b",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\I\\polarstate\\.venv\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

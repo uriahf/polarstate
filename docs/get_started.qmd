@@ -4,7 +4,6 @@ jupyter: python3
 ---
 
 ```{python}
-# | include: false
 import polars as pl
 from polarstate.aj import aalen_johansen
 ```
