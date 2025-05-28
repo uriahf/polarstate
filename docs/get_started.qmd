@@ -1,0 +1,22 @@
+---
+title: Get started with polarstate
+jupyter: python3
+---
+
+```{python}
+# | include: false
+import polars as pl
+from polarstate.aj import aalen_johansen
+```
+
+Get starteds with polarstate
+
+```{python}
+times = pl.Series([1, 2, 3, 4, 5])
+reals = pl.Series([1, 0, 2, 1, 0])
+
+result = aalen_johansen(times, reals)
+
+print(result)
+
+```

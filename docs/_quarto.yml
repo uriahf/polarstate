@@ -1,37 +1,25 @@
 project:
   type: website
 
-# tell quarto to read the generated sidebar
-metadata-files:
-  - reference/_sidebar.yml
+website:
+  title: "Polars State"
+  navbar:
+    left:
+      - href: get_started.qmd
+        text: Get Started
+      - file: reference/index.qmd
+        text: "Reference"
 
-# tell quarto to read the generated styles
-format:
-  html:
-    css:
-      - reference/_styles-quartodoc.css
+metadata-files:
+  - _sidebar.yml
+
 
 quartodoc:
-  # the name used to import the package you want to create reference docs for
+  sidebar: "_sidebar.yml"
   package: polarstate
-
-  # write sidebar and style data
-  sidebar: 
-    file: "_sidebar.yml"
-    style: docked
-    search: true
-    collapse-level: 2
-    contents:
-      - text: "Introduction"
-        href: introduction.qmd
-      - section: "Reference"
-        contents:
-          - "{{ contents }}"
-      - text: "Basics"
-        href: basics-summary.qmd
-  css: reference/_styles-quartodoc.css
-
   sections:
+    - title: Getting Started
+      desc: Introduction to the package.
     - title: Some functions
       desc: Functions to inspect docstrings.
       contents:

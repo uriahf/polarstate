@@ -1,5 +1,9 @@
 # Function reference {.doc .doc-index}
 
+## Getting Started
+
+Introduction to the package.
+
 ## Some functions
 
 Functions to inspect docstrings.
