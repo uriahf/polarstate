@@ -50,3 +50,9 @@ def aalen_johansen(
             result.append({"time": t, "cuminc": cum_hazard})
 
     return pl.DataFrame(result)
+
+def create_sorted_times_and_reals_data(
+        times: pl.Series,
+        reals: pl.Series
+):
+    pass

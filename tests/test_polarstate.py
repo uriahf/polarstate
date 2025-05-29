@@ -1,5 +1,6 @@
 import polars as pl
-from polarstate.aj import aalen_johansen
+from polarstate.aj import aalen_johansen, create_sorted_times_and_reals_data
+from polars.testing import assert_frame_equal
 
 def test_aalen_johansen() -> None:
     # Test data
@@ -27,3 +28,17 @@ def test_aalen_johansen() -> None:
     assert all(result["cuminc"].to_list()[i] <= result["cuminc"].to_list()[i + 1] for i in range(len(result) - 1)), "Cumulative incidence is not non-decreasing"
     
     
+def test_create_sorted_times_and_reals_data() -> None:
+    # Test data
+    times = pl.Series([5, 3, 1, 4, 2])
+    reals = pl.Series([0, 1, 2, 1, 0])
+
+    # Expected output
+    expected_output = pl.DataFrame({
+        "times": [1, 2, 3, 4, 5],
+        "reals": [2, 0, 1, 1, 0]
+    })
+
+    result = create_sorted_times_and_reals_data(times, reals)
+
+    assert_frame_equal(result, expected_output)
