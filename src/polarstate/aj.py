@@ -55,4 +55,7 @@ def create_sorted_times_and_reals_data(
         times: pl.Series,
         reals: pl.Series
 ):
-    pass
+    return pl.DataFrame({ 
+        "times": times,
+        "reals": reals
+    }).sort("times")
