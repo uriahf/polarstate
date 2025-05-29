@@ -8,7 +8,12 @@ import polars as pl
 from polarstate.aj import aalen_johansen
 ```
 
-Get starteds with polarstate
+# Get starteds with polarstate
+
+::: {.panel-tabset}
+
+
+## Polarstate
 
 ```{python}
 times = pl.Series([1, 2, 3, 4, 5])
@@ -19,3 +24,19 @@ result = aalen_johansen(times, reals)
 print(result)
 
 ```
+
+## lifelines
+
+```{python}
+
+from lifelines import AalenJohansenFitter
+from lifelines.datasets import load_waltons
+T, E = load_waltons()['T'], load_waltons()['E']
+ajf = AalenJohansenFitter(calculate_variance=True)
+ajf.fit(T, E, event_of_interest=1)
+ajf.cumulative_density_
+
+
+```
+
+:::

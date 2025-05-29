@@ -37,7 +37,7 @@
     "href": "get_started.html",
     "title": "Get started with polarstate",
     "section": "",
-    "text": "Get starteds with polarstate\n\ntimes = pl.Series([1, 2, 3, 4, 5])\nreals = pl.Series([1, 0, 2, 1, 0])\n\nresult = aalen_johansen(times, reals)\n\nprint(result)\n\nshape: (3, 2)\n┌──────┬────────┐\n│ time ┆ cuminc │\n│ ---  ┆ ---    │\n│ i64  ┆ f64    │\n╞══════╪════════╡\n│ 1    ┆ 0.2    │\n│ 3    ┆ 0.2    │\n│ 4    ┆ 0.7    │\n└──────┴────────┘"
+    "text": "import polars as pl\nfrom polarstate.aj import aalen_johansen\n\n\nGet starteds with polarstate\n\nPolarstatelifelines\n\n\n\ntimes = pl.Series([1, 2, 3, 4, 5])\nreals = pl.Series([1, 0, 2, 1, 0])\n\nresult = aalen_johansen(times, reals)\n\nprint(result)\n\nshape: (3, 2)\n┌──────┬────────┐\n│ time ┆ cuminc │\n│ ---  ┆ ---    │\n│ i64  ┆ f64    │\n╞══════╪════════╡\n│ 1    ┆ 0.2    │\n│ 3    ┆ 0.2    │\n│ 4    ┆ 0.7    │\n└──────┴────────┘\n\n\n\n\n\nimport pandas as pd\nfrom lifelines import AalenJohansenFitter\n\n# Define the data\ndf = pd.DataFrame({\n    \"duration\": [1, 2, 3, 4, 5],\n    \"event\":    [1, 0, 2, 1, 0]\n})\n\n# Fit the Aalen-Johansen estimator for event type 1\najf = AalenJohansenFitter()\najf.fit(df[\"duration\"], df[\"event\"], event_of_interest=1)\n\n# Show the cumulative incidence function\nprint(ajf.cumulative_density_)\n\n             CIF_1\nevent_at          \n0.0       0.000000\n1.0       0.200000\n2.0       0.200000\n3.0       0.200000\n4.0       0.466667\n5.0       0.466667"
   },
   {
     "objectID": "reference/aj.html",
