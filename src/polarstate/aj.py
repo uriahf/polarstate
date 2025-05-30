@@ -1,10 +1,11 @@
 import polars as pl
 
+
 def aalen_johansen(
     times: pl.Series,
     reals: pl.Series,
     event_of_interest: int = 1,
-    competing_events: list[int] = None
+    competing_events: list[int] = None,
 ) -> pl.DataFrame:
     """
     Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.
@@ -42,7 +43,9 @@ def aalen_johansen(
 
     for t in event_times:
         n_at_risk = df.filter(pl.col("times") >= t).height
-        n_event = df.filter((pl.col("times") == t) & (pl.col("reals") == event_of_interest)).height
+        n_event = df.filter(
+            (pl.col("times") == t) & (pl.col("reals") == event_of_interest)
+        ).height
 
         if n_at_risk > 0:
             hazard = n_event / n_at_risk
@@ -51,22 +54,18 @@ def aalen_johansen(
 
     return pl.DataFrame(result)
 
-def create_sorted_times_and_reals_data(
-        times: pl.Series,
-        reals: pl.Series
-):
-    return pl.DataFrame({ 
-        "times": times,
-        "reals": reals
-    }).sort("times")
 
-def add_events_at_times_column(
-        sorted_times_and_reals: pl.DataFrame
-):
+def create_sorted_times_and_reals_data(times: pl.Series, reals: pl.Series):
+    return pl.DataFrame({"times": times, "reals": reals}).sort("times")
+
+
+def add_events_at_times_column(sorted_times_and_reals: pl.DataFrame):
     return sorted_times_and_reals.with_columns(
-        (pl.col("count_0") + pl.col("count_1") + pl.col("count_2")).alias("events_at_times")
+        (pl.col("count_0") + pl.col("count_1") + pl.col("count_2")).alias(
+            "events_at_times"
+        )
     )
-     
+
 
 def group_reals_by_times(df: pl.DataFrame) -> pl.DataFrame:
     """
@@ -98,17 +97,18 @@ def group_reals_by_times(df: pl.DataFrame) -> pl.DataFrame:
     """
     return (
         df.group_by("times")
-          .agg([
-              (pl.col("reals") == 0).sum().cast(pl.Int64).alias("count_0"),
-              (pl.col("reals") == 1).sum().cast(pl.Int64).alias("count_1"),
-              (pl.col("reals") == 2).sum().cast(pl.Int64).alias("count_2"),
-          ])
-          .sort("times")
+        .agg(
+            [
+                (pl.col("reals") == 0).sum().cast(pl.Int64).alias("count_0"),
+                (pl.col("reals") == 1).sum().cast(pl.Int64).alias("count_1"),
+                (pl.col("reals") == 2).sum().cast(pl.Int64).alias("count_2"),
+            ]
+        )
+        .sort("times")
     )
 
-def add_at_risk_column(
-        events_data: pl.DataFrame
-) -> pl.DataFrame:
+
+def add_at_risk_column(events_data: pl.DataFrame) -> pl.DataFrame:
     """
     Add a column to the DataFrame that counts the number of individuals at risk at each time point.
 
@@ -124,4 +124,37 @@ def add_at_risk_column(
     """
     return events_data.with_columns(
         pl.col("events_at_times").cum_sum(reverse=True).alias("at_risk")
+    )
+
+
+def add_cause_specific_hazards_columns(events_data: pl.DataFrame) -> pl.DataFrame:
+    """
+    Add columns for cause-specific hazards and conditional survival at each time point.
+
+    Parameters
+    ----------
+    events_data : pl.DataFrame
+        A DataFrame with columns:
+        - 'count_0': number of censored individuals at each time point,
+        - 'count_1': number of primary events at each time point,
+        - 'count_2': number of competing events at each time point,
+        - 'at_risk': number of individuals at risk at each time point.
+
+    Returns
+    -------
+    pl.DataFrame
+        The input DataFrame with three additional columns:
+        - 'csh_1': cause-specific hazard for event type 1 (count_1 / at_risk)
+        - 'csh_2': cause-specific hazard for event type 2 (count_2 / at_risk)
+        - 'conditional_survival': probability of not having any event at that time (count_0 / at_risk)
+    """
+    return events_data.with_columns(
+        [
+            (pl.col("count_1") / pl.col("at_risk")).alias("csh_1"),
+            (pl.col("count_2") / pl.col("at_risk")).alias("csh_2"),
+        ]
+    ).with_columns(
+        [
+            (1 - pl.col("csh_1") - pl.col("csh_2")).alias("conditional_survival"),
+        ]
     )
