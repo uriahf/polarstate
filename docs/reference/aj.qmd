@@ -12,6 +12,7 @@
 | [group_reals_by_times](#polarstate.aj.group_reals_by_times) | Count occurrences of each event type (0, 1, 2) per unique observed time. |
 | [add_events_at_times_column](#polarstate.aj.add_events_at_times_column) |  |
 | [add_at_risk_column](#polarstate.aj.add_at_risk_column) | Add a column to the DataFrame that counts the number of individuals at risk at each time point. |
+| [add_cause_specific_hazards_columns](#polarstate.aj.add_cause_specific_hazards_columns) | Add columns for cause-specific hazards and conditional survival at each time point. |
 
 ### aalen_johansen { #polarstate.aj.aalen_johansen }
 
@@ -93,3 +94,23 @@ Add a column to the DataFrame that counts the number of individuals at risk at e
 | Name   | Type         | Description                                                                                                                 |
 |--------|--------------|-----------------------------------------------------------------------------------------------------------------------------|
 |        | pl.DataFrame | The input DataFrame with an additional column 'at_risk' that contains the number of individuals at risk at each time point. |
+
+### add_cause_specific_hazards_columns { #polarstate.aj.add_cause_specific_hazards_columns }
+
+```python
+aj.add_cause_specific_hazards_columns(events_data)
+```
+
+Add columns for cause-specific hazards and conditional survival at each time point.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name        | Type         | Description                                                                                                                                                                                                                                                                    | Default    |
+|-------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| events_data | pl.DataFrame | A DataFrame with columns: - 'count_0': number of censored individuals at each time point, - 'count_1': number of primary events at each time point, - 'count_2': number of competing events at each time point, - 'at_risk': number of individuals at risk at each time point. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type         | Description                                                                                                                                                                                                                                                                                   |
+|--------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|        | pl.DataFrame | The input DataFrame with three additional columns: - 'csh_1': cause-specific hazard for event type 1 (count_1 / at_risk) - 'csh_2': cause-specific hazard for event type 2 (count_2 / at_risk) - 'conditional_survival': probability of not having any event at that time (count_0 / at_risk) |
