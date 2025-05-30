@@ -228,6 +228,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><a href="#polarstate.aj.add_at_risk_column">add_at_risk_column</a></td>
 <td>Add a column to the DataFrame that counts the number of individuals at risk at each time point.</td>
 </tr>
+<tr class="odd">
+<td><a href="#polarstate.aj.add_cause_specific_hazards_columns">add_cause_specific_hazards_columns</a></td>
+<td>Add columns for cause-specific hazards and conditional survival at each time point.</td>
+</tr>
 </tbody>
 </table>
 <section id="polarstate.aj.aalen_johansen" class="level3">
@@ -427,6 +431,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td></td>
 <td>pl.DataFrame</td>
 <td>The input DataFrame with an additional column ‘at_risk’ that contains the number of individuals at risk at each time point.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="polarstate.aj.add_cause_specific_hazards_columns" class="level3">
+<h3 class="anchored" data-anchor-id="polarstate.aj.add_cause_specific_hazards_columns">add_cause_specific_hazards_columns</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>aj.add_cause_specific_hazards_columns(events_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add columns for cause-specific hazards and conditional survival at each time point.</p>
+<section id="parameters-3" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 87%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>events_data</td>
+<td>pl.DataFrame</td>
+<td>A DataFrame with columns: - ‘count_0’: number of censored individuals at each time point, - ‘count_1’: number of primary events at each time point, - ‘count_2’: number of competing events at each time point, - ‘at_risk’: number of individuals at risk at each time point.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-3" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 4%">
+<col style="width: 92%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>pl.DataFrame</td>
+<td>The input DataFrame with three additional columns: - ‘csh_1’: cause-specific hazard for event type 1 (count_1 / at_risk) - ‘csh_2’: cause-specific hazard for event type 2 (count_2 / at_risk) - ‘conditional_survival’: probability of not having any event at that time (count_0 / at_risk)</td>
 </tr>
 </tbody>
 </table>
