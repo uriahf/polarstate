@@ -59,3 +59,57 @@ def create_sorted_times_and_reals_data(
         "times": times,
         "reals": reals
     }).sort("times")
+
+def add_at_risk_column(
+        sorted_times_and_reals: pl.DataFrame
+):
+
+    at_risk_lookup = (
+        sorted_times_and_reals.select("times")
+        .unique()
+        .with_row_index("row_id")
+        .with_columns([
+            (sorted_times_and_reals.height - pl.col("row_id")).alias("at_risk")
+        ])
+    )
+
+    return sorted_times_and_reals.join(at_risk_lookup, on="times", how="left")
+
+
+def group_reals_by_times(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Count occurrences of each event type (0, 1, 2) per unique observed time.
+
+    Parameters
+    ----------
+    df : pl.DataFrame
+        A Polars DataFrame with at least two columns:
+        - 'times' (int): The observed time for each record.
+        - 'reals' (int): The event type for each record, where:
+            - 0 indicates censoring,
+            - 1 indicates the primary event,
+            - 2 indicates a competing event.
+
+    Returns
+    -------
+    pl.DataFrame
+        A DataFrame with one row per unique time and three additional columns:
+        - 'count_0': Number of censored observations at that time.
+        - 'count_1': Number of primary events at that time.
+        - 'count_2': Number of competing events at that time.
+
+    Notes
+    -----
+    - Input is assumed to be clean (i.e., `times` and `reals` are properly typed).
+    - Times are sorted in ascending order in the output.
+    - If a particular event type does not occur at a time, its count will be 0.
+    """
+    return (
+        df.group_by("times")
+          .agg([
+              (pl.col("reals") == 0).sum().cast(pl.Int64).alias("count_0"),
+              (pl.col("reals") == 1).sum().cast(pl.Int64).alias("count_1"),
+              (pl.col("reals") == 2).sum().cast(pl.Int64).alias("count_2"),
+          ])
+          .sort("times")
+    )
