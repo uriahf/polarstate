@@ -26,3 +26,4 @@ quartodoc:
       - name: aj
         members:
         - aalen_johansen
+        - group_reals_by_times

@@ -57,7 +57,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -100,6 +100,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
 
 </head>
@@ -166,23 +172,231 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="21cbafc7" class="cell" data-execution_count="1">
+<div id="18a5af18" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> aalen_johansen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="get-starteds-with-polarstate" class="level1">
 <h1>Get starteds with polarstate</h1>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Polarstate</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">lifelines</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">lifelines</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">polarstate</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="63885f53" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> pl.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>reals <span class="op">=</span> pl.Series([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>])</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> aalen_johansen(times, reals)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e3893cef" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ajf.cumulative_density_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CIF_1</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">event_at</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0.0</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6.0</td>
+<td>0.006135</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7.0</td>
+<td>0.012270</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9.0</td>
+<td>0.030790</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13.0</td>
+<td>0.049310</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15.0</td>
+<td>0.061656</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17.0</td>
+<td>0.067830</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19.0</td>
+<td>0.086350</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22.0</td>
+<td>0.111043</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26.0</td>
+<td>0.141910</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">29.0</td>
+<td>0.172776</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">32.0</td>
+<td>0.178949</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">33.0</td>
+<td>0.197469</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">36.0</td>
+<td>0.209816</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">38.0</td>
+<td>0.222163</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41.0</td>
+<td>0.265376</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">43.0</td>
+<td>0.271549</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">45.0</td>
+<td>0.327109</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">47.0</td>
+<td>0.333339</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">48.0</td>
+<td>0.383183</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">51.0</td>
+<td>0.401875</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">53.0</td>
+<td>0.445488</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">54.0</td>
+<td>0.457949</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">56.0</td>
+<td>0.570097</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">58.0</td>
+<td>0.595019</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">60.0</td>
+<td>0.688476</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">61.0</td>
+<td>0.745695</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">62.0</td>
+<td>0.759079</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">63.0</td>
+<td>0.819310</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">66.0</td>
+<td>0.839386</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">68.0</td>
+<td>0.899616</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">69.0</td>
+<td>0.985659</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75.0</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="ce4e9d9f" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> group_reals_by_times</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>times_and_reals <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"times"</span>: T,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reals"</span>: E</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> group_reals_by_times(times_and_reals)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (32, 4)
+┌───────┬─────────┬─────────┬─────────┐
+│ times ┆ count_0 ┆ count_1 ┆ count_2 │
+│ ---   ┆ ---     ┆ ---     ┆ ---     │
+│ f64   ┆ i64     ┆ i64     ┆ i64     │
+╞═══════╪═════════╪═════════╪═════════╡
+│ 6.0   ┆ 0       ┆ 1       ┆ 0       │
+│ 7.0   ┆ 1       ┆ 1       ┆ 0       │
+│ 9.0   ┆ 0       ┆ 3       ┆ 0       │
+│ 13.0  ┆ 0       ┆ 3       ┆ 0       │
+│ 15.0  ┆ 0       ┆ 2       ┆ 0       │
+│ …     ┆ …       ┆ …       ┆ …       │
+│ 63.0  ┆ 0       ┆ 9       ┆ 0       │
+│ 66.0  ┆ 0       ┆ 3       ┆ 0       │
+│ 68.0  ┆ 1       ┆ 9       ┆ 0       │
+│ 69.0  ┆ 1       ┆ 12      ┆ 0       │
+│ 75.0  ┆ 0       ┆ 1       ┆ 0       │
+└───────┴─────────┴─────────┴─────────┘</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="polarstate-1" class="level1">
+<h1>Polarstate</h1>
+<div id="bdd8b910" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> pl.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>reals <span class="op">=</span> pl.Series([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> aalen_johansen(times, reals)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>shape: (3, 2)
 ┌──────┬────────┐
@@ -194,38 +408,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 │ 3    ┆ 0.2    │
 │ 4    ┆ 0.7    │
 └──────┴────────┘</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="fac8f038" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the data</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"duration"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>:    [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>]</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the Aalen-Johansen estimator for event type 1</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter()</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>ajf.fit(df[<span class="st">"duration"</span>], df[<span class="st">"event"</span>], event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the cumulative incidence function</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf.cumulative_density_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             CIF_1
-event_at          
-0.0       0.000000
-1.0       0.200000
-2.0       0.200000
-3.0       0.200000
-4.0       0.466667
-5.0       0.466667</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 

@@ -9,6 +9,7 @@
 | Name | Description |
 | --- | --- |
 | [aalen_johansen](#polarstate.aj.aalen_johansen) | Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks. |
+| [group_reals_by_times](#polarstate.aj.group_reals_by_times) | Count occurrences of each event type (0, 1, 2) per unique observed time. |
 
 ### aalen_johansen { #polarstate.aj.aalen_johansen }
 
@@ -36,3 +37,29 @@ Compute the Aalen-Johansen estimator for cumulative incidence in the presence of
 #### Notes {.doc-section .doc-section-notes}
 
 This implementation assumes that event codes are integers, with 0 indicating censoring.
+
+### group_reals_by_times { #polarstate.aj.group_reals_by_times }
+
+```python
+aj.group_reals_by_times(df)
+```
+
+Count occurrences of each event type (0, 1, 2) per unique observed time.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type         | Description                                                                                                                                                                                                                                                      | Default    |
+|--------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| df     | pl.DataFrame | A Polars DataFrame with at least two columns: - 'times' (int): The observed time for each record. - 'reals' (int): The event type for each record, where:     - 0 indicates censoring,     - 1 indicates the primary event,     - 2 indicates a competing event. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type         | Description                                                                                                                                                                                                                                 |
+|--------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|        | pl.DataFrame | A DataFrame with one row per unique time and three additional columns: - 'count_0': Number of censored observations at that time. - 'count_1': Number of primary events at that time. - 'count_2': Number of competing events at that time. |
+
+#### Notes {.doc-section .doc-section-notes}
+
+- Input is assumed to be clean (i.e., `times` and `reals` are properly typed).
+- Times are sorted in ascending order in the output.
+- If a particular event type does not occur at a time, its count will be 0.

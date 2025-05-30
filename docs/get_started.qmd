@@ -13,18 +13,6 @@ from polarstate.aj import aalen_johansen
 ::: {.panel-tabset}
 
 
-## Polarstate
-
-```{python}
-times = pl.Series([1, 2, 3, 4, 5])
-reals = pl.Series([1, 0, 2, 1, 0])
-
-result = aalen_johansen(times, reals)
-
-print(result)
-
-```
-
 ## lifelines
 
 ```{python}
@@ -39,4 +27,39 @@ ajf.cumulative_density_
 
 ```
 
+## polarstate
+
+```{python}
+
+from lifelines import AalenJohansenFitter
+from lifelines.datasets import load_waltons
+from polarstate.aj import group_reals_by_times
+
+
+T, E = load_waltons()['T'], load_waltons()['E']
+
+times_and_reals = pl.DataFrame({
+        "times": T,
+        "reals": E
+    })
+
+result = group_reals_by_times(times_and_reals)
+
+print(result)
+```
+
 :::
+
+# Polarstate 
+
+```{python}
+times = pl.Series([1, 2, 3, 4, 5])
+reals = pl.Series([1, 0, 2, 1, 0])
+
+result = aalen_johansen(times, reals)
+
+
+
+print(result)
+
+```
