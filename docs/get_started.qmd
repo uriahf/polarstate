@@ -33,7 +33,7 @@ ajf.cumulative_density_
 
 from lifelines import AalenJohansenFitter
 from lifelines.datasets import load_waltons
-from polarstate.aj import group_reals_by_times, add_events_at_times_column
+from polarstate.aj import group_reals_by_times, add_events_at_times_column, add_at_risk_column
 
 
 T, E = load_waltons()['T'], load_waltons()['E']
@@ -44,7 +44,8 @@ times_and_reals = pl.DataFrame({
     })
 
 times_and_counts = group_reals_by_times(times_and_reals)
-result = add_events_at_times_column(times_and_counts)
+events_data = add_events_at_times_column(times_and_counts)
+result = add_at_risk_column(events_data)
 
 print(result)
 ```

@@ -11,6 +11,7 @@
 | [aalen_johansen](#polarstate.aj.aalen_johansen) | Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks. |
 | [group_reals_by_times](#polarstate.aj.group_reals_by_times) | Count occurrences of each event type (0, 1, 2) per unique observed time. |
 | [add_events_at_times_column](#polarstate.aj.add_events_at_times_column) |  |
+| [add_at_risk_column](#polarstate.aj.add_at_risk_column) | Add a column to the DataFrame that counts the number of individuals at risk at each time point. |
 
 ### aalen_johansen { #polarstate.aj.aalen_johansen }
 
@@ -71,3 +72,24 @@ Count occurrences of each event type (0, 1, 2) per unique observed time.
 aj.add_events_at_times_column(sorted_times_and_reals)
 ```
 
+
+
+### add_at_risk_column { #polarstate.aj.add_at_risk_column }
+
+```python
+aj.add_at_risk_column(events_data)
+```
+
+Add a column to the DataFrame that counts the number of individuals at risk at each time point.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name        | Type         | Description                                                            | Default    |
+|-------------|--------------|------------------------------------------------------------------------|------------|
+| events_data | pl.DataFrame | A DataFrame with columns 'times', 'count_0', 'count_1', and 'count_2'. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type         | Description                                                                                                                 |
+|--------|--------------|-----------------------------------------------------------------------------------------------------------------------------|
+|        | pl.DataFrame | The input DataFrame with an additional column 'at_risk' that contains the number of individuals at risk at each time point. |

@@ -1,5 +1,5 @@
 import polars as pl
-from polarstate.aj import aalen_johansen, create_sorted_times_and_reals_data, group_reals_by_times, add_events_at_times_column
+from polarstate.aj import aalen_johansen, create_sorted_times_and_reals_data, group_reals_by_times, add_events_at_times_column, add_at_risk_column
 from polars.testing import assert_frame_equal
 
 def test_aalen_johansen() -> None:
@@ -47,19 +47,19 @@ def test_add_events_at_times_column() -> None:
     
     times_and_counts = pl.DataFrame({
         "times": [1, 2, 3],
-        "count_0": [1, 0, 2],
-        "count_1": [0, 1, 1],
-        "count_2": [1, 2, 0],
+        "count_0": [1, 1, 0],
+        "count_1": [1, 1, 0],
+        "count_2": [0, 1, 2]
     })
 
     result = add_events_at_times_column(times_and_counts)
 
     expected_output = pl.DataFrame({
         "times": [1, 2, 3],
-        "count_0": [1, 0, 2],
-        "count_1": [0, 1, 1],
-        "count_2": [1, 2, 0],
-        "events_at_times": [2, 3, 3]
+        "count_0": [1, 1, 0],
+        "count_1": [1, 1, 0],
+        "count_2": [0, 1, 2],
+        "events_at_times": [2, 3, 2]
     })
     
     assert_frame_equal(result, expected_output)
@@ -78,6 +78,28 @@ def test_group_reals_by_times():
         "count_0": [1, 1, 0],
         "count_1": [1, 1, 0],
         "count_2": [0, 1, 2]
+    })
+
+    assert_frame_equal(result, expected_output)
+
+def test_add_at_risk_column():
+    events_data = pl.DataFrame({
+        "times": [1, 2, 3],
+        "count_0": [1, 1, 0],
+        "count_1": [1, 1, 0],
+        "count_2": [0, 1, 2],
+        "events_at_times": [2, 3, 2]
+    })
+
+    result = add_at_risk_column(events_data)
+
+    expected_output = pl.DataFrame({
+        "times": [1, 2, 3],
+        "count_0": [1, 1, 0],
+        "count_1": [1, 1, 0],
+        "count_2": [0, 1, 2],
+        "events_at_times": [2, 3, 2],
+        "at_risk": [7, 5, 2]
     })
 
     assert_frame_equal(result, expected_output)

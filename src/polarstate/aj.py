@@ -105,3 +105,23 @@ def group_reals_by_times(df: pl.DataFrame) -> pl.DataFrame:
           ])
           .sort("times")
     )
+
+def add_at_risk_column(
+        events_data: pl.DataFrame
+) -> pl.DataFrame:
+    """
+    Add a column to the DataFrame that counts the number of individuals at risk at each time point.
+
+    Parameters
+    ----------
+    events_data : pl.DataFrame
+        A DataFrame with columns 'times', 'count_0', 'count_1', and 'count_2'.
+
+    Returns
+    -------
+    pl.DataFrame
+        The input DataFrame with an additional column 'at_risk' that contains the number of individuals at risk at each time point.
+    """
+    return events_data.with_columns(
+        pl.col("events_at_times").cum_sum(reverse=True).alias("at_risk")
+    )

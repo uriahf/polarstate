@@ -224,6 +224,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><a href="#polarstate.aj.add_events_at_times_column">add_events_at_times_column</a></td>
 <td></td>
 </tr>
+<tr class="even">
+<td><a href="#polarstate.aj.add_at_risk_column">add_at_risk_column</a></td>
+<td>Add a column to the DataFrame that counts the number of individuals at risk at each time point.</td>
+</tr>
 </tbody>
 </table>
 <section id="polarstate.aj.aalen_johansen" class="level3">
@@ -371,8 +375,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="polarstate.aj.add_events_at_times_column" class="level3">
 <h3 class="anchored" data-anchor-id="polarstate.aj.add_events_at_times_column">add_events_at_times_column</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>aj.add_events_at_times_column(sorted_times_and_reals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="polarstate.aj.add_at_risk_column" class="level3">
+<h3 class="anchored" data-anchor-id="polarstate.aj.add_at_risk_column">add_at_risk_column</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>aj.add_at_risk_column(events_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add a column to the DataFrame that counts the number of individuals at risk at each time point.</p>
+<section id="parameters-2" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 64%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>events_data</td>
+<td>pl.DataFrame</td>
+<td>A DataFrame with columns ‘times’, ‘count_0’, ‘count_1’, and ‘count_2’.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-2" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 9%">
+<col style="width: 85%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>pl.DataFrame</td>
+<td>The input DataFrame with an additional column ‘at_risk’ that contains the number of individuals at risk at each time point.</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 </section>
 </section>
