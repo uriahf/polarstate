@@ -1,5 +1,5 @@
 import polars as pl
-from polarstate.aj import aalen_johansen, create_sorted_times_and_reals_data, add_at_risk_column, group_reals_by_times
+from polarstate.aj import aalen_johansen, create_sorted_times_and_reals_data, group_reals_by_times, add_events_at_times_column
 from polars.testing import assert_frame_equal
 
 def test_aalen_johansen() -> None:
@@ -43,24 +43,26 @@ def test_create_sorted_times_and_reals_data() -> None:
 
     assert_frame_equal(result, expected_output)
 
-# def test_add_at_risk_column() -> None:
-#     # Test data
-#     sorted_times_and_reals = pl.DataFrame({
-#         "times": [1, 2, 3, 4, 5],
-#         "reals": [2, 0, 1, 1, 0]
-#     }) 
+def test_add_events_at_times_column() -> None:
+    
+    times_and_counts = pl.DataFrame({
+        "times": [1, 2, 3],
+        "count_0": [1, 0, 2],
+        "count_1": [0, 1, 1],
+        "count_2": [1, 2, 0],
+    })
 
-#     # Expected output
-#     expected_output = pl.DataFrame({
-#         "times": [1, 2, 3, 4, 5],
-#         "reals": [2, 0, 1, 1, 0],
-#         "at_risk": [5, 4, 3, 2, 1]
-#     })
+    result = add_events_at_times_column(times_and_counts)
 
-#     # Call the function
-#     result = add_at_risk_column(sorted_times_and_reals)
-
-#     assert_frame_equal(result, expected_output)
+    expected_output = pl.DataFrame({
+        "times": [1, 2, 3],
+        "count_0": [1, 0, 2],
+        "count_1": [0, 1, 1],
+        "count_2": [1, 2, 0],
+        "events_at_times": [2, 3, 3]
+    })
+    
+    assert_frame_equal(result, expected_output)
 
 
 def test_group_reals_by_times():

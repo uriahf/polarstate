@@ -10,6 +10,7 @@
 | --- | --- |
 | [aalen_johansen](#polarstate.aj.aalen_johansen) | Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks. |
 | [group_reals_by_times](#polarstate.aj.group_reals_by_times) | Count occurrences of each event type (0, 1, 2) per unique observed time. |
+| [add_events_at_times_column](#polarstate.aj.add_events_at_times_column) |  |
 
 ### aalen_johansen { #polarstate.aj.aalen_johansen }
 
@@ -63,3 +64,10 @@ Count occurrences of each event type (0, 1, 2) per unique observed time.
 - Input is assumed to be clean (i.e., `times` and `reals` are properly typed).
 - Times are sorted in ascending order in the output.
 - If a particular event type does not occur at a time, its count will be 0.
+
+### add_events_at_times_column { #polarstate.aj.add_events_at_times_column }
+
+```python
+aj.add_events_at_times_column(sorted_times_and_reals)
+```
+

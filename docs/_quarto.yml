@@ -27,3 +27,4 @@ quartodoc:
         members:
         - aalen_johansen
         - group_reals_by_times
+        - add_events_at_times_column

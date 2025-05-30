@@ -60,21 +60,13 @@ def create_sorted_times_and_reals_data(
         "reals": reals
     }).sort("times")
 
-def add_at_risk_column(
+def add_events_at_times_column(
         sorted_times_and_reals: pl.DataFrame
 ):
-
-    at_risk_lookup = (
-        sorted_times_and_reals.select("times")
-        .unique()
-        .with_row_index("row_id")
-        .with_columns([
-            (sorted_times_and_reals.height - pl.col("row_id")).alias("at_risk")
-        ])
+    return sorted_times_and_reals.with_columns(
+        (pl.col("count_0") + pl.col("count_1") + pl.col("count_2")).alias("events_at_times")
     )
-
-    return sorted_times_and_reals.join(at_risk_lookup, on="times", how="left")
-
+     
 
 def group_reals_by_times(df: pl.DataFrame) -> pl.DataFrame:
     """
