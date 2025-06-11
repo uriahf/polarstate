@@ -158,3 +158,25 @@ def add_cause_specific_hazards_columns(events_data: pl.DataFrame) -> pl.DataFram
             (1 - pl.col("csh_1") - pl.col("csh_2")).alias("conditional_survival"),
         ]
     )
+
+
+def add_overall_survival_column(events_data: pl.DataFrame) -> pl.DataFrame:
+    """
+    Add a column for overall survival, defined as the cumulative product of
+    the conditional survival probabilities up to and including each time point.
+
+    Parameters
+    ----------
+    events_data : pl.DataFrame
+        A Polars DataFrame with a column 'conditional_survival' representing
+        the probability of surviving past each time point.
+
+    Returns
+    -------
+    pl.DataFrame
+        The input DataFrame with an additional column 'overall_survival',
+        which contains the Kaplan-Meier-style survival probability at each time.
+    """
+    return events_data.with_columns(
+        pl.col("conditional_survival").cum_prod().alias("overall_survival")
+    )

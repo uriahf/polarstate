@@ -13,6 +13,7 @@
 | [add_events_at_times_column](#polarstate.aj.add_events_at_times_column) |  |
 | [add_at_risk_column](#polarstate.aj.add_at_risk_column) | Add a column to the DataFrame that counts the number of individuals at risk at each time point. |
 | [add_cause_specific_hazards_columns](#polarstate.aj.add_cause_specific_hazards_columns) | Add columns for cause-specific hazards and conditional survival at each time point. |
+| [add_overall_survival_column](#polarstate.aj.add_overall_survival_column) | Add a column for overall survival, defined as the cumulative product of |
 
 ### aalen_johansen { #polarstate.aj.aalen_johansen }
 
@@ -114,3 +115,24 @@ Add columns for cause-specific hazards and conditional survival at each time poi
 | Name   | Type         | Description                                                                                                                                                                                                                                                                                   |
 |--------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |        | pl.DataFrame | The input DataFrame with three additional columns: - 'csh_1': cause-specific hazard for event type 1 (count_1 / at_risk) - 'csh_2': cause-specific hazard for event type 2 (count_2 / at_risk) - 'conditional_survival': probability of not having any event at that time (count_0 / at_risk) |
+
+### add_overall_survival_column { #polarstate.aj.add_overall_survival_column }
+
+```python
+aj.add_overall_survival_column(events_data)
+```
+
+Add a column for overall survival, defined as the cumulative product of
+the conditional survival probabilities up to and including each time point.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name        | Type         | Description                                                                                                             | Default    |
+|-------------|--------------|-------------------------------------------------------------------------------------------------------------------------|------------|
+| events_data | pl.DataFrame | A Polars DataFrame with a column 'conditional_survival' representing the probability of surviving past each time point. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type         | Description                                                                                                                                |
+|--------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+|        | pl.DataFrame | The input DataFrame with an additional column 'overall_survival', which contains the Kaplan-Meier-style survival probability at each time. |

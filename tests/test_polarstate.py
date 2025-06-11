@@ -6,6 +6,7 @@ from polarstate.aj import (
     add_events_at_times_column,
     add_at_risk_column,
     add_cause_specific_hazards_columns,
+    add_overall_survival_column,
 )
 from polars.testing import assert_frame_equal
 
@@ -151,6 +152,35 @@ def test_add_cause_specific_hazards_columns():
             "csh_2": [0.0, 1 / 5, 2 / 2],
             "conditional_survival": [6 / 7, 3 / 5, 0.0],
         }
+    )
+
+    assert_frame_equal(result, expected_output)
+
+
+def test_add_overall_survival_column():
+    events_data = pl.DataFrame(
+        {
+            "times": [1, 2, 3],
+            "count_0": [1, 1, 0],
+            "count_1": [1, 1, 0],
+            "count_2": [0, 1, 2],
+            "events_at_times": [2, 3, 2],
+            "at_risk": [7, 5, 2],
+            "csh_1": [1 / 7, 1 / 5, 0.0],
+            "csh_2": [0.0, 1 / 5, 1.0],
+            "conditional_survival": [6 / 7, 3 / 5, 0.0],
+        }
+    )
+
+    result = add_overall_survival_column(events_data)
+
+    expected_output = events_data.with_columns(
+        [
+            pl.Series(
+                "overall_survival",
+                [(6 / 7), (6 / 7) * (3 / 5), (6 / 7) * (3 / 5) * 0.0],
+            )
+        ]
     )
 
     assert_frame_equal(result, expected_output)
