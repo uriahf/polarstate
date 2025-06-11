@@ -48,7 +48,9 @@ events_data = add_events_at_times_column(times_and_counts)
 events_data = add_at_risk_column(events_data)
 events_data = add_cause_specific_hazards_columns(events_data)
 events_data = add_overall_survival_column(events_data)
-result = add_previous_overal_survival_column(events_data)
+events_data = add_previous_overal_survival_column(events_data)
+result = add_transition_probabilities_at_times_columns(events_data)
+
 
 
 print(result)

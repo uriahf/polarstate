@@ -8,6 +8,7 @@ from polarstate.aj import (
     add_cause_specific_hazards_columns,
     add_overall_survival_column,
     add_previous_overal_survival_column,
+    add_transition_probabilities_at_times_columns,
 )
 from polars.testing import assert_frame_equal
 
@@ -229,6 +230,70 @@ def test_add_previous_overal_survival_column() -> None:
                 1.0,
                 (6 / 7),
                 (6 / 7) * (3 / 5)
+            ]
+        }
+    )
+
+    assert_frame_equal(result, expected_output)
+
+
+def test_add_transition_probabilities_at_times_columns() -> None:
+    events_data = pl.DataFrame(
+        {
+            "times": [1, 2, 3],
+            "count_0": [1, 1, 0],
+            "count_1": [1, 1, 0],
+            "count_2": [0, 1, 2],
+            "events_at_times": [2, 3, 2],
+            "at_risk": [7, 5, 2],
+            "csh_1": [1 / 7, 1 / 5, 0.0],
+            "csh_2": [0.0, 1 / 5, 1.0],
+            "conditional_survival": [6 / 7, 3 / 5, 0.0],
+            "overall_survival": [
+                (6 / 7),
+                (6 / 7) * (3 / 5),
+                (6 / 7) * (3 / 5) * 0.0,
+            ],
+            "previous_overall_survival": [
+                1.0,
+                (6 / 7),
+                (6 / 7) * (3 / 5)
+            ]
+        }
+    )
+
+    result = add_transition_probabilities_at_times_columns(events_data)
+
+    expected_output  = pl.DataFrame(
+        {
+            "times": [1, 2, 3],
+            "count_0": [1, 1, 0],
+            "count_1": [1, 1, 0],
+            "count_2": [0, 1, 2],
+            "events_at_times": [2, 3, 2],
+            "at_risk": [7, 5, 2],
+            "csh_1": [1 / 7, 1 / 5, 0.0],
+            "csh_2": [0.0, 1 / 5, 1.0],
+            "conditional_survival": [6 / 7, 3 / 5, 0.0],
+            "overall_survival": [
+                (6 / 7),
+                (6 / 7) * (3 / 5),
+                (6 / 7) * (3 / 5) * 0.0,
+            ],
+            "previous_overall_survival": [
+                1.0,
+                (6 / 7),
+                (6 / 7) * (3 / 5)
+            ],
+            "trainsition_probabilities_to_1_at_times": [
+                1.0 * (1 / 7),
+                (6 / 7) * (1 / 5),
+                (6 / 7) * (3 / 5) * 0.0
+            ],
+            "trainsition_probabilities_to_2_at_times": [
+                1.0 * 0.0,
+                (6 / 7) * (1 / 5),
+                (6 / 7) * (3 / 5) * 1.0
             ]
         }
     )

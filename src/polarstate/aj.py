@@ -198,3 +198,32 @@ def add_previous_overal_survival_column(events_data: pl.DataFrame) -> pl.DataFra
     return events_data.with_columns(
         pl.col("overall_survival").shift(1, fill_value=1).alias("previous_overall_survival")
     )
+
+
+def add_transition_probabilities_at_times_columns(events_data: pl.DataFrame) -> pl.DataFrame:
+    """
+    Add columns for transition probabilities at each time point based on cause-specific hazards and previous overall survival.
+    Parameters
+    ----------
+    events_data : pl.DataFrame
+        A Polars DataFrame with columns:
+        - 'csh_1': cause-specific hazard for event type 1,
+        - 'csh_2': cause-specific hazard for event type 2,
+        - 'previous_overall_survival': overall survival probability at the previous time point.
+    Returns
+    -------
+    pl.DataFrame
+        The input DataFrame with additional columns:
+        - 'trainsition_probabilities_to_1_at_times': transition probability to event type 1 at each time point,
+        - 'trainsition_probabilities_to_2_at_times': transition probability to event type 2 at each time point.
+    """
+    return events_data.with_columns(
+        [
+            (pl.col("csh_1") * pl.col("previous_overall_survival")).alias(
+                "trainsition_probabilities_to_1_at_times"
+            ),
+            (pl.col("csh_2") * pl.col("previous_overall_survival")).alias(
+                "trainsition_probabilities_to_2_at_times"
+            ),
+        ]
+    )
