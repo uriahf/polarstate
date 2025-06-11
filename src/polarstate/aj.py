@@ -180,3 +180,21 @@ def add_overall_survival_column(events_data: pl.DataFrame) -> pl.DataFrame:
     return events_data.with_columns(
         pl.col("conditional_survival").cum_prod().alias("overall_survival")
     )
+
+
+def add_previous_overal_survival_column(events_data: pl.DataFrame) -> pl.DataFrame:
+    """
+    Add a column for previous overall survival, defined as the overall survival probability just before the current time point.
+    Parameters
+    ----------
+    events_data : pl.DataFrame
+        A Polars DataFrame with a column 'overall_survival' representing the overall survival probability at each time point.
+    Returns
+    -------
+    pl.DataFrame
+        The input DataFrame with an additional column 'previous_overall_survival',
+        which contains the overall survival probability at the previous time point.
+    """
+    return events_data.with_columns(
+        pl.col("overall_survival").shift(1, fill_value=1).alias("previous_overall_survival")
+    )
