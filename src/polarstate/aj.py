@@ -260,6 +260,7 @@ def add_state_occupancy_probabilities_at_times_columns(
         ]
     )
 
+
 def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     """Generate the full event table from raw ``times`` and ``reals`` data.
 
@@ -275,8 +276,7 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     """
 
     return (
-        times_and_reals
-        .pipe(group_reals_by_times)
+        times_and_reals.pipe(group_reals_by_times)
         .pipe(add_events_at_times_column)
         .pipe(add_at_risk_column)
         .pipe(add_cause_specific_hazards_columns)

@@ -10,7 +10,7 @@ from polarstate.aj import (
     add_previous_overal_survival_column,
     add_transition_probabilities_at_times_columns,
     add_state_occupancy_probabilities_at_times_columns,
-    prepare_event_table
+    prepare_event_table,
 )
 from polars.testing import assert_frame_equal
 
@@ -365,6 +365,7 @@ def test_add_state_occupancy_probabilities_at_times_columns() -> None:
     )
 
     assert_frame_equal(result, expected_output)
+
 
 def test_prepare_event_table() -> None:
     times_and_reals = pl.DataFrame(
