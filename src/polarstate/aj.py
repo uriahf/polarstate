@@ -196,11 +196,15 @@ def add_previous_overal_survival_column(events_data: pl.DataFrame) -> pl.DataFra
         which contains the overall survival probability at the previous time point.
     """
     return events_data.with_columns(
-        pl.col("overall_survival").shift(1, fill_value=1).alias("previous_overall_survival")
+        pl.col("overall_survival")
+        .shift(1, fill_value=1)
+        .alias("previous_overall_survival")
     )
 
 
-def add_transition_probabilities_at_times_columns(events_data: pl.DataFrame) -> pl.DataFrame:
+def add_transition_probabilities_at_times_columns(
+    events_data: pl.DataFrame,
+) -> pl.DataFrame:
     """
     Add columns for transition probabilities at each time point based on cause-specific hazards and previous overall survival.
     Parameters
@@ -228,7 +232,10 @@ def add_transition_probabilities_at_times_columns(events_data: pl.DataFrame) -> 
         ]
     )
 
-def add_state_occupancy_probabilities_at_times_columns(events_data: pl.DataFrame) -> pl.DataFrame:
+
+def add_state_occupancy_probabilities_at_times_columns(
+    events_data: pl.DataFrame,
+) -> pl.DataFrame:
     """
     Add columns for state occupancy probabilities at each time point based on trainsition_probabilities_to_1_at_times and trainsition_probabilities_to_2_at_times columns.
     Parameters
@@ -239,16 +246,16 @@ def add_state_occupancy_probabilities_at_times_columns(events_data: pl.DataFrame
     -------
     pl.DataFrame
         The input DataFrame with additional columns 'state_occupancy_probability_1_at_times' and 'state_occupancy_probability_2_at_times',
-        which contain the state occupancy probabilities at each time point. This function should sum all the previous values from state_occupancy_probability_1_at_times and state_occupancy_probability_2_at_times accordingly and assign the sum of the previous values to the new columns 
+        which contain the state occupancy probabilities at each time point. This function should sum all the previous values from state_occupancy_probability_1_at_times and state_occupancy_probability_2_at_times accordingly and assign the sum of the previous values to the new columns
         state_occupancy_probability_1 and state_occupancy_probability_2.
-    """ 
+    """
     return events_data.with_columns(
         [
-            pl.col("trainsition_probabilities_to_1_at_times").cum_sum().alias(
-                "state_occupancy_probability_1_at_times"
-            ),
-            pl.col("trainsition_probabilities_to_2_at_times").cum_sum().alias(
-                "state_occupancy_probability_2_at_times"
-            ),
+            pl.col("trainsition_probabilities_to_1_at_times")
+            .cum_sum()
+            .alias("state_occupancy_probability_1_at_times"),
+            pl.col("trainsition_probabilities_to_2_at_times")
+            .cum_sum()
+            .alias("state_occupancy_probability_2_at_times"),
         ]
     )

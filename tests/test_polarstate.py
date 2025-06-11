@@ -9,7 +9,7 @@ from polarstate.aj import (
     add_overall_survival_column,
     add_previous_overal_survival_column,
     add_transition_probabilities_at_times_columns,
-    add_state_occupancy_probabilities_at_times_columns
+    add_state_occupancy_probabilities_at_times_columns,
 )
 from polars.testing import assert_frame_equal
 
@@ -227,11 +227,7 @@ def test_add_previous_overal_survival_column() -> None:
                 (6 / 7) * (3 / 5),
                 (6 / 7) * (3 / 5) * 0.0,
             ],
-            "previous_overall_survival": [
-                1.0,
-                (6 / 7),
-                (6 / 7) * (3 / 5)
-            ]
+            "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
         }
     )
 
@@ -255,17 +251,13 @@ def test_add_transition_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5),
                 (6 / 7) * (3 / 5) * 0.0,
             ],
-            "previous_overall_survival": [
-                1.0,
-                (6 / 7),
-                (6 / 7) * (3 / 5)
-            ]
+            "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
         }
     )
 
     result = add_transition_probabilities_at_times_columns(events_data)
 
-    expected_output  = pl.DataFrame(
+    expected_output = pl.DataFrame(
         {
             "times": [1, 2, 3],
             "count_0": [1, 1, 0],
@@ -281,25 +273,22 @@ def test_add_transition_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5),
                 (6 / 7) * (3 / 5) * 0.0,
             ],
-            "previous_overall_survival": [
-                1.0,
-                (6 / 7),
-                (6 / 7) * (3 / 5)
-            ],
+            "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
             "trainsition_probabilities_to_1_at_times": [
                 1.0 * (1 / 7),
                 (6 / 7) * (1 / 5),
-                (6 / 7) * (3 / 5) * 0.0
+                (6 / 7) * (3 / 5) * 0.0,
             ],
             "trainsition_probabilities_to_2_at_times": [
                 1.0 * 0.0,
                 (6 / 7) * (1 / 5),
-                (6 / 7) * (3 / 5) * 1.0
-            ]
+                (6 / 7) * (3 / 5) * 1.0,
+            ],
         }
     )
 
     assert_frame_equal(result, expected_output)
+
 
 def test_add_state_occupancy_probabilities_at_times_columns() -> None:
     events_data = pl.DataFrame(
@@ -318,21 +307,17 @@ def test_add_state_occupancy_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5),
                 (6 / 7) * (3 / 5) * 0.0,
             ],
-            "previous_overall_survival": [
-                1.0,
-                (6 / 7),
-                (6 / 7) * (3 / 5)
-            ],
+            "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
             "trainsition_probabilities_to_1_at_times": [
                 (1.0 * (1 / 7)),
                 ((6 / 7) * (1 / 5)),
-                ((6 / 7) * (3 / 5) * 0.0)
+                ((6 / 7) * (3 / 5) * 0.0),
             ],
             "trainsition_probabilities_to_2_at_times": [
                 (1.0 * 0.0),
                 ((6 / 7) * (1 / 5)),
-                ((6 / 7) * (3 / 5) * 1.0)
-            ]
+                ((6 / 7) * (3 / 5) * 1.0),
+            ],
         }
     )
 
@@ -354,31 +339,28 @@ def test_add_state_occupancy_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5),
                 (6 / 7) * (3 / 5) * 0.0,
             ],
-            "previous_overall_survival": [
-                1.0,
-                (6 / 7),
-                (6 / 7) * (3 / 5)
-            ],
+            "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
             "trainsition_probabilities_to_1_at_times": [
                 (1.0 * (1 / 7)),
                 ((6 / 7) * (1 / 5)),
-                ((6 / 7) * (3 / 5) * 0.0)
+                ((6 / 7) * (3 / 5) * 0.0),
             ],
             "trainsition_probabilities_to_2_at_times": [
                 (1.0 * 0.0),
                 ((6 / 7) * (1 / 5)),
-                ((6 / 7) * (3 / 5) * 1.0)
+                ((6 / 7) * (3 / 5) * 1.0),
             ],
             "state_occupancy_probability_1_at_times": [
                 (1.0 * (1 / 7)),
                 (1.0 * (1 / 7)) + ((6 / 7) * (1 / 5)),
-                (1.0 * (1 / 7)) + ((6 / 7) * (1 / 5)) + ((6 / 7) * (3 / 5) * 0.0)
+                (1.0 * (1 / 7)) + ((6 / 7) * (1 / 5)) + ((6 / 7) * (3 / 5) * 0.0),
             ],
             "state_occupancy_probability_2_at_times": [
                 (1.0 * 0.0),
                 (1.0 * 0.0) + ((6 / 7) * (1 / 5)),
-                (1.0 * 0.0) + ((6 / 7) * (1 / 5)) + ((6 / 7) * (3 / 5) * 1.0)
-            ]
-        })
+                (1.0 * 0.0) + ((6 / 7) * (1 / 5)) + ((6 / 7) * (3 / 5) * 1.0),
+            ],
+        }
+    )
 
     assert_frame_equal(result, expected_output)
