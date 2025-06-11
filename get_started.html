@@ -169,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="4ee03eaa" class="cell" data-execution_count="1">
+<div id="4a5b338f" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> aalen_johansen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -179,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">lifelines</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">polarstate</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="da521c42" class="cell" data-execution_count="2">
+<div id="b612a58a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
@@ -342,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="cc693221" class="cell" data-execution_count="3">
+<div id="e2a42f99" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> <span class="op">*</span></span>
@@ -358,28 +358,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>times_and_counts <span class="op">=</span> group_reals_by_times(times_and_reals)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>events_data <span class="op">=</span> add_events_at_times_column(times_and_counts)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>events_data <span class="op">=</span> add_at_risk_column(events_data)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> add_cause_specific_hazards_columns(events_data)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>events_data <span class="op">=</span> add_cause_specific_hazards_columns(events_data)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>events_data <span class="op">=</span> add_overall_survival_column(events_data)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> add_previous_overal_survival_column(events_data)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>shape: (32, 9)
-┌───────┬─────────┬─────────┬─────────┬───┬─────────┬──────────┬───────┬──────────────────────┐
-│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ at_risk ┆ csh_1    ┆ csh_2 ┆ conditional_survival │
-│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ ---     ┆ ---      ┆ ---   ┆ ---                  │
-│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ i64     ┆ f64      ┆ f64   ┆ f64                  │
-╞═══════╪═════════╪═════════╪═════════╪═══╪═════════╪══════════╪═══════╪══════════════════════╡
-│ 6.0   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 163     ┆ 0.006135 ┆ 0.0   ┆ 0.993865             │
-│ 7.0   ┆ 1       ┆ 1       ┆ 0       ┆ … ┆ 162     ┆ 0.006173 ┆ 0.0   ┆ 0.993827             │
-│ 9.0   ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 160     ┆ 0.01875  ┆ 0.0   ┆ 0.98125              │
-│ 13.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 157     ┆ 0.019108 ┆ 0.0   ┆ 0.980892             │
-│ 15.0  ┆ 0       ┆ 2       ┆ 0       ┆ … ┆ 154     ┆ 0.012987 ┆ 0.0   ┆ 0.987013             │
-│ …     ┆ …       ┆ …       ┆ …       ┆ … ┆ …       ┆ …        ┆ …     ┆ …                    │
-│ 63.0  ┆ 0       ┆ 9       ┆ 0       ┆ … ┆ 36      ┆ 0.25     ┆ 0.0   ┆ 0.75                 │
-│ 66.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 27      ┆ 0.111111 ┆ 0.0   ┆ 0.888889             │
-│ 68.0  ┆ 1       ┆ 9       ┆ 0       ┆ … ┆ 24      ┆ 0.375    ┆ 0.0   ┆ 0.625                │
-│ 69.0  ┆ 1       ┆ 12      ┆ 0       ┆ … ┆ 14      ┆ 0.857143 ┆ 0.0   ┆ 0.142857             │
-│ 75.0  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 1       ┆ 1.0      ┆ 0.0   ┆ 0.0                  │
-└───────┴─────────┴─────────┴─────────┴───┴─────────┴──────────┴───────┴──────────────────────┘</code></pre>
+<pre><code>shape: (32, 11)
+┌───────┬─────────┬─────────┬─────────┬───┬───────┬────────────────┬───────────────┬───────────────┐
+│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ csh_2 ┆ conditional_su ┆ overall_survi ┆ previous_over │
+│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ ---   ┆ rvival         ┆ val           ┆ all_survival  │
+│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ f64   ┆ ---            ┆ ---           ┆ ---           │
+│       ┆         ┆         ┆         ┆   ┆       ┆ f64            ┆ f64           ┆ f64           │
+╞═══════╪═════════╪═════════╪═════════╪═══╪═══════╪════════════════╪═══════════════╪═══════════════╡
+│ 6.0   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0   ┆ 0.993865       ┆ 0.993865      ┆ 1.0           │
+│ 7.0   ┆ 1       ┆ 1       ┆ 0       ┆ … ┆ 0.0   ┆ 0.993827       ┆ 0.98773       ┆ 0.993865      │
+│ 9.0   ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.0   ┆ 0.98125        ┆ 0.96921       ┆ 0.98773       │
+│ 13.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.0   ┆ 0.980892       ┆ 0.95069       ┆ 0.96921       │
+│ 15.0  ┆ 0       ┆ 2       ┆ 0       ┆ … ┆ 0.0   ┆ 0.987013       ┆ 0.938344      ┆ 0.95069       │
+│ …     ┆ …       ┆ …       ┆ …       ┆ … ┆ …     ┆ …              ┆ …             ┆ …             │
+│ 63.0  ┆ 0       ┆ 9       ┆ 0       ┆ … ┆ 0.0   ┆ 0.75           ┆ 0.18069       ┆ 0.240921      │
+│ 66.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.0   ┆ 0.888889       ┆ 0.160614      ┆ 0.18069       │
+│ 68.0  ┆ 1       ┆ 9       ┆ 0       ┆ … ┆ 0.0   ┆ 0.625          ┆ 0.100384      ┆ 0.160614      │
+│ 69.0  ┆ 1       ┆ 12      ┆ 0       ┆ … ┆ 0.0   ┆ 0.142857       ┆ 0.014341      ┆ 0.100384      │
+│ 75.0  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0   ┆ 0.0            ┆ 0.0           ┆ 0.014341      │
+└───────┴─────────┴─────────┴─────────┴───┴───────┴────────────────┴───────────────┴───────────────┘</code></pre>
 </div>
 </div>
 </div>
@@ -388,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="polarstate-1" class="level1">
 <h1>Polarstate</h1>
-<div id="cc569e52" class="cell" data-execution_count="4">
+<div id="8de162f9" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> pl.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>reals <span class="op">=</span> pl.Series([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
