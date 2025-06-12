@@ -26,6 +26,7 @@ dev = [
     "nbformat>=5.10.4",
     "pandas>=2.2.3",
     "polars>=1.30.0",
+    "pre-commit>=4.2.0",
     "pytest>=8.3.5",
     "quartodoc>=0.10.0",
     "rpy2>=3.6.1",
