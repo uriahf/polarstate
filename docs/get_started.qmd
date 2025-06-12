@@ -8,26 +8,76 @@ import polars as pl
 from polarstate.aj import aalen_johansen
 ```
 
-# Get starteds with polarstate
+
+# Competing Risks Example
+
+::: {.panel-tabset}
+
+## polarstate (Py 🐍)
+
+```{python}
+
+times_and_reals = pl.DataFrame({
+    "times": [1, 2, 2, 3, 4, 5, 6],
+    "reals": [1, 0, 2, 1, 0, 2, 1]
+})
+
+result = prepare_event_table(times_and_reals)
+
+print(result)
+
+```
+
+## lifelines (Py 🐍)
+
+```{python}
+
+
+from lifelines import AalenJohansenFitter
+
+T = times_and_reals["times"].to_numpy()
+E = times_and_reals["reals"].to_numpy()
+
+ajf = AalenJohansenFitter()
+ajf.fit(T, E, event_of_interest=1)
+print(ajf.cumulative_density_)
+
+ajf.fit(T, E, event_of_interest=2)
+print(ajf.cumulative_density_)
+
+```
+
+
+
+## tidycmprsk (R 🔵)
+
+```{r}
+library(tidycmprsk)
+cuminc(Surv(ttdeath, death_cr) ~ 1, trial)
+
+times_and_reals <- data.frame(
+  times = c(1, 2, 2, 3, 4, 5, 6),
+  reals = factor(c(1, 0, 2, 1, 0, 2, 1),
+                 levels = c(0, 1, 2),
+                 labels = c("censored", "primary_event", "competing_event"))
+)
+
+(cuminc(Surv(times, reals) ~ 1, times_and_reals)) |>
+    tidy() |>
+    print()
+
+```
+
+:::
+
+# No Compating Risks Example
+
 
 ::: {.panel-tabset}
 
 
-## lifelines
+## polarstate (Py 🐍)
 
-```{python}
-
-from lifelines import AalenJohansenFitter
-from lifelines.datasets import load_waltons
-T, E = load_waltons()['T'], load_waltons()['E']
-ajf = AalenJohansenFitter(calculate_variance=True)
-ajf.fit(T, E, event_of_interest=1)
-ajf.cumulative_density_
-
-
-```
-
-## polarstate
 
 ```{python}
 
@@ -48,18 +98,24 @@ result = prepare_event_table(times_and_reals)
 print(result)
 ```
 
-:::
 
-# Polarstate 
+
+
+## lifelines (Py 🐍)
+
 
 ```{python}
-times = pl.Series([1, 2, 3, 4, 5])
-reals = pl.Series([1, 0, 2, 1, 0])
 
-result = aalen_johansen(times, reals)
+from lifelines import AalenJohansenFitter
+from lifelines.datasets import load_waltons
+T, E = load_waltons()['T'], load_waltons()['E']
+ajf = AalenJohansenFitter(calculate_variance=True)
+ajf.fit(T, E, event_of_interest=1)
+ajf.cumulative_density_
 
-
-
-print(result)
 
 ```
+
+
+
+:::
