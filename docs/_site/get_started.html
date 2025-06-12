@@ -102,10 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
 
 </head>
@@ -172,24 +169,155 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="e5259917" class="cell" data-execution_count="1">
+<div id="2f414fcc" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> aalen_johansen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="get-starteds-with-polarstate" class="level1">
-<h1>Get starteds with polarstate</h1>
+<section id="competing-risks-example" class="level1">
+<h1>Competing Risks Example</h1>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">lifelines</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">polarstate</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">lifelines (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">tidycmprsk (R 🔵)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="3e1c789f" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ajf.cumulative_density_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div id="14655f66" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>times_and_reals <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> prepare_event_table(times_and_reals)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (6, 15)
+┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐
+│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │
+│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │
+│ i64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │
+│       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │
+│       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │
+╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡
+│ 1     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.142857     ┆ 0.0         ┆ 0.142857    ┆ 0.0         │
+│ 2     ┆ 1       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.142857    ┆ 0.142857    ┆ 0.142857    │
+│ 3     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.178571     ┆ 0.0         ┆ 0.321429    ┆ 0.142857    │
+│ 4     ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.321429    ┆ 0.142857    │
+│ 5     ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.267857    ┆ 0.321429    ┆ 0.410714    │
+│ 6     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.267857     ┆ 0.0         ┆ 0.589286    ┆ 0.410714    │
+└───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="783a10e5" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> times_and_reals[<span class="st">"times"</span>].to_numpy()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> times_and_reals[<span class="st">"reals"</span>].to_numpy()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf.cumulative_density_)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf.cumulative_density_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             CIF_1
+event_at          
+0.0       0.000000
+1.0       0.142857
+2.0       0.142857
+3.0       0.321429
+4.0       0.321429
+5.0       0.321429
+6.0       0.589286
+             CIF_2
+event_at          
+0.0       0.000000
+1.0       0.000000
+2.0       0.142857
+3.0       0.142857
+4.0       0.142857
+5.0       0.410714
+6.0       0.410714</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<pre class="{r}"><code>library(tidycmprsk)
+cuminc(Surv(ttdeath, death_cr) ~ 1, trial)
+
+times_and_reals &lt;- data.frame(
+  times = c(1, 2, 2, 3, 4, 5, 6),
+  reals = factor(c(1, 0, 2, 1, 0, 2, 1),
+                 levels = c(0, 1, 2),
+                 labels = c("censored", "primary_event", "competing_event"))
+)
+
+(cuminc(Surv(times, reals) ~ 1, times_and_reals)) |&gt;
+    tidy() |&gt;
+    print()
+</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="no-compating-risks-example" class="level1">
+<h1>No Compating Risks Example</h1>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">lifelines (Py 🐍)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="4e48d834" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>times_and_reals <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"times"</span>: T,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reals"</span>: E</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> prepare_event_table(times_and_reals)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>shape: (32, 15)
+┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐
+│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │
+│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │
+│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │
+│       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │
+│       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │
+╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡
+│ 6.0   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.006135     ┆ 0.0         ┆ 0.006135    ┆ 0.0         │
+│ 7.0   ┆ 1       ┆ 1       ┆ 0       ┆ … ┆ 0.006135     ┆ 0.0         ┆ 0.01227     ┆ 0.0         │
+│ 9.0   ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.01852      ┆ 0.0         ┆ 0.03079     ┆ 0.0         │
+│ 13.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.01852      ┆ 0.0         ┆ 0.04931     ┆ 0.0         │
+│ 15.0  ┆ 0       ┆ 2       ┆ 0       ┆ … ┆ 0.012347     ┆ 0.0         ┆ 0.061656    ┆ 0.0         │
+│ …     ┆ …       ┆ …       ┆ …       ┆ … ┆ …            ┆ …           ┆ …           ┆ …           │
+│ 63.0  ┆ 0       ┆ 9       ┆ 0       ┆ … ┆ 0.06023      ┆ 0.0         ┆ 0.81931     ┆ 0.0         │
+│ 66.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.020077     ┆ 0.0         ┆ 0.839386    ┆ 0.0         │
+│ 68.0  ┆ 1       ┆ 9       ┆ 0       ┆ … ┆ 0.06023      ┆ 0.0         ┆ 0.899616    ┆ 0.0         │
+│ 69.0  ┆ 1       ┆ 12      ┆ 0       ┆ … ┆ 0.086043     ┆ 0.0         ┆ 0.985659    ┆ 0.0         │
+│ 75.0  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.014341     ┆ 0.0         ┆ 1.0         ┆ 0.0         │
+└───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="a7d4aadf" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>ajf.cumulative_density_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
@@ -344,135 +472,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="2e2fb2fd" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate.aj <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>times_and_reals <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"times"</span>: T,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reals"</span>: E</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> prepare_event_table(times_and_reals)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>shape: (32, 15)
-┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐
-│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │
-│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │
-│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │
-│       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │
-│       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │
-╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡
-│ 6.0   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.006135     ┆ 0.0         ┆ 0.006135    ┆ 0.0         │
-│ 7.0   ┆ 1       ┆ 1       ┆ 0       ┆ … ┆ 0.006135     ┆ 0.0         ┆ 0.01227     ┆ 0.0         │
-│ 9.0   ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.01852      ┆ 0.0         ┆ 0.03079     ┆ 0.0         │
-│ 13.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.01852      ┆ 0.0         ┆ 0.04931     ┆ 0.0         │
-│ 15.0  ┆ 0       ┆ 2       ┆ 0       ┆ … ┆ 0.012347     ┆ 0.0         ┆ 0.061656    ┆ 0.0         │
-│ …     ┆ …       ┆ …       ┆ …       ┆ … ┆ …            ┆ …           ┆ …           ┆ …           │
-│ 63.0  ┆ 0       ┆ 9       ┆ 0       ┆ … ┆ 0.06023      ┆ 0.0         ┆ 0.81931     ┆ 0.0         │
-│ 66.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.020077     ┆ 0.0         ┆ 0.839386    ┆ 0.0         │
-│ 68.0  ┆ 1       ┆ 9       ┆ 0       ┆ … ┆ 0.06023      ┆ 0.0         ┆ 0.899616    ┆ 0.0         │
-│ 69.0  ┆ 1       ┆ 12      ┆ 0       ┆ … ┆ 0.086043     ┆ 0.0         ┆ 0.985659    ┆ 0.0         │
-│ 75.0  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.014341     ┆ 0.0         ┆ 1.0         ┆ 0.0         │
-└───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="competing-risks-example" class="level1">
-<h1>Competing Risks Example</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">lifelines (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">tidycmprsk (R 🔵)</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div id="2c2a0bba" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>times_and_reals <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>]</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> prepare_event_table(times_and_reals)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>shape: (6, 15)
-┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐
-│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │
-│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │
-│ i64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │
-│       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │
-│       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │
-╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡
-│ 1     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.142857     ┆ 0.0         ┆ 0.142857    ┆ 0.0         │
-│ 2     ┆ 1       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.142857    ┆ 0.142857    ┆ 0.142857    │
-│ 3     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.178571     ┆ 0.0         ┆ 0.321429    ┆ 0.142857    │
-│ 4     ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.321429    ┆ 0.142857    │
-│ 5     ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.267857    ┆ 0.321429    ┆ 0.410714    │
-│ 6     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.267857     ┆ 0.0         ┆ 0.589286    ┆ 0.410714    │
-└───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div id="fb77290d" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> times_and_reals[<span class="st">"times"</span>].to_numpy()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> times_and_reals[<span class="st">"reals"</span>].to_numpy()</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter()</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf.cumulative_density_)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf.cumulative_density_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             CIF_1
-event_at          
-0.0       0.000000
-1.0       0.142857
-2.0       0.142857
-3.0       0.321429
-4.0       0.321429
-5.0       0.321429
-6.0       0.589286
-             CIF_2
-event_at          
-0.0       0.000000
-1.0       0.000000
-2.0       0.142857
-3.0       0.142857
-4.0       0.142857
-5.0       0.410714
-6.0       0.410714</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
-<pre class="{r}"><code>library(tidycmprsk)
-cuminc(Surv(ttdeath, death_cr) ~ 1, trial)
-
-times_and_reals &lt;- data.frame(
-  times = c(1, 2, 2, 3, 4, 5, 6),
-  reals = factor(c(1, 0, 2, 1, 0, 2, 1),
-                 levels = c(0, 1, 2),
-                 labels = c("censored", "primary_event", "competing_event"))
-)
-
-(cuminc(Surv(times, reals) ~ 1, times_and_reals)) |&gt;
-    tidy() |&gt;
-    print()
-</code></pre>
-</div>
 </div>
 </div>
 
@@ -570,7 +569,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/uriahf\.github\.io\/polarstate\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

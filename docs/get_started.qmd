@@ -17,6 +17,8 @@ from polarstate.aj import aalen_johansen
 
 ```{python}
 
+from polarstate.aj import *
+
 times_and_reals = pl.DataFrame({
     "times": [1, 2, 2, 3, 4, 5, 6],
     "reals": [1, 0, 2, 1, 0, 2, 1]
