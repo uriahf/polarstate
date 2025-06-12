@@ -4,6 +4,13 @@ repos:
   rev: v0.11.13
   hooks:
     # Run the linter.
-    - id: ruff
+    - id: ruff-check
     # Run the formatter.
     - id: ruff-format
+- repo: https://github.com/astral-sh/uv-pre-commit
+  # uv version.
+  rev: 0.7.12
+  hooks:
+    # Update the uv lockfile
+    - id: uv-lock
+    - id: uv-export
