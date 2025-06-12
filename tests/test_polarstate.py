@@ -59,6 +59,19 @@ def test_create_sorted_times_and_reals_data() -> None:
     assert_frame_equal(result, expected_output)
 
 
+def test_predict_aj_estimates_alias() -> None:
+    """Ensure users can import ``predict_aj_estimates`` from ``polarstate``."""
+    times = pl.Series([1, 2, 3])
+    reals = pl.Series([1, 0, 0])
+
+    from polarstate import predict_aj_estimates
+
+    result_root = predict_aj_estimates(times, reals)
+    result_direct = aalen_johansen(times, reals)
+
+    assert_frame_equal(result_root, result_direct)
+
+
 def test_add_events_at_times_column() -> None:
     times_and_counts = pl.DataFrame(
         {
