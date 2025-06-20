@@ -1,6 +1,9 @@
-from .aj import aalen_johansen
+"""Public API for the :mod:`polarstate` package."""
 
-__all__ = ["aalen_johansen"]
+from .aj import aalen_johansen, prepare_event_table
+from .predict import predict_aj_estimates
+
+__all__ = ["aalen_johansen", "prepare_event_table", "predict_aj_estimates"]
 
 
 def main() -> None:
