@@ -17,7 +17,7 @@ from polarstate.aj import aalen_johansen
 
 ```{python}
 
-from polarstate.aj import *
+from polarstate import prepare_event_table
 
 times_and_reals = pl.DataFrame({
     "times": [1, 2, 2, 3, 4, 5, 6],
@@ -85,7 +85,7 @@ times_and_reals <- data.frame(
 
 from lifelines import AalenJohansenFitter
 from lifelines.datasets import load_waltons
-from polarstate.aj import *
+from polarstate import prepare_event_table
 
 
 T, E = load_waltons()['T'], load_waltons()['E']
