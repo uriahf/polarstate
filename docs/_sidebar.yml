@@ -6,6 +6,7 @@ website:
       section: Getting Started
     - contents:
       - reference/aj.qmd
+      - reference/predict.qmd
       section: Some functions
     id: reference
   - id: dummy-sidebar
