@@ -25,9 +25,7 @@ quartodoc:
       contents:
       - name: aj
         members:
-        - aalen_johansen
-        - group_reals_by_times
-        - add_events_at_times_column
-        - add_at_risk_column
-        - add_cause_specific_hazards_columns
-        - add_overall_survival_column
+        - prepare_event_table
+      - name: predict
+        members:
+        - predict_aj_estimates

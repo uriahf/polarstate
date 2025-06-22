@@ -11,3 +11,4 @@ Functions to inspect docstrings.
 | | |
 | --- | --- |
 | [aj](aj.qmd#polarstate.aj) |  |
+| [predict](predict.qmd#polarstate.predict) |  |

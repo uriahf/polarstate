@@ -8,131 +8,24 @@
 
 | Name | Description |
 | --- | --- |
-| [aalen_johansen](#polarstate.aj.aalen_johansen) | Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks. |
-| [group_reals_by_times](#polarstate.aj.group_reals_by_times) | Count occurrences of each event type (0, 1, 2) per unique observed time. |
-| [add_events_at_times_column](#polarstate.aj.add_events_at_times_column) |  |
-| [add_at_risk_column](#polarstate.aj.add_at_risk_column) | Add a column to the DataFrame that counts the number of individuals at risk at each time point. |
-| [add_cause_specific_hazards_columns](#polarstate.aj.add_cause_specific_hazards_columns) | Add columns for cause-specific hazards and conditional survival at each time point. |
-| [add_overall_survival_column](#polarstate.aj.add_overall_survival_column) | Add a column for overall survival, defined as the cumulative product of |
+| [prepare_event_table](#polarstate.aj.prepare_event_table) | Generate the full event table from raw ``times`` and ``reals`` data. |
 
-### aalen_johansen { #polarstate.aj.aalen_johansen }
+### prepare_event_table { #polarstate.aj.prepare_event_table }
 
 ```python
-aj.aalen_johansen(times, reals, event_of_interest=1, competing_events=None)
+aj.prepare_event_table(times_and_reals)
 ```
 
-Compute the Aalen-Johansen estimator for cumulative incidence in the presence of competing risks.
+Generate the full event table from raw ``times`` and ``reals`` data.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name              | Type        | Description                                                                   | Default    |
-|-------------------|-------------|-------------------------------------------------------------------------------|------------|
-| times             | pl.Series   | Event or censoring times for each observation.                                | _required_ |
-| reals             | pl.Series   | Event type for each observation (0 for censored, event codes otherwise).      | _required_ |
-| event_of_interest | int         | The event code for the event of interest (default is 1).                      | `1`        |
-| competing_events  | list of int | List of event codes considered as competing events. If None, defaults to [2]. | `None`     |
+| Name            | Type         | Description                                                             | Default    |
+|-----------------|--------------|-------------------------------------------------------------------------|------------|
+| times_and_reals | pl.DataFrame | A Polars DataFrame containing at least ``times`` and ``reals`` columns. | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type         | Description                                                                                                 |
-|--------|--------------|-------------------------------------------------------------------------------------------------------------|
-|        | pl.DataFrame | DataFrame with columns: - 'time': unique event times - 'cuminc': cumulative incidence estimate at each time |
-
-#### Notes {.doc-section .doc-section-notes}
-
-This implementation assumes that event codes are integers, with 0 indicating censoring.
-
-### group_reals_by_times { #polarstate.aj.group_reals_by_times }
-
-```python
-aj.group_reals_by_times(df)
-```
-
-Count occurrences of each event type (0, 1, 2) per unique observed time.
-
-#### Parameters {.doc-section .doc-section-parameters}
-
-| Name   | Type         | Description                                                                                                                                                                                                                                                      | Default    |
-|--------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| df     | pl.DataFrame | A Polars DataFrame with at least two columns: - 'times' (int): The observed time for each record. - 'reals' (int): The event type for each record, where:     - 0 indicates censoring,     - 1 indicates the primary event,     - 2 indicates a competing event. | _required_ |
-
-#### Returns {.doc-section .doc-section-returns}
-
-| Name   | Type         | Description                                                                                                                                                                                                                                 |
-|--------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|        | pl.DataFrame | A DataFrame with one row per unique time and three additional columns: - 'count_0': Number of censored observations at that time. - 'count_1': Number of primary events at that time. - 'count_2': Number of competing events at that time. |
-
-#### Notes {.doc-section .doc-section-notes}
-
-- Input is assumed to be clean (i.e., `times` and `reals` are properly typed).
-- Times are sorted in ascending order in the output.
-- If a particular event type does not occur at a time, its count will be 0.
-
-### add_events_at_times_column { #polarstate.aj.add_events_at_times_column }
-
-```python
-aj.add_events_at_times_column(sorted_times_and_reals)
-```
-
-
-
-### add_at_risk_column { #polarstate.aj.add_at_risk_column }
-
-```python
-aj.add_at_risk_column(events_data)
-```
-
-Add a column to the DataFrame that counts the number of individuals at risk at each time point.
-
-#### Parameters {.doc-section .doc-section-parameters}
-
-| Name        | Type         | Description                                                            | Default    |
-|-------------|--------------|------------------------------------------------------------------------|------------|
-| events_data | pl.DataFrame | A DataFrame with columns 'times', 'count_0', 'count_1', and 'count_2'. | _required_ |
-
-#### Returns {.doc-section .doc-section-returns}
-
-| Name   | Type         | Description                                                                                                                 |
-|--------|--------------|-----------------------------------------------------------------------------------------------------------------------------|
-|        | pl.DataFrame | The input DataFrame with an additional column 'at_risk' that contains the number of individuals at risk at each time point. |
-
-### add_cause_specific_hazards_columns { #polarstate.aj.add_cause_specific_hazards_columns }
-
-```python
-aj.add_cause_specific_hazards_columns(events_data)
-```
-
-Add columns for cause-specific hazards and conditional survival at each time point.
-
-#### Parameters {.doc-section .doc-section-parameters}
-
-| Name        | Type         | Description                                                                                                                                                                                                                                                                    | Default    |
-|-------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| events_data | pl.DataFrame | A DataFrame with columns: - 'count_0': number of censored individuals at each time point, - 'count_1': number of primary events at each time point, - 'count_2': number of competing events at each time point, - 'at_risk': number of individuals at risk at each time point. | _required_ |
-
-#### Returns {.doc-section .doc-section-returns}
-
-| Name   | Type         | Description                                                                                                                                                                                                                                                                                   |
-|--------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|        | pl.DataFrame | The input DataFrame with three additional columns: - 'csh_1': cause-specific hazard for event type 1 (count_1 / at_risk) - 'csh_2': cause-specific hazard for event type 2 (count_2 / at_risk) - 'conditional_survival': probability of not having any event at that time (count_0 / at_risk) |
-
-### add_overall_survival_column { #polarstate.aj.add_overall_survival_column }
-
-```python
-aj.add_overall_survival_column(events_data)
-```
-
-Add a column for overall survival, defined as the cumulative product of
-the conditional survival probabilities up to and including each time point.
-
-#### Parameters {.doc-section .doc-section-parameters}
-
-| Name        | Type         | Description                                                                                                             | Default    |
-|-------------|--------------|-------------------------------------------------------------------------------------------------------------------------|------------|
-| events_data | pl.DataFrame | A Polars DataFrame with a column 'conditional_survival' representing the probability of surviving past each time point. | _required_ |
-
-#### Returns {.doc-section .doc-section-returns}
-
-| Name   | Type         | Description                                                                                                                                |
-|--------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-|        | pl.DataFrame | The input DataFrame with an additional column 'overall_survival', which contains the Kaplan-Meier-style survival probability at each time. |
+| Name   | Type         | Description                                             |
+|--------|--------------|---------------------------------------------------------|
+|        | pl.DataFrame | The event table with all intermediate columns computed. |

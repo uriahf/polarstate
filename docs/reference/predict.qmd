@@ -1,0 +1,32 @@
+# predict { #polarstate.predict }
+
+`predict`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [predict_aj_estimates](#polarstate.predict.predict_aj_estimates) | Predict state-occupancy probabilities at ``fixed_time_horizons``. |
+
+### predict_aj_estimates { #polarstate.predict.predict_aj_estimates }
+
+```python
+predict.predict_aj_estimates(event_table, fixed_time_horizons)
+```
+
+Predict state-occupancy probabilities at ``fixed_time_horizons``.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name                | Type         | Description                                                 | Default    |
+|---------------------|--------------|-------------------------------------------------------------|------------|
+| event_table         | pl.DataFrame | The event table created by :func:`prepare_event_table`.     | _required_ |
+| fixed_time_horizons | pl.Series    | Times at which to obtain the state-occupancy probabilities. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type         | Description                                                                                   |
+|--------|--------------|-----------------------------------------------------------------------------------------------|
+|        | pl.DataFrame | DataFrame with ``fixed_time_horizons`` and the estimated probabilities for states 0, 1 and 2. |
