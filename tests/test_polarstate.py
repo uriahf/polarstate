@@ -11,6 +11,7 @@ from polarstate.aj import (
     add_state_occupancy_probabilities_at_times_columns,
     prepare_event_table,
 )
+from polarstate.predict import predict_aj_estimates
 from polars.testing import assert_frame_equal
 
 
@@ -378,6 +379,41 @@ def test_prepare_event_table() -> None:
                 (1.0 * 0.0),
                 (1.0 * 0.0) + ((6 / 7) * (1 / 5)),
                 (1.0 * 0.0) + ((6 / 7) * (1 / 5)) + ((6 / 7) * (3 / 5) * 1.0),
+            ],
+        }
+    )
+
+    assert_frame_equal(result, expected_output)
+
+
+def test_predict_aj_estimates() -> None:
+    times_and_reals = pl.DataFrame(
+        {"times": [1, 1, 2, 2, 2, 3, 3], "reals": [0, 1, 0, 1, 2, 2, 2]}
+    )
+
+    event_table = prepare_event_table(times_and_reals)
+
+    fixed_time_horizons = pl.Series([1, 3, 5])
+
+    result = predict_aj_estimates(event_table, fixed_time_horizons)
+
+    expected_output = pl.DataFrame(
+        {
+            "fixed_time_horizons": [1, 3, 5],
+            "state_occupancy_probability_0": [
+                (6 / 7),
+                0.0,
+                0.0,
+            ],
+            "state_occupancy_probability_1": [
+                (1 / 7),
+                (11 / 35),
+                (11 / 35),
+            ],
+            "state_occupancy_probability_2": [
+                0.0,
+                (24 / 35),
+                (24 / 35),
             ],
         }
     )
