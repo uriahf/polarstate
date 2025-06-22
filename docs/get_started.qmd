@@ -5,7 +5,6 @@ jupyter: python3
 
 ```{python}
 import polars as pl
-from polarstate.aj import aalen_johansen
 ```
 
 
