@@ -1,6 +1,6 @@
 [project]
 name = "polarstate"
-version = "0.1.3"
+version = "0.1.4"
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -30,6 +30,7 @@ dev = [
     "pytest>=8.3.5",
     "quartodoc>=0.10.0",
     "ruff>=0.11.11",
+    "uv>=0.7.13",
 ]
 
 [tool.pytest.ini_options]
@@ -37,9 +38,3 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
 
-[tool.hatch.build]
-packages = ["polarstate"]
-sources = { polarstate = "src/polarstate" }
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/polarstate"]
