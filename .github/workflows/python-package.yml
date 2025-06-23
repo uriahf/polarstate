@@ -45,6 +45,9 @@ jobs:
       - name: Build package using uv
         run: uv build
 
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
       - name: Build docs using quartodoc
         run: uv run quartodoc build
         working-directory: docs
