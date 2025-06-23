@@ -45,5 +45,13 @@ jobs:
       - name: Build package using uv
         run: uv build
 
+      - name: Build docs using quartodoc
+        run: uv run quartodoc build
+        working-directory: docs
+
+      - name: Publish docs using Quarto
+        run: uv quarto publish gh-pages
+        working-directory: docs
+
       - name: Publish package using uv
         run: uv publish
