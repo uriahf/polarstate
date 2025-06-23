@@ -50,7 +50,7 @@ jobs:
         working-directory: docs
 
       - name: Publish docs using Quarto
-        run: uv quarto publish gh-pages
+        run: uv run quarto publish gh-pages
         working-directory: docs
 
       - name: Publish package using uv
