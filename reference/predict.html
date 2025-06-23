@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>index – Polars State</title>
+<title>predict – Polars State</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -109,7 +143,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html">Function reference</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/aj.html">Some functions</a></li><li class="breadcrumb-item"><a href="../reference/predict.html">predict</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -128,7 +162,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
@@ -153,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/predict.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/predict.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">predict</span></a>
   </div>
 </li>
@@ -166,34 +200,94 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/aj.html">Some functions</a></li><li class="breadcrumb-item"><a href="../reference/predict.html">predict</a></li></ol></nav></header>
 
 
 
 
-<section id="function-reference" class="level1 doc doc-index">
-<h1 class="doc doc-index">Function reference</h1>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<p>Introduction to the package.</p>
-</section>
-<section id="some-functions" class="level2">
-<h2 class="anchored" data-anchor-id="some-functions">Some functions</h2>
-<p>Functions to inspect docstrings.</p>
+<section id="polarstate.predict" class="level1">
+<h1>predict</h1>
+<p><code>predict</code></p>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td><a href="../reference/aj.html#polarstate.aj">aj</a></td>
-<td></td>
+<td><a href="#polarstate.predict.predict_aj_estimates">predict_aj_estimates</a></td>
+<td>Predict state-occupancy probabilities at <code>fixed_time_horizons</code>.</td>
+</tr>
+</tbody>
+</table>
+<section id="polarstate.predict.predict_aj_estimates" class="level3">
+<h3 class="anchored" data-anchor-id="polarstate.predict.predict_aj_estimates">predict_aj_estimates</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>predict.predict_aj_estimates(event_table, fixed_time_horizons)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Predict state-occupancy probabilities at <code>fixed_time_horizons</code>.</p>
+<section id="parameters" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 56%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>event_table</td>
+<td>pl.DataFrame</td>
+<td>The event table created by :func:<code>prepare_event_table</code>.</td>
+<td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><a href="../reference/predict.html#polarstate.predict">predict</a></td>
+<td>fixed_time_horizons</td>
+<td>pl.Series</td>
+<td>Times at which to obtain the state-occupancy probabilities.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 11%">
+<col style="width: 81%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td></td>
+<td>pl.DataFrame</td>
+<td>DataFrame with <code>fixed_time_horizons</code> and the estimated probabilities for states 0, 1 and 2.</td>
 </tr>
 </tbody>
 </table>
 
 
+</section>
+</section>
 </section>
 </section>
 
