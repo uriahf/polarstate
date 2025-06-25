@@ -36,4 +36,4 @@ jobs:
 
       - name: Render and Publish
         working-directory: docs
-        run: uv run quarto publish gh-pages
+        run: uv run quarto publish gh-pages --token "${{ secrets.GITHUB_TOKEN }}"
