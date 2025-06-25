@@ -7,4 +7,5 @@ wheels/
 *.egg-info
 
 # Virtual environments
-.venv
+**/*.html
+docs/_site/search.json
