@@ -8,3 +8,4 @@ wheels/
 
 # Virtual environments
 **/*.html
+docs/_site/search.json
