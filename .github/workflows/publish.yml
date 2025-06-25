@@ -28,6 +28,9 @@ jobs:
       - name: 🐍 Set up Python
         run: uv python install
 
+      - name: Install Jupyter
+        run: uv pip install jupyter
+
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
