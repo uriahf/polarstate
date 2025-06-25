@@ -34,6 +34,14 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
+      - name: Set Git identity for Quarto publishing
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clean any leftover Quarto publish worktree
+        run: rm -rf .quarto
+
       - name: Render and Publish
         working-directory: docs
         run: uv run quarto publish gh-pages --no-browser --token "${{ secrets.GITHUB_TOKEN }}"
