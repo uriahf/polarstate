@@ -35,9 +35,5 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2
-        with:
-          path: docs
-          target: gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: docs
+        run: uv run quarto publish gh-pages
