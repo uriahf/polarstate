@@ -3,6 +3,11 @@ title: Get started with polarstate
 jupyter: python3
 ---
 
+This is a reproducible example that shows how to use polarstate, and compare the outputs to {lifelines} package.
+
+First:
+Import polars as a dependency:
+
 ```{python}
 import polars as pl
 ```
