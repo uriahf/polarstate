@@ -1,12 +1,12 @@
 [project]
 name = "polarstate"
-version = "0.1.5"
+version = "0.1.6"
 description = "Add your description here"
 readme = "README.md"
 authors = [
     { name = "Uriah Finkel", email = "Ufinkel@gmail.com" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.9"
 dependencies = [
     "polars>=1.30.0",
 ]
