@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://uriahf.github.io/polarstate/reference/predict.html</loc>
-    <lastmod>2025-06-25T12:28:01.535Z</lastmod>
-  </url>
-  <url>
     <loc>https://uriahf.github.io/polarstate/reference/aj.html</loc>
-    <lastmod>2025-06-25T12:28:01.534Z</lastmod>
-  </url>
-  <url>
-    <loc>https://uriahf.github.io/polarstate/get_started.html</loc>
-    <lastmod>2025-06-25T12:28:01.531Z</lastmod>
+    <lastmod>2025-07-03T17:53:43.208Z</lastmod>
   </url>
   <url>
     <loc>https://uriahf.github.io/polarstate/reference/index.html</loc>
-    <lastmod>2025-06-25T12:28:01.535Z</lastmod>
+    <lastmod>2025-07-03T17:53:43.208Z</lastmod>
+  </url>
+  <url>
+    <loc>https://uriahf.github.io/polarstate/get_started.html</loc>
+    <lastmod>2025-07-03T17:53:43.205Z</lastmod>
+  </url>
+  <url>
+    <loc>https://uriahf.github.io/polarstate/reference/predict.html</loc>
+    <lastmod>2025-07-03T17:53:43.208Z</lastmod>
   </url>
 </urlset>
