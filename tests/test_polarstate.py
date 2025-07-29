@@ -399,7 +399,7 @@ def test_predict_aj_estimates() -> None:
 
     expected_output = pl.DataFrame(
         {
-            "fixed_time_horizons": [1, 3, 5],
+            "times": [1, 3, 5],
             "state_occupancy_probability_0": [
                 (6 / 7),
                 0.0,
@@ -415,7 +415,14 @@ def test_predict_aj_estimates() -> None:
                 (24 / 35),
                 (24 / 35),
             ],
+            "estimate_origin": [
+                "fixed_time_horizons",
+                "fixed_time_horizons",
+                "fixed_time_horizons",
+            ],
         }
+    ).with_columns(
+        pl.col("estimate_origin").cast(pl.Enum(["fixed_time_horizons", "event_table"]))
     )
 
     assert_frame_equal(result, expected_output)
