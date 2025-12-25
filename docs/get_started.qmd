@@ -154,3 +154,46 @@ ajf.cumulative_density_
 
 
 :::
+
+# Performance Comparison
+
+Here we compare the performance of `polarstate` and `lifelines` for the same task.
+
+```{python}
+import timeit
+
+import pandas as pd
+import polars as pl
+from lifelines import AalenJohansenFitter
+from lifelines.datasets import load_waltons
+
+from polarstate import prepare_event_table
+
+# Load the dataset
+T, E = load_waltons()["T"], load_waltons()["E"]
+
+# Prepare data for polarstate
+polarstate_data = pl.DataFrame({"times": T, "reals": E})
+
+# Prepare data for lifelines
+lifelines_data = pd.DataFrame({"duration": T, "event": E})
+
+
+# Time polarstate
+polarstate_time = timeit.timeit(
+    "prepare_event_table(polarstate_data)",
+    globals=globals(),
+    number=100,
+)
+
+# Time lifelines
+ajf = AalenJohansenFitter(calculate_variance=True)
+lifelines_time = timeit.timeit(
+    'ajf.fit(lifelines_data["duration"], lifelines_data["event"], event_of_interest=1)',
+    globals=globals(),
+    number=100,
+)
+
+print(f"polarstate execution time: {polarstate_time:.4f} seconds (for 100 executions)")
+print(f"lifelines execution time: {lifelines_time:.4f} seconds (for 100 executions)")
+```
