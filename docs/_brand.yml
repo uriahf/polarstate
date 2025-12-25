@@ -1,26 +1,39 @@
 color:
   palette:
-    ice-blue: "#e8f4f8"
-    steel-grey: "#3a4750"
-    frost-white: "#f7fbfc"
-    arctic-blue: "#c7d9e1"
-    midnight: "#1a1d23"
-    glacier: "#d1e7ed"
-  background: ice-blue
-  foreground: steel-grey
-  primary: midnight
-
-logo: 
+    white: "#f7fbfd"
+    black: "#0e1419"
+    navbar-bg: white
+    navbar-fg: "#0f3b5f"
+    navbar-hl: "#1f5f82"
+    primary: "#e6f1f6"
+    link: "#1f5f82"
+    danger: "#7a2e2e"
+  background: white
+  foreground: black
+  primary: primary
+  light: white
+  dark: black
+  danger: danger
+  link: link
+logo:
   large: logo.png
 
 typography:
   fonts:
-    - family: Open Sans
+    - source: file
+      family: Fraunces9pt-Light
+      files:
+        - assets/fonts/Fraunces9pt-Light.woff2
+    - family: Lato
       source: google
     - family: Fraunces
       source: google
-    - family: Fira Code
+    - family: JetBrains Mono
       source: google
-  base: Open Sans
-  headings: Fraunces
-  monospace: Fira Code
+  base: Lato
+  headings:
+    family: Fraunces9pt-Light
+    weight: 700
+    style: normal
+    line-height: 1.2
+  monospace: JetBrains Mono
