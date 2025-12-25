@@ -24,8 +24,8 @@ import polars as pl
 from polarstate import prepare_event_table
 
 times_and_reals = pl.DataFrame({
-    "times": [1, 2, 2, 3, 4, 5, 6],
-    "reals": [1, 0, 2, 1, 0, 2, 1]
+    "times": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],
+    "reals": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1]
 })
 
 event_table = prepare_event_table(times_and_reals)
@@ -40,7 +40,7 @@ print(event_table)
 ```{python}
 from polarstate import predict_aj_estimates
 
-predict_aj_estimates(event_table, pl.Series([1, 3, 5]))
+predict_aj_estimates(event_table, pl.Series([10, 20, 30, 40, 50]))
 
 ```
 
@@ -52,8 +52,8 @@ import pandas as pd
 from lifelines import AalenJohansenFitter
 
 df = pd.DataFrame({
-    "duration": [1, 2, 2, 3, 4, 5, 6],
-    "event":    [1, 0, 2, 1, 0, 2, 1]
+    "duration": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],
+    "event":    [1, 1, 1, 1, 0, 2, 1, 2, 0, 1]
 })
 
 ajf_priamry = AalenJohansenFitter()
@@ -75,11 +75,11 @@ print(ajf_competing.cumulative_density_)
 ### Prediction for Specific Time-Horizons
 
 ```{python}
-print("Cumulative incidence for event type 1 at times 1, 3, 5:")
-print(ajf_priamry.predict([1, 3, 5]))
+print("Cumulative incidence for event type 1 at times 10, 20, 30, 40, 50:")
+print(ajf_priamry.predict([10, 20, 30, 40, 50]))
 
-print("Cumulative incidence for event type 2 at times 1, 3, 5:")
-print(ajf_competing.predict([1, 3, 5]))
+print("Cumulative incidence for event type 2 at times 10, 20, 30, 40, 50:")
+print(ajf_competing.predict([10, 20, 30, 40, 50]))
 
 ```
 
@@ -91,8 +91,8 @@ library(tidycmprsk)
 cuminc(Surv(ttdeath, death_cr) ~ 1, trial)
 
 times_and_reals <- data.frame(
-  times = c(1, 2, 2, 3, 4, 5, 6),
-  reals = factor(c(1, 0, 2, 1, 0, 2, 1),
+  times = c(24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3),
+  reals = factor(c(1, 1, 1, 1, 0, 2, 1, 2, 0, 1),
                  levels = c(0, 1, 2),
                  labels = c("censored", "primary_event", "competing_event"))
 )
