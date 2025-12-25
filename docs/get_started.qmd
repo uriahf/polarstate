@@ -40,7 +40,7 @@ print(event_table)
 ```{python}
 from polarstate import predict_aj_estimates
 
-predict_aj_estimates(event_table, pl.Series([10, 20, 30, 40, 50]))
+predict_aj_estimates(event_table, pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]))
 
 ```
 
@@ -75,11 +75,11 @@ print(ajf_competing.cumulative_density_)
 ### Prediction for Specific Time-Horizons
 
 ```{python}
-print("Cumulative incidence for event type 1 at times 10, 20, 30, 40, 50:")
-print(ajf_priamry.predict([10, 20, 30, 40, 50]))
+print("Cumulative incidence for event type 1 at times 10.0, 20.0, 30.0, 40.0, 50.0:")
+print(ajf_priamry.predict([10.0, 20.0, 30.0, 40.0, 50.0]))
 
-print("Cumulative incidence for event type 2 at times 10, 20, 30, 40, 50:")
-print(ajf_competing.predict([10, 20, 30, 40, 50]))
+print("Cumulative incidence for event type 2 at times 10.0, 20.0, 30.0, 40.0, 50.0:")
+print(ajf_competing.predict([10.0, 20.0, 30.0, 40.0, 50.0]))
 
 ```
 
