@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -67,14 +67,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4d49c55b2a02038d936e54d6a2565e99.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9c3682d5fde4964396e4ada689836294.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2aaf298298d3c4d86eb955b9fd3a786c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9c3682d5fde4964396e4ada689836294.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6982e8834f70bd3ed9a063887a0d40b4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-76771ed4e219e3feea9e73685da7d00b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-76771ed4e219e3feea9e73685da7d00b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-76771ed4e219e3feea9e73685da7d00b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
@@ -117,7 +122,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./logo.png" alt="" class="navbar-logo">
+    <img src="./logo.png" alt="" class="navbar-logo light-content">
+    <img src="./logo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Polars State</span>
@@ -173,50 +179,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>This is a reproducible example that shows how to use polarstate, and compare the outputs to {lifelines} package.</p>
 <p>First: Import polars as a dependency:</p>
-<div id="a02f9f1b" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="00e0f29e" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="competing-risks-example" class="level1">
 <h1>Competing Risks Example</h1>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">lifelines (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">tidycmprsk (R 🔵)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">lifelines (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">tidycmprsk (R 🔵)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="c3a79c34" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table</span>
+<div id="a7570fa0" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>times_and_reals <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>]</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>event_table <span class="op">=</span> prepare_event_table(times_and_reals)</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(event_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(event_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>shape: (6, 15)
+<pre><code>shape: (10, 15)
 ┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐
 │ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │
 │ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │
-│ i64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │
+│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │
 │       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │
 │       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │
 ╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡
-│ 1     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.142857     ┆ 0.0         ┆ 0.142857    ┆ 0.0         │
-│ 2     ┆ 1       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.142857    ┆ 0.142857    ┆ 0.142857    │
-│ 3     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.178571     ┆ 0.0         ┆ 0.321429    ┆ 0.142857    │
-│ 4     ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.321429    ┆ 0.142857    │
-│ 5     ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.267857    ┆ 0.321429    ┆ 0.410714    │
-│ 6     ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.267857     ┆ 0.0         ┆ 0.589286    ┆ 0.410714    │
+│ 4.3   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.1         ┆ 0.0         │
+│ 9.7   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.2         ┆ 0.0         │
+│ 14.2  ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.1         ┆ 0.2         ┆ 0.1         │
+│ 18.6  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.3         ┆ 0.1         │
+│ 24.1  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.4         ┆ 0.1         │
+│ 31.5  ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.4         ┆ 0.1         │
+│ 34.8  ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.4         ┆ 0.1         │
+│ 39.2  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.166667     ┆ 0.0         ┆ 0.566667    ┆ 0.1         │
+│ 46.0  ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.166667    ┆ 0.566667    ┆ 0.266667    │
+│ 49.9  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.166667     ┆ 0.0         ┆ 0.733333    ┆ 0.266667    │
 └───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘</code></pre>
 </div>
 </div>
 <section id="prediction-for-specific-time-horizons" class="level3">
 <h3 class="anchored" data-anchor-id="prediction-for-specific-time-horizons">Prediction for Specific Time-Horizons</h3>
-<div id="ebe83ee8" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> predict_aj_estimates</span>
+<div id="e0e6e36d" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> predict_aj_estimates</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>predict_aj_estimates(event_table, pl.Series([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>predict_aj_estimates(event_table, pl.Series([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div><style>
 .dataframe > thead > tr,
@@ -225,8 +235,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (3, 5)</small>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<small>shape: (5, 5)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th">times</th>
@@ -236,33 +246,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th">estimate_origin</th>
 </tr>
 <tr class="even">
-<th>i64</th>
-<th>f64</th>
-<th>f64</th>
-<th>f64</th>
-<th>enum</th>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>enum</td>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>1</td>
-<td>0.857143</td>
-<td>0.142857</td>
+<td>10.0</td>
+<td>0.8</td>
+<td>0.2</td>
 <td>0.0</td>
 <td>"fixed_time_horizons"</td>
 </tr>
 <tr class="even">
-<td>3</td>
-<td>0.535714</td>
-<td>0.321429</td>
-<td>0.142857</td>
+<td>20.0</td>
+<td>0.6</td>
+<td>0.3</td>
+<td>0.1</td>
 <td>"fixed_time_horizons"</td>
 </tr>
 <tr class="odd">
-<td>5</td>
-<td>0.267857</td>
-<td>0.321429</td>
-<td>0.410714</td>
+<td>30.0</td>
+<td>0.5</td>
+<td>0.4</td>
+<td>0.1</td>
+<td>"fixed_time_horizons"</td>
+</tr>
+<tr class="even">
+<td>40.0</td>
+<td>0.333333</td>
+<td>0.566667</td>
+<td>0.1</td>
+<td>"fixed_time_horizons"</td>
+</tr>
+<tr class="odd">
+<td>50.0</td>
+<td>-5.5511e-17</td>
+<td>0.733333</td>
+<td>0.266667</td>
 <td>"fixed_time_horizons"</td>
 </tr>
 </tbody>
@@ -273,13 +297,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="cbbda1f3" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div id="0711bf23" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"duration"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>:    [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"duration"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>:    [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>]</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ajf_priamry <span class="op">=</span> AalenJohansenFitter()</span>
@@ -292,48 +316,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>ajf_competing.fit(df[<span class="st">"duration"</span>], df[<span class="st">"event"</span>], event_of_interest<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Event Table for event type 2"</span>)</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf_competing.cumulative_density_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf_competing.cumulative_density_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Event Table for event type 1
              CIF_1
 event_at          
 0.0       0.000000
-1.0       0.142857
-2.0       0.142857
-3.0       0.321429
-4.0       0.321429
-5.0       0.321429
-6.0       0.589286
+4.3       0.100000
+9.7       0.200000
+14.2      0.200000
+18.6      0.300000
+24.1      0.400000
+31.5      0.400000
+34.8      0.400000
+39.2      0.566667
+46.0      0.566667
+49.9      0.733333
 Event Table for event type 2
              CIF_2
 event_at          
 0.0       0.000000
-1.0       0.000000
-2.0       0.142857
-3.0       0.142857
-4.0       0.142857
-5.0       0.410714
-6.0       0.410714</code></pre>
+4.3       0.000000
+9.7       0.000000
+14.2      0.100000
+18.6      0.100000
+24.1      0.100000
+31.5      0.100000
+34.8      0.100000
+39.2      0.100000
+46.0      0.266667
+49.9      0.266667</code></pre>
 </div>
 </div>
 <section id="prediction-for-specific-time-horizons-1" class="level3">
 <h3 class="anchored" data-anchor-id="prediction-for-specific-time-horizons-1">Prediction for Specific Time-Horizons</h3>
-<div id="834750d5" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Cumulative incidence for event type 1 at times 1, 3, 5:"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf_priamry.predict([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>]))</span>
+<div id="946fc4b0" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Cumulative incidence for event type 1 at times 10.0, 20.0, 30.0, 40.0, 50.0:"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf_priamry.predict([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Cumulative incidence for event type 2 at times 1, 3, 5:"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf_competing.predict([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Cumulative incidence for event type 2 at times 10.0, 20.0, 30.0, 40.0, 50.0:"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ajf_competing.predict([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Cumulative incidence for event type 1 at times 1, 3, 5:
-1    0.142857
-3    0.321429
-5    0.321429
+<pre><code>Cumulative incidence for event type 1 at times 10.0, 20.0, 30.0, 40.0, 50.0:
+10.0    0.200000
+20.0    0.300000
+30.0    0.400000
+40.0    0.566667
+50.0    0.733333
 Name: CIF_1, dtype: float64
-Cumulative incidence for event type 2 at times 1, 3, 5:
-1    0.000000
-3    0.142857
-5    0.410714
+Cumulative incidence for event type 2 at times 10.0, 20.0, 30.0, 40.0, 50.0:
+10.0    0.000000
+20.0    0.100000
+30.0    0.100000
+40.0    0.100000
+50.0    0.266667
 Name: CIF_2, dtype: float64</code></pre>
 </div>
 </div>
@@ -344,8 +380,8 @@ Name: CIF_2, dtype: float64</code></pre>
 cuminc(Surv(ttdeath, death_cr) ~ 1, trial)
 
 times_and_reals &lt;- data.frame(
-  times = c(1, 2, 2, 3, 4, 5, 6),
-  reals = factor(c(1, 0, 2, 1, 0, 2, 1),
+  times = c(24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3),
+  reals = factor(c(1, 1, 1, 1, 0, 2, 1, 2, 0, 1),
                  levels = c(0, 1, 2),
                  labels = c("censored", "primary_event", "competing_event"))
 )
@@ -361,11 +397,11 @@ times_and_reals &lt;- data.frame(
 <section id="no-compating-risks-example" class="level1">
 <h1>No Compating Risks Example</h1>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">lifelines (Py 🐍)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">lifelines (Py 🐍)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div id="327814b6" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<div id="6745b7b6" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -379,7 +415,7 @@ times_and_reals &lt;- data.frame(
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> prepare_event_table(times_and_reals)</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>shape: (32, 15)
 ┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐
@@ -405,18 +441,18 @@ times_and_reals &lt;- data.frame(
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div id="ae82b87d" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<div id="bb3e185e" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines.datasets <span class="im">import</span> load_waltons</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>T, E <span class="op">=</span> load_waltons()[<span class="st">'T'</span>], load_waltons()[<span class="st">'E'</span>]</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>ajf <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>ajf.fit(T, E, event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>ajf.cumulative_density_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>ajf.cumulative_density_</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -429,135 +465,135 @@ times_and_reals &lt;- data.frame(
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0.0</td>
+<th data-quarto-table-cell-role="th">0.0</th>
 <td>0.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">6.0</td>
+<th data-quarto-table-cell-role="th">6.0</th>
 <td>0.006135</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">7.0</td>
+<th data-quarto-table-cell-role="th">7.0</th>
 <td>0.012270</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9.0</td>
+<th data-quarto-table-cell-role="th">9.0</th>
 <td>0.030790</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">13.0</td>
+<th data-quarto-table-cell-role="th">13.0</th>
 <td>0.049310</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15.0</td>
+<th data-quarto-table-cell-role="th">15.0</th>
 <td>0.061656</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">17.0</td>
+<th data-quarto-table-cell-role="th">17.0</th>
 <td>0.067830</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">19.0</td>
+<th data-quarto-table-cell-role="th">19.0</th>
 <td>0.086350</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">22.0</td>
+<th data-quarto-table-cell-role="th">22.0</th>
 <td>0.111043</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">26.0</td>
+<th data-quarto-table-cell-role="th">26.0</th>
 <td>0.141910</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">29.0</td>
+<th data-quarto-table-cell-role="th">29.0</th>
 <td>0.172776</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">32.0</td>
+<th data-quarto-table-cell-role="th">32.0</th>
 <td>0.178949</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">33.0</td>
+<th data-quarto-table-cell-role="th">33.0</th>
 <td>0.197469</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">36.0</td>
+<th data-quarto-table-cell-role="th">36.0</th>
 <td>0.209816</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">38.0</td>
+<th data-quarto-table-cell-role="th">38.0</th>
 <td>0.222163</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">41.0</td>
+<th data-quarto-table-cell-role="th">41.0</th>
 <td>0.265376</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">43.0</td>
+<th data-quarto-table-cell-role="th">43.0</th>
 <td>0.271549</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">45.0</td>
+<th data-quarto-table-cell-role="th">45.0</th>
 <td>0.327109</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">47.0</td>
+<th data-quarto-table-cell-role="th">47.0</th>
 <td>0.333339</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">48.0</td>
+<th data-quarto-table-cell-role="th">48.0</th>
 <td>0.383183</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">51.0</td>
+<th data-quarto-table-cell-role="th">51.0</th>
 <td>0.401875</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">53.0</td>
+<th data-quarto-table-cell-role="th">53.0</th>
 <td>0.445488</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">54.0</td>
+<th data-quarto-table-cell-role="th">54.0</th>
 <td>0.457949</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">56.0</td>
+<th data-quarto-table-cell-role="th">56.0</th>
 <td>0.570097</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">58.0</td>
+<th data-quarto-table-cell-role="th">58.0</th>
 <td>0.595019</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">60.0</td>
+<th data-quarto-table-cell-role="th">60.0</th>
 <td>0.688476</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">61.0</td>
+<th data-quarto-table-cell-role="th">61.0</th>
 <td>0.745695</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">62.0</td>
+<th data-quarto-table-cell-role="th">62.0</th>
 <td>0.759079</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">63.0</td>
+<th data-quarto-table-cell-role="th">63.0</th>
 <td>0.819310</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">66.0</td>
+<th data-quarto-table-cell-role="th">66.0</th>
 <td>0.839386</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">68.0</td>
+<th data-quarto-table-cell-role="th">68.0</th>
 <td>0.899616</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">69.0</td>
+<th data-quarto-table-cell-role="th">69.0</th>
 <td>0.985659</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">75.0</td>
+<th data-quarto-table-cell-role="th">75.0</th>
 <td>1.000000</td>
 </tr>
 </tbody>
@@ -625,13 +661,14 @@ times_and_reals &lt;- data.frame(
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
