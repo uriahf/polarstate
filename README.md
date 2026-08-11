@@ -1,11 +1,12 @@
 # polarstate
 
-Fast, Polars-native Aalen-Johansen estimates for competing-risks data.
+Fast, Polars-native Aalen-Johansen estimates for time-to-event data.
 
 `polarstate` turns event times and outcomes into an event table, then predicts
-state-occupancy probabilities at the time horizons you care about. The public
-API is deliberately small: one function prepares the estimates and one function
-queries them.
+state-occupancy probabilities at the time horizons you care about. It supports
+ordinary single-event analyses and binary event/censoring data, with optional
+competing events. The public API is deliberately small: one function prepares
+the estimates and one function queries them.
 
 ## Install
 
@@ -35,13 +36,14 @@ estimates = predict_aj_estimates(
 print(estimates)
 ```
 
-Outcomes use `0` for censoring, `1` for the primary event, and `2` for the
-competing event. See the [documentation](https://uriahf.github.io/polarstate/)
-for a complete walkthrough and API reference.
+Outcomes use `0` for censoring and `1` for the event of interest. Use `2`
+only when the data include a competing event. See the
+[documentation](https://uriahf.github.io/polarstate/) for a complete
+walkthrough and API reference.
 
 ## Why polarstate?
 
 - Polars-native inputs and outputs
 - A compact, explicit event table you can inspect
 - Predictions at arbitrary time horizons
-- Support for both single-event and competing-risks data
+- Support for single-event, binary event/censoring, and competing-risks data
