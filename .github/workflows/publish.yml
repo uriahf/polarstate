@@ -1,9 +1,6 @@
-on:
-  workflow_dispatch:
-  push:
-    branches: master
+on: workflow_dispatch
 
-name: Quarto Publish
+name: Legacy Quarto Publish (manual)
 
 jobs:
   build-deploy:
@@ -25,7 +22,7 @@ jobs:
       - name: Build package using uv
         run: uv build
 
-      - name: 🐍 Set up Python
+      - name: Set up Python
         run: uv python install
 
       - name: Install Jupyter
