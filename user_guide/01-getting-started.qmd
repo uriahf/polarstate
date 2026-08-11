@@ -1,17 +1,21 @@
 ---
 title: "Getting Started"
-description: "Estimate competing-risks probabilities with Polars in a few lines."
+description: "Estimate time-to-event probabilities with Polars in a few lines."
 guide-section: "Getting Started"
 ---
 
 `polarstate` implements a compact Aalen-Johansen workflow with Polars
-DataFrames. It uses three outcome codes:
+DataFrames. It works for ordinary single-event analyses and binary
+event/censoring data, while also supporting an optional competing event.
 
 | Code | Meaning |
 |---:|---|
 | `0` | Censored |
-| `1` | Primary event |
-| `2` | Competing event |
+| `1` | Event of interest |
+| `2` | Competing event (optional) |
+
+For a simple time-to-event or binary event/censoring analysis, use only `0`
+and `1`.
 
 ## Install
 
