@@ -1,15 +1,22 @@
 [project]
 name = "polarstate"
 version = "0.1.8"
-description = "Add your description here"
+description = "Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames"
 readme = "README.md"
 authors = [
     { name = "Uriah Finkel", email = "Ufinkel@gmail.com" }
 ]
+keywords = ["survival-analysis", "competing-risks", "polars", "aalen-johansen"]
 requires-python = ">=3.9"
 dependencies = [
     "polars>=1.30.0",
 ]
+
+[project.urls]
+Homepage = "https://uriahf.github.io/polarstate/"
+Documentation = "https://uriahf.github.io/polarstate/"
+Repository = "https://github.com/uriahf/polarstate"
+Issues = "https://github.com/uriahf/polarstate/issues"
 
 [project.scripts]
 polarstate = "polarstate:main"
@@ -32,8 +39,6 @@ dev = [
     "pre-commit>=4.2.0",
     "pyarrow>=20.0.0",
     "pytest>=8.3.5",
-    "quarto>=0.1.0",
-    "quartodoc>=0.10.0",
     "ruff>=0.11.11",
     "ty>=0.0.1a14",
     "uv>=0.7.13",
@@ -43,4 +48,3 @@ dev = [
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
-
