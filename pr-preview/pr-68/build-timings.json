@@ -1,0 +1,46 @@
+{
+  "build_time": "2026-08-11T18:30:10Z",
+  "total_seconds": 8.199,
+  "pages": [
+    {
+      "page": "index.qmd",
+      "seconds": 3.184,
+      "frozen": false
+    },
+    {
+      "page": "user-guide/how-it-works.qmd",
+      "seconds": 1.939,
+      "frozen": false
+    },
+    {
+      "page": "package-info.qmd",
+      "seconds": 0.807,
+      "frozen": false
+    },
+    {
+      "page": "user-guide/getting-started.qmd",
+      "seconds": 0.475,
+      "frozen": false
+    },
+    {
+      "page": "reference/predict_aj_estimates.qmd",
+      "seconds": 0.454,
+      "frozen": false
+    },
+    {
+      "page": "reference/prepare_event_table.qmd",
+      "seconds": 0.451,
+      "frozen": false
+    },
+    {
+      "page": "reference/index.qmd",
+      "seconds": 0.445,
+      "frozen": false
+    },
+    {
+      "page": "skills.qmd",
+      "seconds": 0.444,
+      "frozen": false
+    }
+  ]
+}
