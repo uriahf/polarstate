@@ -1,0 +1,31 @@
+---
+title: "How the Estimator Works"
+description: "The calculation behind polarstate's event table."
+guide-section: "Concepts"
+---
+
+The Aalen-Johansen estimator extends Kaplan-Meier reasoning to multiple
+absorbing outcomes. `polarstate` makes each stage available as a column in the
+event table.
+
+## Calculation flow
+
+1. Observations are grouped by time and counted by outcome.
+2. The risk set is computed at each observed time.
+3. Cause-specific hazards are calculated for event types 1 and 2.
+4. Conditional survival is accumulated into overall survival.
+5. The previous survival probability weights each cause-specific hazard.
+6. Weighted transitions are cumulatively summed into state-occupancy
+   probabilities.
+
+For a requested time horizon, the prediction function performs a backward
+as-of join: it returns the latest estimate available at or before that horizon.
+Horizons before the first observed event receive probability 1 for state 0 and
+0 for the absorbing states.
+
+::: {.callout-note}
+## Input contract
+
+The current estimator expects outcomes encoded as `0`, `1`, or `2`. Validate
+and recode upstream data before preparing the event table.
+:::
