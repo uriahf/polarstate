@@ -26,7 +26,7 @@ logo:
 logo_show_title: true
 hero:
   name: "Polars State"
-  tagline: "Fast Aalen-Johansen estimates, built for Polars."
+  tagline: "Fast time-to-event estimates, built for Polars."
   logo_height: 180px
   badges:
     - alt: PyPI version
@@ -56,11 +56,11 @@ changelog:
 reference:
   title: "API Reference"
   desc: >-
-    The complete public API for preparing Aalen-Johansen event tables and
-    predicting state-occupancy probabilities.
+    The complete public API for preparing time-to-event tables and predicting
+    state-occupancy probabilities, with or without competing events.
   sections:
     - title: "Estimation"
-      desc: "Build an inspectable event table from competing-risks observations."
+      desc: "Build an inspectable event table from time-to-event observations."
       contents:
         - prepare_event_table
     - title: "Prediction"
