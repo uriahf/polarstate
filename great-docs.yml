@@ -1,0 +1,69 @@
+display_name: "Polars State"
+package: polarstate
+parser: numpy
+user_guide: user_guide
+homepage: index
+site_url: https://uriahf.github.io/polarstate/
+
+github_style: widget
+dark_mode_toggle: true
+back_to_top: true
+keyboard_nav: true
+markdown_pages: true
+
+navbar_style: sky
+content_style:
+  preset: mint
+  pages: all
+accent_color:
+  light: "#1f5f82"
+  dark: "#73c7e8"
+
+logo:
+  light: docs/logo.png
+  dark: docs/logo.png
+  alt: Polars State
+logo_show_title: true
+hero:
+  name: "Polars State"
+  tagline: "Fast time-to-event estimates, built for Polars."
+  logo_height: 180px
+  badges:
+    - alt: PyPI version
+      img: https://img.shields.io/pypi/v/polarstate
+      url: https://pypi.org/project/polarstate/
+    - alt: Requires Python 3.9 or newer
+      img: https://img.shields.io/badge/python-%E2%89%A53.9-3776AB?logo=python&logoColor=white
+      url: https://pypi.org/project/polarstate/
+
+nav_icons:
+  navbar:
+    User Guide: book-open
+    Reference: code-2
+  sidebar:
+    Getting Started: rocket
+    Concepts: orbit
+
+source:
+  enabled: true
+  branch: master
+  path: src/polarstate
+  placement: usage
+
+changelog:
+  enabled: false
+
+reference:
+  title: "API Reference"
+  desc: >-
+    The complete public API for preparing time-to-event tables and predicting
+    state-occupancy probabilities, with or without competing events.
+  sections:
+    - title: "Estimation"
+      desc: "Build an inspectable event table from time-to-event observations."
+      contents:
+        - prepare_event_table
+    - title: "Prediction"
+      desc: "Evaluate state-occupancy probabilities at fixed time horizons."
+      contents:
+        - predict_aj_estimates

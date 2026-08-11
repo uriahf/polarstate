@@ -1,0 +1,68 @@
+name: Documentation
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: docs-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: github.event.action != 'closed'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Quarto
+        if: github.event.action != 'closed'
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install dependencies
+        if: github.event.action != 'closed'
+        run: |
+          pip install great-docs
+          pip install -e .
+
+      - name: Build documentation
+        if: github.event.action != 'closed'
+        run: great-docs build
+
+      - name: Upload rendered site
+        if: github.event.action != 'closed'
+        uses: actions/upload-artifact@v4
+        with:
+          name: great-docs-site
+          path: great-docs/_site
+          include-hidden-files: true
+
+      - name: Deploy production site
+        if: github.event_name == 'push'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: great-docs/_site
+          branch: gh-pages
+          clean-exclude: pr-preview
+          force: false
+
+      - name: Deploy pull request preview
+        if: github.event_name == 'pull_request'
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: great-docs/_site
+          preview-branch: gh-pages
+          wait-for-pages-deployment: true
+          qr-code: false
