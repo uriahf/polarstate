@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>API Reference – Polars State | Polars State</title>
+<title>prepare_event_table() – Polars State | Polars State</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -91,35 +126,47 @@ ul.task-list li input[type="checkbox"] {
 <meta name="gd-content-style" data-preset="mint" data-pages="all">
 
 
-  <link rel="alternate" type="text/markdown" href="index.md">
-  <link rel="canonical" href="https://uriahf.github.io/polarstate/reference/">
-  <meta name="description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
+  <link rel="alternate" type="text/markdown" href="prepare_event_table.md">
+  <link rel="canonical" href="https://uriahf.github.io/polarstate/reference/prepare_event_table.html">
+  <meta name="description" content="Generate the full event table from raw times and reals data.">
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareSourceCode",
-  "name": "Polars State",
-  "description": "Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames",
-  "codeRepository": "https://github.com/uriahf/polarstate",
-  "url": "https://uriahf.github.io/polarstate",
-  "documentation": "https://uriahf.github.io/polarstate",
-  "programmingLanguage": {
-    "@type": "ComputerLanguage",
-    "name": "Python"
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "Polars State",
+    "description": "Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames",
+    "codeRepository": "https://github.com/uriahf/polarstate",
+    "url": "https://uriahf.github.io/polarstate",
+    "documentation": "https://uriahf.github.io/polarstate",
+    "programmingLanguage": {
+      "@type": "ComputerLanguage",
+      "name": "Python"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "prepare_event_table - Polars State",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Polars State"
+    },
+    "url": "https://uriahf.github.io/polarstate/reference/prepare_event_table.html"
   }
-}
+]
 </script>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="API Reference – Polars State | Polars State">
-  <meta property="og:description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
-  <meta property="og:url" content="https://uriahf.github.io/polarstate/reference/">
+  <meta property="og:title" content="prepare_event_table() – Polars State | Polars State">
+  <meta property="og:description" content="Generate the full event table from raw times and reals data.">
+  <meta property="og:url" content="https://uriahf.github.io/polarstate/reference/prepare_event_table.html">
   <meta property="og:site_name" content="Polars State">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="API Reference – Polars State | Polars State">
-  <meta name="twitter:description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
+  <meta name="twitter:title" content="prepare_event_table() – Polars State | Polars State">
+  <meta name="twitter:description" content="Generate the full event table from raw times and reals data.">
 </head>
 
-<body class="gd-ref-sidebar nav-sidebar floating nav-fixed doc-reference quarto-light">
+<body class="gd-ref-sidebar nav-sidebar floating nav-fixed doc-api-page quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -163,7 +210,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <h1 class="quarto-secondary-nav-title no-breadcrumbs gd-ref-title"><span class="gd-ref-title-prefix">API</span><span class="gd-ref-title-sep">/</span><span class="gd-ref-title-name">Index</span></h1>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs gd-ref-title"><span class="gd-ref-title-prefix">API</span><span class="gd-ref-title-sep">/</span><span class="gd-ref-title-name">prepare_event_table()</span></h1>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -177,7 +224,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container" style="padding-bottom: 0.5rem; padding-top: 0.25rem;"> 
-  <a href="../reference/index.html" style="font-family: &quot;Open Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/index.html" style="font-family: &quot;Open Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;" class="sidebar-item-text sidebar-link">
  <span class="menu-text">API Index</span></a>
   </div>
 </li>
@@ -189,7 +236,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/prepare_event_table.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/prepare_event_table.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">prepare_event_table</span></a>
   </div>
 </li>
@@ -216,11 +263,11 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h3 id="toc-title">On this page</h3>
    
   <ul class="collapse">
-  <li><a href="#estimation" id="toc-estimation" class="nav-link active" data-scroll-target="#estimation">Estimation</a></li>
-  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction">Prediction</a></li>
+  <li><a href="#parameters" id="toc-parameters" class="nav-link active" data-scroll-target="#parameters">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
   </ul>
 </nav>
     </div>
@@ -229,7 +276,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">API Reference</h1>
+<h2 class="title" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 1.25rem;"><span class="doc-object-name doc-function doc-label doc-label-function">prepare_event_table()</span></h2>
 </div>
 
 
@@ -246,37 +293,44 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="doc-description">
-<p>The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.</p>
-</div>
-<section id="estimation" class="level2 doc-group">
-<h2 class="doc-group">Estimation</h2>
-<div class="doc-description">
-<p>Build an inspectable event table from time-to-event observations.</p>
-</div>
-<dl>
-<dt><a href="../reference/prepare_event_table.html#polarstate.prepare_event_table" class="doc-function doc-label doc-label-function">prepare_event_table()</a></dt>
-<dd>
+<div class="doc-subject">
 <p>Generate the full event table from raw <code>times</code> and <code>reals</code> data.</p>
-</dd>
-</dl>
-</section>
-<section id="prediction" class="level2 doc-group">
-<h2 class="doc-group">Prediction</h2>
-<div class="doc-description">
-<p>Evaluate state-occupancy probabilities at fixed time horizons.</p>
 </div>
+<div class="doc-usage-source">
+<p>Usage</p>
+<p><a href="https://github.com/uriahf/polarstate/blob/master/src/polarstate/aj.py#L210-L233" target="_blank" rel="noopener">Source</a></p>
+</div>
+<div class="doc-signature doc-Kind.FUNCTION">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sig-name">prepare_event_table</span>(<span class="va">times_and_reals</span>)</span></code></pre></div>
+</div>
+<section id="parameters" class="level2 doc-parameters">
+<h2 class="doc-parameters">Parameters</h2>
+<div class="doc-definition-items">
 <dl>
-<dt><a href="../reference/predict_aj_estimates.html#polarstate.predict_aj_estimates" class="doc-function doc-label doc-label-function">predict_aj_estimates()</a></dt>
+<dt><code><span class="doc-parameter-name">times_and_reals</span><span class="doc-parameter-annotation-sep">:</span> <span class="doc-parameter-annotation">pl.DataFrame</span></code></dt>
 <dd>
-<p>Predict state-occupancy probabilities at <code>fixed_time_horizons</code>.</p>
+A Polars DataFrame containing at least <code>times</code> and <code>reals</code> columns.
 </dd>
 </dl>
+</div>
+</section>
+<section id="returns" class="level2 doc-returns">
+<h2 class="doc-returns">Returns</h2>
+<div class="doc-definition-items">
+<dl>
+<dt><code> <span class="doc-parameter-annotation">pl.DataFrame</span></code></dt>
+<dd>
+The event table with all intermediate columns computed.
+</dd>
+</dl>
+</div>
 
 
 </section>
 
-</main> <!-- /main -->
+</main>
+<hr style="padding: 0; margin: 0;">
+ <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -624,6 +678,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </footer>
 <script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
 <script src="../sidebar-wrap.js"></script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
 <script src="../sidebar-filter.js"></script>

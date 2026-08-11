@@ -1,0 +1,161 @@
+----------------------------------------------------------------------
+This is the API documentation for the polarstate library.
+----------------------------------------------------------------------
+
+
+## Estimation
+
+Build an inspectable event table from time-to-event observations.
+
+
+prepare_event_table(times_and_reals: polars.dataframe.frame.DataFrame) -> polars.dataframe.frame.DataFrame
+
+Generate the full event table from raw ``times`` and ``reals`` data.
+
+Parameters
+----------
+times_and_reals : pl.DataFrame
+    A Polars DataFrame containing at least ``times`` and ``reals`` columns.
+
+Returns
+-------
+pl.DataFrame
+    The event table with all intermediate columns computed.
+
+
+## Prediction
+
+Evaluate state-occupancy probabilities at fixed time horizons.
+
+
+predict_aj_estimates(event_table: polars.dataframe.frame.DataFrame, fixed_time_horizons: polars.series.series.Series, full_event_table: bool = False) -> polars.dataframe.frame.DataFrame
+
+Predict state-occupancy probabilities at ``fixed_time_horizons``.
+
+Parameters
+----------
+event_table : pl.DataFrame
+    The event table created by :func:`prepare_event_table`.
+fixed_time_horizons : pl.Series
+    Times at which to obtain the state-occupancy probabilities.
+
+Returns
+-------
+pl.DataFrame
+    DataFrame with ``fixed_time_horizons`` and the estimated probabilities
+    for states 0, 1 and 2.
+
+
+----------------------------------------------------------------------
+This is the User Guide documentation for the package.
+----------------------------------------------------------------------
+
+
+## Getting Started
+
+### Getting Started
+
+`polarstate` implements a compact Aalen-Johansen workflow with Polars
+DataFrames. It works for ordinary single-event analyses and binary
+event/censoring data, while also supporting an optional competing event.
+
+| Code | Meaning |
+|---:|---|
+| `0` | Censored |
+| `1` | Event of interest |
+| `2` | Competing event (optional) |
+
+For a simple time-to-event or binary event/censoring analysis, use only `0`
+and `1`.
+
+## Install
+
+```bash
+pip install polarstate
+```
+
+## Prepare an event table
+
+Start with one row per observation. The `times` column contains the observed
+time and `reals` contains the outcome code.
+
+```python
+import polars as pl
+from polarstate import prepare_event_table
+
+observations = pl.DataFrame(
+    {
+        "times": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],
+        "reals": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],
+    }
+)
+
+event_table = prepare_event_table(observations)
+```
+
+The returned table exposes the risk set, cause-specific hazards, overall
+survival, and cumulative state-occupancy probabilities. Keeping these
+intermediate quantities visible makes the estimate easy to inspect and audit.
+
+## Predict at fixed horizons
+
+```python
+from polarstate import predict_aj_estimates
+
+estimates = predict_aj_estimates(
+    event_table,
+    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),
+)
+```
+
+The result contains the requested time and one probability for each state.
+Each row sums to one (up to floating-point precision).
+
+::: {.callout-tip}
+## Need the observed event times too?
+
+Pass `full_event_table=True` to the prediction function to include estimates
+at every observed event time alongside your fixed horizons.
+:::
+
+## Where to go next
+
+- Read [How the estimator works](02-how-it-works.qmd) for the statistical flow.
+- Open the API Reference for signatures, parameter details, and source links.
+
+
+
+## Concepts
+
+### How the Estimator Works
+
+The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more
+absorbing outcomes. With only outcome codes `0` and `1`, `polarstate`
+handles an ordinary single-event or binary event/censoring analysis. Adding
+outcome code `2` introduces a competing event. Each calculation stage remains
+available as a column in the event table.
+
+## Calculation flow
+
+1. Observations are grouped by time and counted by outcome.
+2. The risk set is computed at each observed time.
+3. Cause-specific hazards are calculated for the event of interest and the
+   optional competing event.
+4. Conditional survival is accumulated into overall survival.
+5. The previous survival probability weights each cause-specific hazard.
+6. Weighted transitions are cumulatively summed into state-occupancy
+   probabilities.
+
+For a requested time horizon, the prediction function performs a backward
+as-of join: it returns the latest estimate available at or before that horizon.
+Horizons before the first observed event receive probability 1 for state 0 and
+0 for the absorbing states.
+
+::: {.callout-note}
+## Input contract
+
+The estimator expects outcomes encoded as `0` or `1`, with `2` used only
+when a competing event is present. Validate and recode upstream data before
+preparing the event table.
+:::
+

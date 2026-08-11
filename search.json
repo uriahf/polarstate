@@ -1,90 +1,103 @@
 [
   {
-    "objectID": "get_started.html",
-    "href": "get_started.html",
-    "title": "Get started with polarstate",
+    "objectID": "user-guide/how-it-works.html",
+    "href": "user-guide/how-it-works.html",
+    "title": "How the Estimator Works",
     "section": "",
-    "text": "This is a reproducible example that shows how to use polarstate, and compare the outputs to {lifelines} package.\nFirst: Import polars as a dependency:\n\nimport polars as pl\n\n\nCompeting Risks Example\n\npolarstate (Py 🐍)lifelines (Py 🐍)tidycmprsk (R 🔵)\n\n\n\nfrom polarstate import prepare_event_table\n\ntimes_and_reals = pl.DataFrame({\n    \"times\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n    \"reals\": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1]\n})\n\nevent_table = prepare_event_table(times_and_reals)\n\nprint(event_table)\n\nshape: (10, 15)\n┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐\n│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │\n│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │\n│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │\n│       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │\n│       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │\n╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡\n│ 4.3   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.1         ┆ 0.0         │\n│ 9.7   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.2         ┆ 0.0         │\n│ 14.2  ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.1         ┆ 0.2         ┆ 0.1         │\n│ 18.6  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.3         ┆ 0.1         │\n│ 24.1  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.1          ┆ 0.0         ┆ 0.4         ┆ 0.1         │\n│ 31.5  ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.4         ┆ 0.1         │\n│ 34.8  ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0          ┆ 0.0         ┆ 0.4         ┆ 0.1         │\n│ 39.2  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.166667     ┆ 0.0         ┆ 0.566667    ┆ 0.1         │\n│ 46.0  ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.0          ┆ 0.166667    ┆ 0.566667    ┆ 0.266667    │\n│ 49.9  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.166667     ┆ 0.0         ┆ 0.733333    ┆ 0.266667    │\n└───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘\n\n\n\nPrediction for Specific Time-Horizons\n\nfrom polarstate import predict_aj_estimates\n\npredict_aj_estimates(event_table, pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]))\n\n\nshape: (5, 5)\n\n\n\ntimes\nstate_occupancy_probability_0\nstate_occupancy_probability_1\nstate_occupancy_probability_2\nestimate_origin\n\n\nf64\nf64\nf64\nf64\nenum\n\n\n\n\n10.0\n0.8\n0.2\n0.0\n\"fixed_time_horizons\"\n\n\n20.0\n0.6\n0.3\n0.1\n\"fixed_time_horizons\"\n\n\n30.0\n0.5\n0.4\n0.1\n\"fixed_time_horizons\"\n\n\n40.0\n0.333333\n0.566667\n0.1\n\"fixed_time_horizons\"\n\n\n50.0\n-5.5511e-17\n0.733333\n0.266667\n\"fixed_time_horizons\"\n\n\n\n\n\n\n\n\n\n\nimport pandas as pd\nfrom lifelines import AalenJohansenFitter\n\ndf = pd.DataFrame({\n    \"duration\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n    \"event\":    [1, 1, 1, 1, 0, 2, 1, 2, 0, 1]\n})\n\najf_priamry = AalenJohansenFitter()\najf_priamry.fit(df[\"duration\"], df[\"event\"], event_of_interest=1)\n\nprint(\"Event Table for event type 1\")\nprint(ajf_priamry.cumulative_density_)\n\najf_competing = AalenJohansenFitter()\najf_competing.fit(df[\"duration\"], df[\"event\"], event_of_interest=2)\n\nprint(\"Event Table for event type 2\")\nprint(ajf_competing.cumulative_density_)\n\nEvent Table for event type 1\n             CIF_1\nevent_at          \n0.0       0.000000\n4.3       0.100000\n9.7       0.200000\n14.2      0.200000\n18.6      0.300000\n24.1      0.400000\n31.5      0.400000\n34.8      0.400000\n39.2      0.566667\n46.0      0.566667\n49.9      0.733333\nEvent Table for event type 2\n             CIF_2\nevent_at          \n0.0       0.000000\n4.3       0.000000\n9.7       0.000000\n14.2      0.100000\n18.6      0.100000\n24.1      0.100000\n31.5      0.100000\n34.8      0.100000\n39.2      0.100000\n46.0      0.266667\n49.9      0.266667\n\n\n\nPrediction for Specific Time-Horizons\n\nprint(\"Cumulative incidence for event type 1 at times 10.0, 20.0, 30.0, 40.0, 50.0:\")\nprint(ajf_priamry.predict([10.0, 20.0, 30.0, 40.0, 50.0]))\n\nprint(\"Cumulative incidence for event type 2 at times 10.0, 20.0, 30.0, 40.0, 50.0:\")\nprint(ajf_competing.predict([10.0, 20.0, 30.0, 40.0, 50.0]))\n\nCumulative incidence for event type 1 at times 10.0, 20.0, 30.0, 40.0, 50.0:\n10.0    0.200000\n20.0    0.300000\n30.0    0.400000\n40.0    0.566667\n50.0    0.733333\nName: CIF_1, dtype: float64\nCumulative incidence for event type 2 at times 10.0, 20.0, 30.0, 40.0, 50.0:\n10.0    0.000000\n20.0    0.100000\n30.0    0.100000\n40.0    0.100000\n50.0    0.266667\nName: CIF_2, dtype: float64\n\n\n\n\n\nlibrary(tidycmprsk)\ncuminc(Surv(ttdeath, death_cr) ~ 1, trial)\n\ntimes_and_reals &lt;- data.frame(\n  times = c(24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3),\n  reals = factor(c(1, 1, 1, 1, 0, 2, 1, 2, 0, 1),\n                 levels = c(0, 1, 2),\n                 labels = c(\"censored\", \"primary_event\", \"competing_event\"))\n)\n\n(cuminc(Surv(times, reals) ~ 1, times_and_reals)) |&gt;\n    tidy() |&gt;\n    print()\n\n\n\n\n\n\nNo Compating Risks Example\n\npolarstate (Py 🐍)lifelines (Py 🐍)\n\n\n\nfrom lifelines import AalenJohansenFitter\nfrom lifelines.datasets import load_waltons\nfrom polarstate import prepare_event_table\n\n\nT, E = load_waltons()['T'], load_waltons()['E']\n\ntimes_and_reals = pl.DataFrame({\n        \"times\": T,\n        \"reals\": E\n    })\n\nresult = prepare_event_table(times_and_reals)\n\nprint(result)\n\nshape: (32, 15)\n┌───────┬─────────┬─────────┬─────────┬───┬──────────────┬─────────────┬─────────────┬─────────────┐\n│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_ ┆ trainsition ┆ state_occup ┆ state_occup │\n│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ probabilitie ┆ _probabilit ┆ ancy_probab ┆ ancy_probab │\n│ f64   ┆ i64     ┆ i64     ┆ i64     ┆   ┆ s_to_1…      ┆ ies_to_2…   ┆ ility_1_…   ┆ ility_2_…   │\n│       ┆         ┆         ┆         ┆   ┆ ---          ┆ ---         ┆ ---         ┆ ---         │\n│       ┆         ┆         ┆         ┆   ┆ f64          ┆ f64         ┆ f64         ┆ f64         │\n╞═══════╪═════════╪═════════╪═════════╪═══╪══════════════╪═════════════╪═════════════╪═════════════╡\n│ 6.0   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.006135     ┆ 0.0         ┆ 0.006135    ┆ 0.0         │\n│ 7.0   ┆ 1       ┆ 1       ┆ 0       ┆ … ┆ 0.006135     ┆ 0.0         ┆ 0.01227     ┆ 0.0         │\n│ 9.0   ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.01852      ┆ 0.0         ┆ 0.03079     ┆ 0.0         │\n│ 13.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.01852      ┆ 0.0         ┆ 0.04931     ┆ 0.0         │\n│ 15.0  ┆ 0       ┆ 2       ┆ 0       ┆ … ┆ 0.012347     ┆ 0.0         ┆ 0.061656    ┆ 0.0         │\n│ …     ┆ …       ┆ …       ┆ …       ┆ … ┆ …            ┆ …           ┆ …           ┆ …           │\n│ 63.0  ┆ 0       ┆ 9       ┆ 0       ┆ … ┆ 0.06023      ┆ 0.0         ┆ 0.81931     ┆ 0.0         │\n│ 66.0  ┆ 0       ┆ 3       ┆ 0       ┆ … ┆ 0.020077     ┆ 0.0         ┆ 0.839386    ┆ 0.0         │\n│ 68.0  ┆ 1       ┆ 9       ┆ 0       ┆ … ┆ 0.06023      ┆ 0.0         ┆ 0.899616    ┆ 0.0         │\n│ 69.0  ┆ 1       ┆ 12      ┆ 0       ┆ … ┆ 0.086043     ┆ 0.0         ┆ 0.985659    ┆ 0.0         │\n│ 75.0  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.014341     ┆ 0.0         ┆ 1.0         ┆ 0.0         │\n└───────┴─────────┴─────────┴─────────┴───┴──────────────┴─────────────┴─────────────┴─────────────┘\n\n\n\n\n\nfrom lifelines import AalenJohansenFitter\nfrom lifelines.datasets import load_waltons\nT, E = load_waltons()['T'], load_waltons()['E']\najf = AalenJohansenFitter(calculate_variance=True)\najf.fit(T, E, event_of_interest=1)\najf.cumulative_density_\n\n\n\n\n\n\n\n\nCIF_1\n\n\nevent_at\n\n\n\n\n\n0.0\n0.000000\n\n\n6.0\n0.006135\n\n\n7.0\n0.012270\n\n\n9.0\n0.030790\n\n\n13.0\n0.049310\n\n\n15.0\n0.061656\n\n\n17.0\n0.067830\n\n\n19.0\n0.086350\n\n\n22.0\n0.111043\n\n\n26.0\n0.141910\n\n\n29.0\n0.172776\n\n\n32.0\n0.178949\n\n\n33.0\n0.197469\n\n\n36.0\n0.209816\n\n\n38.0\n0.222163\n\n\n41.0\n0.265376\n\n\n43.0\n0.271549\n\n\n45.0\n0.327109\n\n\n47.0\n0.333339\n\n\n48.0\n0.383183\n\n\n51.0\n0.401875\n\n\n53.0\n0.445488\n\n\n54.0\n0.457949\n\n\n56.0\n0.570097\n\n\n58.0\n0.595019\n\n\n60.0\n0.688476\n\n\n61.0\n0.745695\n\n\n62.0\n0.759079\n\n\n63.0\n0.819310\n\n\n66.0\n0.839386\n\n\n68.0\n0.899616\n\n\n69.0\n0.985659\n\n\n75.0\n1.000000"
+    "text": "The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes 0 and 1, polarstate handles an ordinary single-event or binary event/censoring analysis. Adding outcome code 2 introduces a competing event. Each calculation stage remains available as a column in the event table.\n\nCalculation flow\n\nObservations are grouped by time and counted by outcome.\nThe risk set is computed at each observed time.\nCause-specific hazards are calculated for the event of interest and the optional competing event.\nConditional survival is accumulated into overall survival.\nThe previous survival probability weights each cause-specific hazard.\nWeighted transitions are cumulatively summed into state-occupancy probabilities.\n\nFor a requested time horizon, the prediction function performs a backward as-of join: it returns the latest estimate available at or before that horizon. Horizons before the first observed event receive probability 1 for state 0 and 0 for the absorbing states.\n\n\n\n\n\n\nNoteInput contract\n\n\n\nThe estimator expects outcomes encoded as 0 or 1, with 2 used only when a competing event is present. Validate and recode upstream data before preparing the event table.",
+    "crumbs": [
+      "User Guide",
+      "Concepts",
+      "How the Estimator Works"
+    ]
+  },
+  {
+    "objectID": "skills.html",
+    "href": "skills.html",
+    "title": "Skills",
+    "section": "",
+    "text": "A skill is a package of structured files that teaches an AI coding agent how to work with a specific tool or framework. The skill below was generated by Great Docs from this project’s documentation. Install it in your agent and it will be able to run commands, edit configuration, write content, and troubleshoot problems without step-by-step guidance from you.\n\n  \n    ▶    Install this skill\n  \n  \n    \n      \nAny agent — install with npx:\nnpx skills add https://uriahf.github.io/polarstate/\nCodex / OpenCode\nTell the agent:Fetch the skill file at https://uriahf.github.io/polarstate/skill.md and follow the instructions.\nManual — download the skill file:\ncurl -O https://uriahf.github.io/polarstate/skill.md\nOr browse the SKILL.md file.\n      \n    \n  \n\n\nSKILL.md\n---\nname: polarstate\ndescription: &gt;\n  Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames. Use when writing Python code that uses the polarstate package.\ncompatibility: Requires Python &gt;=3.9.\n---\n\n# Polars State\n\nFast Aalen-Johansen state-occupancy estimates for Polars DataFrames\n\n## Installation\n\n```bash\npip install polarstate\n```\n\n## API overview\n\n### Estimation\n\nBuild an inspectable event table from time-to-event observations.\n\n- `prepare_event_table`: Generate the full event table from raw ``times`` and ``reals`` data\n\n### Prediction\n\nEvaluate state-occupancy probabilities at fixed time horizons.\n\n- `predict_aj_estimates`: Predict state-occupancy probabilities at ``fixed_time_horizons``\n\n## Resources\n\n- [Full documentation](https://uriahf.github.io/polarstate/)\n- [llms.txt](llms.txt) — Indexed API reference for LLMs\n- [llms-full.txt](llms-full.txt) — Comprehensive documentation for LLMs\n- [Source code](https://github.com/uriahf/polarstate)"
+  },
+  {
+    "objectID": "reference/predict_aj_estimates.html",
+    "href": "reference/predict_aj_estimates.html",
+    "title": "predict_aj_estimates()",
+    "section": "",
+    "text": "Predict state-occupancy probabilities at fixed_time_horizons.\n\n\nUsage\nSource\n\n\npredict_aj_estimates(event_table, fixed_time_horizons, full_event_table=False)\n\n\nParameters\n\n\nevent_table: pl.DataFrame\n\nThe event table created by :func:prepare_event_table.\n\nfixed_time_horizons: pl.Series\n\nTimes at which to obtain the state-occupancy probabilities.\n\n\n\n\n\nReturns\n\n\n pl.DataFrame\n\nDataFrame with fixed_time_horizons and the estimated probabilities for states 0, 1 and 2.",
+    "crumbs": [
+      "API Reference",
+      "Prediction",
+      "predict_aj_estimates"
+    ]
+  },
+  {
+    "objectID": "package-info.html",
+    "href": "package-info.html",
+    "title": "Package Info",
+    "section": "",
+    "text": "Runtime Dependencies\n\n\n\nPackage\nVersion Constraint\nLast Published\nPyPI\n\n\n\n\npolars\n&gt;=1.30.0\n2026-08-01\n\n\n\n\n\n\nSummary\n\nRequires: Python &gt;=3.9\nRuntime Dependencies: 1\nTotal unique dependencies: 1"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "polarstate",
+    "section": "",
+    "text": "Polars State\nFast time-to-event estimates, built for Polars."
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "polarstate",
+    "section": "Install",
+    "text": "Install\npip install polarstate"
+  },
+  {
+    "objectID": "index.html#quick-start",
+    "href": "index.html#quick-start",
+    "title": "polarstate",
+    "section": "Quick start",
+    "text": "Quick start\nimport polars as pl\nfrom polarstate import prepare_event_table, predict_aj_estimates\n\nobservations = pl.DataFrame(\n    {\n        \"times\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n        \"reals\": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],\n    }\n)\n\nevent_table = prepare_event_table(observations)\nestimates = predict_aj_estimates(\n    event_table,\n    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),\n)\n\nprint(estimates)\nOutcomes use 0 for censoring and 1 for the event of interest. Use 2 only when the data include a competing event. See the documentation for a complete walkthrough and API reference."
+  },
+  {
+    "objectID": "index.html#why-polarstate",
+    "href": "index.html#why-polarstate",
+    "title": "polarstate",
+    "section": "Why polarstate?",
+    "text": "Why polarstate?\n\nPolars-native inputs and outputs\nA compact, explicit event table you can inspect\nPredictions at arbitrary time horizons\nSupport for single-event, binary event/censoring, and competing-risks data"
   },
   {
     "objectID": "reference/index.html",
     "href": "reference/index.html",
-    "title": "Function reference",
+    "title": "API Reference",
     "section": "",
-    "text": "Introduction to the package.\n\n\n\nFunctions to inspect docstrings.\n\n\n\naj\n\n\n\npredict",
+    "text": "The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.\n\n\nEstimation\n\nBuild an inspectable event table from time-to-event observations.\n\n\nprepare_event_table()\n\nGenerate the full event table from raw times and reals data.\n\n\n\n\nPrediction\n\nEvaluate state-occupancy probabilities at fixed time horizons.\n\n\npredict_aj_estimates()\n\nPredict state-occupancy probabilities at fixed_time_horizons.",
     "crumbs": [
-      "Reference",
-      "Function reference"
+      "API Reference",
+      "API Index"
     ]
   },
   {
-    "objectID": "reference/index.html#getting-started",
-    "href": "reference/index.html#getting-started",
-    "title": "Function reference",
+    "objectID": "reference/prepare_event_table.html",
+    "href": "reference/prepare_event_table.html",
+    "title": "prepare_event_table()",
     "section": "",
-    "text": "Introduction to the package.",
+    "text": "Generate the full event table from raw times and reals data.\n\n\nUsage\nSource\n\n\nprepare_event_table(times_and_reals)\n\n\nParameters\n\n\ntimes_and_reals: pl.DataFrame\n\nA Polars DataFrame containing at least times and reals columns.\n\n\n\n\n\nReturns\n\n\n pl.DataFrame\n\nThe event table with all intermediate columns computed.",
     "crumbs": [
-      "Reference",
-      "Function reference"
+      "API Reference",
+      "Estimation",
+      "prepare_event_table"
     ]
   },
   {
-    "objectID": "reference/index.html#some-functions",
-    "href": "reference/index.html#some-functions",
-    "title": "Function reference",
+    "objectID": "user-guide/getting-started.html",
+    "href": "user-guide/getting-started.html",
+    "title": "Getting Started",
     "section": "",
-    "text": "Functions to inspect docstrings.\n\n\n\naj\n\n\n\npredict",
+    "text": "polarstate implements a compact Aalen-Johansen workflow with Polars DataFrames. It works for ordinary single-event analyses and binary event/censoring data, while also supporting an optional competing event.\n\n\n\nCode\nMeaning\n\n\n\n\n0\nCensored\n\n\n1\nEvent of interest\n\n\n2\nCompeting event (optional)\n\n\n\nFor a simple time-to-event or binary event/censoring analysis, use only 0 and 1.\n\nInstall\npip install polarstate\n\n\nPrepare an event table\nStart with one row per observation. The times column contains the observed time and reals contains the outcome code.\nimport polars as pl\nfrom polarstate import prepare_event_table\n\nobservations = pl.DataFrame(\n    {\n        \"times\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n        \"reals\": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],\n    }\n)\n\nevent_table = prepare_event_table(observations)\nThe returned table exposes the risk set, cause-specific hazards, overall survival, and cumulative state-occupancy probabilities. Keeping these intermediate quantities visible makes the estimate easy to inspect and audit.\n\n\nPredict at fixed horizons\nfrom polarstate import predict_aj_estimates\n\nestimates = predict_aj_estimates(\n    event_table,\n    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),\n)\nThe result contains the requested time and one probability for each state. Each row sums to one (up to floating-point precision).\n\n\n\n\n\n\nTipNeed the observed event times too?\n\n\n\nPass full_event_table=True to the prediction function to include estimates at every observed event time alongside your fixed horizons.\n\n\n\n\nWhere to go next\n\nRead How the estimator works for the statistical flow.\nOpen the API Reference for signatures, parameter details, and source links.",
     "crumbs": [
-      "Reference",
-      "Function reference"
-    ]
-  },
-  {
-    "objectID": "reference/predict.html",
-    "href": "reference/predict.html",
-    "title": "predict",
-    "section": "",
-    "text": "predict\n\n\n\n\n\nName\nDescription\n\n\n\n\npredict_aj_estimates\nPredict state-occupancy probabilities at fixed_time_horizons.\n\n\n\n\n\npredict.predict_aj_estimates(event_table, fixed_time_horizons)\nPredict state-occupancy probabilities at fixed_time_horizons.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nevent_table\npl.DataFrame\nThe event table created by :func:prepare_event_table.\nrequired\n\n\nfixed_time_horizons\npl.Series\nTimes at which to obtain the state-occupancy probabilities.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\npl.DataFrame\nDataFrame with fixed_time_horizons and the estimated probabilities for states 0, 1 and 2.",
-    "crumbs": [
-      "Reference",
-      "Some functions",
-      "predict"
-    ]
-  },
-  {
-    "objectID": "reference/predict.html#functions",
-    "href": "reference/predict.html#functions",
-    "title": "predict",
-    "section": "",
-    "text": "Name\nDescription\n\n\n\n\npredict_aj_estimates\nPredict state-occupancy probabilities at fixed_time_horizons.\n\n\n\n\n\npredict.predict_aj_estimates(event_table, fixed_time_horizons)\nPredict state-occupancy probabilities at fixed_time_horizons.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nevent_table\npl.DataFrame\nThe event table created by :func:prepare_event_table.\nrequired\n\n\nfixed_time_horizons\npl.Series\nTimes at which to obtain the state-occupancy probabilities.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\npl.DataFrame\nDataFrame with fixed_time_horizons and the estimated probabilities for states 0, 1 and 2.",
-    "crumbs": [
-      "Reference",
-      "Some functions",
-      "predict"
-    ]
-  },
-  {
-    "objectID": "reference/aj.html",
-    "href": "reference/aj.html",
-    "title": "aj",
-    "section": "",
-    "text": "aj\n\n\n\n\n\nName\nDescription\n\n\n\n\nprepare_event_table\nGenerate the full event table from raw times and reals data.\n\n\n\n\n\naj.prepare_event_table(times_and_reals)\nGenerate the full event table from raw times and reals data.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntimes_and_reals\npl.DataFrame\nA Polars DataFrame containing at least times and reals columns.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\npl.DataFrame\nThe event table with all intermediate columns computed.",
-    "crumbs": [
-      "Reference",
-      "Some functions",
-      "aj"
-    ]
-  },
-  {
-    "objectID": "reference/aj.html#functions",
-    "href": "reference/aj.html#functions",
-    "title": "aj",
-    "section": "",
-    "text": "Name\nDescription\n\n\n\n\nprepare_event_table\nGenerate the full event table from raw times and reals data.\n\n\n\n\n\naj.prepare_event_table(times_and_reals)\nGenerate the full event table from raw times and reals data.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntimes_and_reals\npl.DataFrame\nA Polars DataFrame containing at least times and reals columns.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\npl.DataFrame\nThe event table with all intermediate columns computed.",
-    "crumbs": [
-      "Reference",
-      "Some functions",
-      "aj"
+      "User Guide",
+      "Getting Started",
+      "Getting Started"
     ]
   }
 ]
