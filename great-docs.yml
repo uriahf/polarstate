@@ -32,8 +32,8 @@ hero:
     - alt: PyPI version
       img: https://img.shields.io/pypi/v/polarstate
       url: https://pypi.org/project/polarstate/
-    - alt: Python versions
-      img: https://img.shields.io/pypi/pyversions/polarstate
+    - alt: Requires Python 3.9 or newer
+      img: https://img.shields.io/badge/python-%E2%89%A53.9-3776AB?logo=python&logoColor=white
       url: https://pypi.org/project/polarstate/
 
 nav_icons:
