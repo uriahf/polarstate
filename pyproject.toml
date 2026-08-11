@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Uriah Finkel", email = "Ufinkel@gmail.com" }
 ]
-keywords = ["survival-analysis", "competing-risks", "polars", "aalen-johansen"]
+keywords = ["time-to-event", "survival-analysis", "competing-risks", "polars", "aalen-johansen"]
 requires-python = ">=3.9"
 dependencies = [
     "polars>=1.30.0",
