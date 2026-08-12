@@ -49,7 +49,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-360b2068b25b2f2099f2f47bce35ebf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-bf476c94c8758bc321fd5fd3b984c438.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -77,6 +77,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<meta name="mermaid-theme" content="default">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
@@ -265,7 +269,26 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes <code>0</code> and <code>1</code>, <code>polarstate</code> handles an ordinary single-event or binary event/censoring analysis. Adding outcome code <code>2</code> introduces a competing event. Each calculation stage remains available as a column in the event table.<code>{mermaid}\nflowchart LR\n    O[\"Under observation\"] --&gt;|\"Code 0\"| C[\"Censored\"]\n    O --&gt;|\"Code 1\"| E[\"Event of interest\"]\n    O -.-&gt;|\"Optional code 2\"| R[\"Competing event\"]\n    style O fill:#dff3f8,stroke:#1f5f82\n    style E fill:#e3f4ea,stroke:#287a4b\n    style R fill:#f8e8ef,stroke:#9b4668\n</code><code>0</code> and <code>1</code> are sufficient for the single-event case. Code <code>2</code> adds aabsorbing state; it is not required by the API.</p>
+<p>The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes <code>0</code> and <code>1</code>, <code>polarstate</code> handles an ordinary single-event or binary event/censoring analysis. Adding outcome code <code>2</code> introduces a competing event. Each calculation stage remains available as a column in the event table.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    O["Under observation"] --&gt;|"Code 0"| C["Censored"]
+    O --&gt;|"Code 1"| E["Event of interest"]
+    O -.-&gt;|"Optional code 2"| R["Competing event"]
+    style O fill:#dff3f8,stroke:#1f5f82
+    style E fill:#e3f4ea,stroke:#287a4b
+    style R fill:#f8e8ef,stroke:#9b4668
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Codes <code>0</code> and <code>1</code> are sufficient for the single-event case. Code <code>2</code> adds a second absorbing state; it is not required by the API.</p>
 <section id="calculation-flow" class="level1">
 <h1>Calculation flow</h1>
 <ol type="1">
@@ -287,11 +310,12 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The estimator expects outcomes encoded as <code>0</code> or <code>1</code>, with <code>2</code> used only when a competing event is present. Validate and recode upstream data before preparing the event table.:::with <a href="../user-guide/understanding-output.html">Understanding the output</a> for a-by-column interpretation.</p>
-
-
+<p>The estimator expects outcomes encoded as <code>0</code> or <code>1</code>, with <code>2</code> used only when a competing event is present. Validate and recode upstream data before preparing the event table.</p>
 </div>
 </div>
+<p>Continue with <a href="../user-guide/understanding-output.html">Understanding the output</a> for a column-by-column interpretation.</p>
+
+
 </section>
 
 </main> <!-- /main -->

@@ -84,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-360b2068b25b2f2099f2f47bce35ebf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-bf476c94c8758bc321fd5fd3b984c438.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -309,7 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="create-the-observations" class="level1">
 <h1>Create the observations</h1>
 <p>Each row contains an observed time and an outcome code: <code>0</code> for censoring, <code>1</code> for the event of interest, and optional <code>2</code> for a competing event.</p>
-<div id="635bc48e" class="cell" data-execution_count="1">
+<div id="7c919d0d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -334,7 +334,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="prepare-the-event-table" class="level1">
 <h1>Prepare the event table</h1>
-<div id="68d0bb31" class="cell" data-execution_count="2">
+<div id="ef616cfb" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>event_table <span class="op">=</span> prepare_event_table(observations)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>event_table.select(</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>,</span>
@@ -361,7 +361,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="predict-at-useful-horizons" class="level1">
 <h1>Predict at useful horizons</h1>
-<div id="98f71b34" class="cell" data-execution_count="3">
+<div id="46b9bef1" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> pl.Series(<span class="st">"times"</span>, [<span class="fl">0.0</span>, <span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>estimates <span class="op">=</span> predict_aj_estimates(event_table, horizons)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>estimates</span></code></pre></div>
@@ -376,7 +376,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <small>shape: (6, 5)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>times</th><th>state_occupancy_probability_0</th><th>state_occupancy_probability_1</th><th>state_occupancy_probability_2</th><th>estimate_origin</th></tr><tr><td>f64</td><td>f64</td><td>f64</td><td>f64</td><td>enum</td></tr></thead><tbody><tr><td>0.0</td><td>1.0</td><td>0.0</td><td>0.0</td><td>"fixed_time_horizons"</td></tr><tr><td>10.0</td><td>0.8</td><td>0.2</td><td>0.0</td><td>"fixed_time_horizons"</td></tr><tr><td>20.0</td><td>0.6</td><td>0.3</td><td>0.1</td><td>"fixed_time_horizons"</td></tr><tr><td>30.0</td><td>0.5</td><td>0.4</td><td>0.1</td><td>"fixed_time_horizons"</td></tr><tr><td>40.0</td><td>0.333333</td><td>0.566667</td><td>0.1</td><td>"fixed_time_horizons"</td></tr><tr><td>50.0</td><td>-5.5511e-17</td><td>0.733333</td><td>0.266667</td><td>"fixed_time_horizons"</td></tr></tbody></table></div>
 </div>
 </div>
-<div id="c785b03a" class="cell" data-execution_count="4">
+<div id="98c46e84" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>estimates.with_columns(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    pl.sum_horizontal(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"state_occupancy_probability_0"</span>,</span>
