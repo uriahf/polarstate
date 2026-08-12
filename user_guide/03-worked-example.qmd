@@ -1,0 +1,78 @@
+---
+title: "Worked Example"
+description: "Run a complete time-to-event analysis and inspect every result."
+guide-section: "Tutorial"
+jupyter: python3
+execute:
+  echo: true
+  warning: false
+---
+
+This tutorial follows a small cohort from subject-level observations to
+state-occupancy estimates. The code is executed when the documentation builds,
+so it also acts as a continuously checked example.
+
+## Create the observations
+
+Each row contains an observed time and an outcome code: `0` for censoring,
+`1` for the event of interest, and optional `2` for a competing event.
+
+```{python}
+import polars as pl
+from polarstate import prepare_event_table, predict_aj_estimates
+
+observations = pl.DataFrame(
+    {
+        "times": [4.3, 9.7, 14.2, 18.6, 24.1, 31.5, 34.8, 39.2, 46.0, 49.9],
+        "reals": [1, 1, 2, 1, 1, 0, 0, 1, 2, 1],
+    }
+)
+observations
+```
+
+## Prepare the event table
+
+```{python}
+event_table = prepare_event_table(observations)
+event_table.select(
+    "times",
+    "at_risk",
+    "count_0",
+    "count_1",
+    "count_2",
+    "overall_survival",
+    "state_occupancy_probability_1_at_times",
+    "state_occupancy_probability_2_at_times",
+)
+```
+
+The risk set decreases as observations experience an event or are censored.
+The two cumulative state-occupancy columns record the estimated probability of
+having entered each absorbing state by each observed time.
+
+## Predict at useful horizons
+
+```{python}
+horizons = pl.Series("times", [0.0, 10.0, 20.0, 30.0, 40.0, 50.0])
+estimates = predict_aj_estimates(event_table, horizons)
+estimates
+```
+
+```{python}
+estimates.with_columns(
+    pl.sum_horizontal(
+        "state_occupancy_probability_0",
+        "state_occupancy_probability_1",
+        "state_occupancy_probability_2",
+    ).alias("probability_sum")
+)
+```
+
+Every row sums to one, up to floating-point precision. State 0 means no
+absorbing event has occurred by the horizon; states 1 and 2 are the cumulative
+probabilities of the event of interest and competing event.
+
+::: {.callout-tip}
+To model a simple single-event analysis, use the same workflow with only codes
+`0` and `1`. The state-2 probability remains zero.
+:::
