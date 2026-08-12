@@ -10,6 +10,14 @@ the estimates and one function queries them.
 
 ## Install
 
+With [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv add polarstate
+```
+
+Alternatively, with pip:
+
 ```bash
 pip install polarstate
 ```
