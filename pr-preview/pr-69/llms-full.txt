@@ -127,6 +127,14 @@ and `1`.
 
 ## Install
 
+With [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv add polarstate
+```
+
+Alternatively, with pip:
+
 ```bash
 pip install polarstate
 ```
@@ -136,7 +144,7 @@ pip install polarstate
 Start with one row per observation. The `times` column contains the observed
 time and `reals` contains the outcome code.
 
-```python
+```{python}
 import polars as pl
 from polarstate import prepare_event_table
 
@@ -148,25 +156,36 @@ observations = pl.DataFrame(
 )
 
 event_table = prepare_event_table(observations)
+event_table.select(
+    "times",
+    "at_risk",
+    "count_0",
+    "count_1",
+    "count_2",
+    "overall_survival",
+    "state_occupancy_probability_1_at_times",
+    "state_occupancy_probability_2_at_times",
+)
 ```
 
-The returned table exposes the risk set, cause-specific hazards, overall
-survival, and cumulative state-occupancy probabilities. Keeping these
-intermediate quantities visible makes the estimate easy to inspect and audit.
+The rendered table above is the actual output from `polarstate`, generated
+when the documentation builds. It exposes the risk set, outcome counts,
+overall survival, and cumulative state-occupancy probabilities.
 
 ## Predict at fixed horizons
 
-```python
+```{python}
 from polarstate import predict_aj_estimates
 
 estimates = predict_aj_estimates(
     event_table,
     pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),
 )
+estimates
 ```
 
-The result contains the requested time and one probability for each state.
-Each row sums to one (up to floating-point precision).
+The rendered result contains the requested time and one probability for each
+state. Each row sums to one (up to floating-point precision).
 
 ::: {.callout-tip}
 ## Need the observed event times too?
@@ -177,6 +196,8 @@ at every observed event time alongside your fixed horizons.
 
 ## Where to go next
 
+- Continue with the [worked example](03-worked-example.qmd) for a complete,
+  executable analysis.
 - Read [How the estimator works](02-how-it-works.qmd) for the statistical flow.
 - Open the API Reference for signatures, parameter details, and source links.
 

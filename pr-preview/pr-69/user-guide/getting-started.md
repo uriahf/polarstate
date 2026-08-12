@@ -13,6 +13,14 @@ For a simple time-to-event or binary event/censoring analysis, use only `0` and 
 
 # Install
 
+With [uv](https://docs.astral.sh/uv/):
+
+``` bash
+uv add polarstate
+```
+
+Alternatively, with pip:
+
 ``` bash
 pip install polarstate
 ```
@@ -21,6 +29,7 @@ pip install polarstate
 # Prepare an event table
 
 Start with one row per observation. The `times` column contains the observed time and `reals` contains the outcome code.
+
 
 ``` python
 import polars as pl
@@ -34,12 +43,41 @@ observations = pl.DataFrame(
 )
 
 event_table = prepare_event_table(observations)
+event_table.select(
+    "times",
+    "at_risk",
+    "count_0",
+    "count_1",
+    "count_2",
+    "overall_survival",
+    "state_occupancy_probability_1_at_times",
+    "state_occupancy_probability_2_at_times",
+)
 ```
 
-The returned table exposes the risk set, cause-specific hazards, overall survival, and cumulative state-occupancy probabilities. Keeping these intermediate quantities visible makes the estimate easy to inspect and audit.
+
+shape: (10, 8)
+
+| times | at_risk | count_0 | count_1 | count_2 | overall_survival | state_occupancy_probability_1_at_times | state_occupancy_probability_2_at_times |
+|----|----|----|----|----|----|----|----|
+| f64 | i64 | i64 | i64 | i64 | f64 | f64 | f64 |
+| 4.3 | 10 | 0 | 1 | 0 | 0.9 | 0.1 | 0.0 |
+| 9.7 | 9 | 0 | 1 | 0 | 0.8 | 0.2 | 0.0 |
+| 14.2 | 8 | 0 | 0 | 1 | 0.7 | 0.2 | 0.1 |
+| 18.6 | 7 | 0 | 1 | 0 | 0.6 | 0.3 | 0.1 |
+| 24.1 | 6 | 0 | 1 | 0 | 0.5 | 0.4 | 0.1 |
+| 31.5 | 5 | 1 | 0 | 0 | 0.5 | 0.4 | 0.1 |
+| 34.8 | 4 | 1 | 0 | 0 | 0.5 | 0.4 | 0.1 |
+| 39.2 | 3 | 0 | 1 | 0 | 0.333333 | 0.566667 | 0.1 |
+| 46.0 | 2 | 0 | 0 | 1 | 0.166667 | 0.566667 | 0.266667 |
+| 49.9 | 1 | 0 | 1 | 0 | 0.0 | 0.733333 | 0.266667 |
+
+
+The rendered table above is the actual output from `polarstate`, generated when the documentation builds. It exposes the risk set, outcome counts, overall survival, and cumulative state-occupancy probabilities.
 
 
 # Predict at fixed horizons
+
 
 ``` python
 from polarstate import predict_aj_estimates
@@ -48,9 +86,23 @@ estimates = predict_aj_estimates(
     event_table,
     pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),
 )
+estimates
 ```
 
-The result contains the requested time and one probability for each state. Each row sums to one (up to floating-point precision).
+
+shape: (5, 5)
+
+| times | state_occupancy_probability_0 | state_occupancy_probability_1 | state_occupancy_probability_2 | estimate_origin |
+|----|----|----|----|----|
+| f64 | f64 | f64 | f64 | enum |
+| 10.0 | 0.8 | 0.2 | 0.0 | "fixed_time_horizons" |
+| 20.0 | 0.6 | 0.3 | 0.1 | "fixed_time_horizons" |
+| 30.0 | 0.5 | 0.4 | 0.1 | "fixed_time_horizons" |
+| 40.0 | 0.333333 | 0.566667 | 0.1 | "fixed_time_horizons" |
+| 50.0 | -5.5511e-17 | 0.733333 | 0.266667 | "fixed_time_horizons" |
+
+
+The rendered result contains the requested time and one probability for each state. Each row sums to one (up to floating-point precision).
 
 > **Tip: Need the observed event times too?**
 >
@@ -59,5 +111,6 @@ The result contains the requested time and one probability for each state. Each 
 
 # Where to go next
 
+- Continue with the [worked example](worked-example.md) for a complete, executable analysis.
 - Read [How the estimator works](how-it-works.md) for the statistical flow.
 - Open the API Reference for signatures, parameter details, and source links.
