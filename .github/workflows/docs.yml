@@ -41,7 +41,7 @@ jobs:
         if: github.event.action != 'closed'
         run: great-docs build
 
-      - name: Upload rendered site
+      - name: Lint public API documentation\n        if: github.event.action != 'closed'\n        run: great-docs lint\n\n      - name: Check documentation links\n        if: github.event.action != 'closed'\n        run: great-docs check-links --docs-only --timeout 20\n\n      - name: Upload rendered site
         if: github.event.action != 'closed'
         uses: actions/upload-artifact@v4
         with:
