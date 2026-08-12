@@ -1,0 +1,17 @@
+# polarstate
+
+> Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames
+
+## Docs
+
+### API Reference
+
+#### Estimation
+> Build an inspectable event table from time-to-event observations.
+
+- [prepare_event_table](https://uriahf.github.io/polarstate/reference/prepare_event_table.html): Build an inspectable Aalen-Johansen event table
+
+#### Prediction
+> Evaluate state-occupancy probabilities at fixed time horizons.
+
+- [predict_aj_estimates](https://uriahf.github.io/polarstate/reference/predict_aj_estimates.html): Evaluate state-occupancy probabilities at fixed time horizons
