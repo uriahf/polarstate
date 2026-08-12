@@ -19,6 +19,7 @@ Each row contains an observed time and an outcome code: `0` for censoring,
 
 ```{python}
 import polars as pl
+from great_docs import tbl_explorer
 from polarstate import prepare_event_table, predict_aj_estimates
 
 observations = pl.DataFrame(
@@ -34,7 +35,7 @@ observations
 
 ```{python}
 event_table = prepare_event_table(observations)
-event_table.select(
+event_table_view = event_table.select(
     "times",
     "at_risk",
     "count_0",
@@ -43,6 +44,19 @@ event_table.select(
     "overall_survival",
     "state_occupancy_probability_1_at_times",
     "state_occupancy_probability_2_at_times",
+)
+```
+
+Explore the calculation row by row. Sort by time, hide intermediate columns, or
+copy the visible values for comparison.
+
+```{python}
+#| echo: false
+tbl_explorer(
+    event_table_view,
+    page_size=0,
+    downloadable=False,
+    caption="Aalen–Johansen event table",
 )
 ```
 
@@ -55,16 +69,24 @@ having entered each absorbing state by each observed time.
 ```{python}
 horizons = pl.Series("times", [0.0, 10.0, 20.0, 30.0, 40.0, 50.0])
 estimates = predict_aj_estimates(event_table, horizons)
-estimates
-```
-
-```{python}
-estimates.with_columns(
+estimates_with_sum = estimates.with_columns(
     pl.sum_horizontal(
         "state_occupancy_probability_0",
         "state_occupancy_probability_1",
         "state_occupancy_probability_2",
     ).alias("probability_sum")
+)
+```
+
+```{python}
+#| echo: false
+tbl_explorer(
+    estimates_with_sum,
+    page_size=0,
+    filterable=False,
+    column_toggle=False,
+    downloadable=False,
+    caption="State-occupancy estimates at requested horizons",
 )
 ```
 
