@@ -205,16 +205,33 @@ flowchart LR
 Codes `0` and `1` are sufficient for the single-event case. Code `2` adds a
 second absorbing state; it is not required by the API.
 
+## The estimator
+
+For event type (j), the estimated state-occupancy probability is
+
+$$
+\widehat F_j(t)
+=
+\sum_{u \le t}
+\widehat S(u-)
+\frac{dN_j(u)}{Y(u)}.
+$$ {#eq-aalen-johansen}
+
+Here, (Y(u)) is the risk set immediately before time (u), (dN_j(u)) is
+the number of type-(j) events at that time, and (widehat S(u-)) is the
+probability of remaining in state 0 immediately beforehand.
+
 ## Calculation flow
 
+The columns returned by `prepare_event_table()` expose each component of
+@eq-aalen-johansen:
+
 1. Observations are grouped by time and counted by outcome.
-2. The risk set is computed at each observed time.
-3. Cause-specific hazards are calculated for the event of interest and the
-   optional competing event.
-4. Conditional survival is accumulated into overall survival.
-5. The previous survival probability weights each cause-specific hazard.
-6. Weighted transitions are cumulatively summed into state-occupancy
-   probabilities.
+2. `at_risk` supplies (Y(u)).
+3. `csh_1` and `csh_2` supply (dN_j(u)/Y(u)).
+4. `previous_overall_survival` supplies (widehat S(u-)).
+5. `trainsition_probabilities_to_*_at_times` contains each weighted increment.
+6. `state_occupancy_probability_*_at_times` cumulatively sums those increments.
 
 For a requested time horizon, the prediction function performs a backward
 as-of join: it returns the latest estimate available at or before that horizon.
@@ -230,7 +247,8 @@ preparing the event table.
 :::
 
 Continue with [Understanding the output](04-understanding-output.qmd) for a
-column-by-column interpretation.
+column-by-column interpretation, or open the [worked example](03-worked-example.qmd)
+to inspect Equation @eq-aalen-johansen numerically.
 
 
 
@@ -249,6 +267,7 @@ Each row contains an observed time and an outcome code: `0` for censoring,
 
 ```{python}
 import polars as pl
+from great_docs import tbl_explorer
 from polarstate import prepare_event_table, predict_aj_estimates
 
 observations = pl.DataFrame(
@@ -264,7 +283,7 @@ observations
 
 ```{python}
 event_table = prepare_event_table(observations)
-event_table.select(
+event_table_view = event_table.select(
     "times",
     "at_risk",
     "count_0",
@@ -273,6 +292,19 @@ event_table.select(
     "overall_survival",
     "state_occupancy_probability_1_at_times",
     "state_occupancy_probability_2_at_times",
+)
+```
+
+Explore the calculation row by row. Sort by time, hide intermediate columns, or
+copy the visible values for comparison.
+
+```{python}
+#| echo: false
+tbl_explorer(
+    event_table_view,
+    page_size=0,
+    downloadable=False,
+    caption="Aalen–Johansen event table",
 )
 ```
 
@@ -285,16 +317,24 @@ having entered each absorbing state by each observed time.
 ```{python}
 horizons = pl.Series("times", [0.0, 10.0, 20.0, 30.0, 40.0, 50.0])
 estimates = predict_aj_estimates(event_table, horizons)
-estimates
-```
-
-```{python}
-estimates.with_columns(
+estimates_with_sum = estimates.with_columns(
     pl.sum_horizontal(
         "state_occupancy_probability_0",
         "state_occupancy_probability_1",
         "state_occupancy_probability_2",
     ).alias("probability_sum")
+)
+```
+
+```{python}
+#| echo: false
+tbl_explorer(
+    estimates_with_sum,
+    page_size=0,
+    filterable=False,
+    column_toggle=False,
+    downloadable=False,
+    caption="State-occupancy estimates at requested horizons",
 )
 ```
 
@@ -378,7 +418,13 @@ establish causal effects.
 
 ## Recipes
 
-## Single-event survival
+## Choose the event structure
+
+The estimation workflow is unchanged; only the outcome coding differs.
+
+::: {.panel-tabset}
+
+### Single event
 
 Use `0` for censoring and `1` for the event. No competing-event rows are
 required.
@@ -396,14 +442,17 @@ table = prepare_event_table(data)
 result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 12.0]))
 ```
 
-In this case, `state_occupancy_probability_2` is zero and state 0 is the
+Here, `state_occupancy_probability_2` is zero and state 0 is the
 event-free probability.
 
-## Add a competing event
+### Competing risks
 
 Encode the event of interest as `1` and the competing event as `2`.
 
 ```python
+import polars as pl
+from polarstate import prepare_event_table, predict_aj_estimates
+
 data = pl.DataFrame({
     "times": [2.0, 4.0, 5.0, 8.0, 10.0, 12.0],
     "reals": [1, 2, 0, 1, 2, 1],
@@ -415,6 +464,8 @@ result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 9.0, 12.0]))
 
 Do not censor competing events. Encoding them as `0` changes the estimand and
 generally overstates the cumulative incidence of the event of interest.
+
+:::
 
 ## Return horizons and event times together
 

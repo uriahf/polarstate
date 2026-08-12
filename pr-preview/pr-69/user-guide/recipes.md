@@ -1,7 +1,14 @@
 # Recipes
 
 
-# Single-event survival
+# Choose the event structure
+
+The estimation workflow is unchanged; only the outcome coding differs.
+
+
+- <a href="" id="tabset-1-1-tab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Single event</a>
+- <a href="" id="tabset-1-2-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Competing risks</a>
+
 
 Use `0` for censoring and `1` for the event. No competing-event rows are required.
 
@@ -18,14 +25,15 @@ table = prepare_event_table(data)
 result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 12.0]))
 ```
 
-In this case, `state_occupancy_probability_2` is zero and state 0 is the event-free probability.
+Here, `state_occupancy_probability_2` is zero and state 0 is the event-free probability.
 
-
-# Add a competing event
 
 Encode the event of interest as `1` and the competing event as `2`.
 
 ``` python
+import polars as pl
+from polarstate import prepare_event_table, predict_aj_estimates
+
 data = pl.DataFrame({
     "times": [2.0, 4.0, 5.0, 8.0, 10.0, 12.0],
     "reals": [1, 2, 0, 1, 2, 1],

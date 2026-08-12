@@ -268,8 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#single-event-survival" id="toc-single-event-survival" class="nav-link active" data-scroll-target="#single-event-survival">Single-event survival</a></li>
-  <li><a href="#add-a-competing-event" id="toc-add-a-competing-event" class="nav-link" data-scroll-target="#add-a-competing-event">Add a competing event</a></li>
+  <li><a href="#choose-the-event-structure" id="toc-choose-the-event-structure" class="nav-link active" data-scroll-target="#choose-the-event-structure">Choose the event structure</a></li>
   <li><a href="#return-horizons-and-event-times-together" id="toc-return-horizons-and-event-times-together" class="nav-link" data-scroll-target="#return-horizons-and-event-times-together">Return horizons and event times together</a></li>
   <li><a href="#estimate-within-groups" id="toc-estimate-within-groups" class="nav-link" data-scroll-target="#estimate-within-groups">Estimate within groups</a></li>
   <li><a href="#convert-pandas-input" id="toc-convert-pandas-input" class="nav-link" data-scroll-target="#convert-pandas-input">Convert pandas input</a></li>
@@ -303,8 +302,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="single-event-survival" class="level1">
-<h1>Single-event survival</h1>
+<section id="choose-the-event-structure" class="level1">
+<h1>Choose the event structure</h1>
+<p>The estimation workflow is unchanged; only the outcome coding differs.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Single event</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Competing risks</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Use <code>0</code> for censoring and <code>1</code> for the event. No competing-event rows are required.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
@@ -316,19 +320,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> prepare_event_table(data)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> predict_aj_estimates(table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">12.0</span>]))</span></code></pre></div>
-<p>In this case, <code>state_occupancy_probability_2</code> is zero and state 0 is the event-free probability.</p>
-</section>
-<section id="add-a-competing-event" class="level1">
-<h1>Add a competing event</h1>
+<p>Here, <code>state_occupancy_probability_2</code> is zero and state 0 is the event-free probability.</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Encode the event of interest as <code>1</code> and the competing event as <code>2</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>, <span class="fl">12.0</span>],</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> prepare_event_table(data)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> predict_aj_estimates(table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>, <span class="fl">12.0</span>],</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> prepare_event_table(data)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> predict_aj_estimates(table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]))</span></code></pre></div>
 <p>Do not censor competing events. Encoding them as <code>0</code> changes the estimand and generally overstates the cumulative incidence of the event of interest.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="return-horizons-and-event-times-together" class="level1">
 <h1>Return horizons and event times together</h1>
