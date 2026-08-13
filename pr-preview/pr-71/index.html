@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Polars State | Polars State</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./favicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bf476c94c8758bc321fd5fd3b984c438.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const list = document.querySelector("#navbarCollapse .navbar-nav");
+  const brand = document.querySelector(".navbar-brand");
+  if (!list || !brand) return;
+
+  const root = new URL(brand.href);
+  const pages = [
+    ["Home", new URL(".", root).href],
+    ["How It Works", new URL("user-guide/how-it-works.html", root).href],
+    ["Package Comparisons", new URL("user-guide/package-comparisons.html", root).href],
+    ["Recipes", new URL("user-guide/recipes.html", root).href],
+  ];
+
+  const apiItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
+    item.textContent.trim().includes("API Reference")
+  );
+  const userGuideItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
+    item.textContent.trim().includes("User Guide")
+  );
+
+  for (const [label, href] of pages) {
+    const item = document.createElement("li");
+    item.className = "nav-item";
+
+    const link = document.createElement("a");
+    link.className = "nav-link";
+    link.href = href;
+    link.textContent = label;
+
+    const currentPath = window.location.pathname.replace(/index\.html$/, "");
+    const linkPath = new URL(href).pathname.replace(/index\.html$/, "");
+    if (currentPath === linkPath) {
+      link.classList.add("active");
+      link.setAttribute("aria-current", "page");
+    }
+
+    item.appendChild(link);
+    list.insertBefore(item, apiItem || null);
+  }
+
+  userGuideItem?.remove();
+});
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<link rel="icon" type="image/x-icon" href="https://uriahf.github.io/polarstate/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="https://uriahf.github.io/polarstate/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://uriahf.github.io/polarstate/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://uriahf.github.io/polarstate/apple-touch-icon.png">
+<script src="theme-init.js"></script>
+<meta name="gd-navbar-style" data-preset="sky">
+<meta name="gd-content-style" data-preset="mint" data-pages="all">
+
+
+<link rel="stylesheet" href="uriah-brand.css">
+  <link rel="canonical" href="https://uriahf.github.io/polarstate/">
+  <meta name="description" content="Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Polars State",
+  "description": "Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames",
+  "codeRepository": "https://github.com/uriahf/polarstate",
+  "url": "https://uriahf.github.io/polarstate",
+  "documentation": "https://uriahf.github.io/polarstate",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "Python"
+  }
+}
+</script>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Polars State | Polars State">
+  <meta property="og:description" content="Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames">
+  <meta property="og:url" content="https://uriahf.github.io/polarstate">
+  <meta property="og:site_name" content="Polars State">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Polars State | Polars State">
+  <meta name="twitter:description" content="Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames">
+</head>
+
+<body class="nav-fixed gd-homepage quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./logo.png" alt="Polars State" class="navbar-logo light-content">
+    <img src="./logo.png" alt="Polars State" class="navbar-logo dark-content">
+    </a>
+  </div>
+            <div id="quarto-search" class=""></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./user-guide/how-it-works.html"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./reference/index.html"> 
+<span class="menu-text">API Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <span class="nav-link">
+<div id="github-widget" data-owner="uriahf" data-repo="polarstate" data-stars="1" data-forks="0"></div>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<style>
+section.level1:first-of-type > h1:first-child,
+section.level2:first-of-type > h2:first-child,
+.column-body-outset-right > section.level1:first-of-type > h1,
+#quarto-document-content > section:first-of-type > h1 {
+  margin-top: 4px !important;
+}
+</style>
+<div class="gd-hero">
+<img src="docs/logo.png" alt="Polars State" class="gd-hero-logo" style="max-height:180px">
+<p class="gd-hero-name">Polars State</p>
+<p class="gd-hero-tagline">Fast time-to-event estimates, built for Polars.</p>
+<div class="gd-hero-badges">
+<a href="https://pypi.org/project/polarstate/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/polarstate"></a>
+<a href="https://pypi.org/project/polarstate/"><img alt="Requires Python 3.9 or newer" src="https://img.shields.io/badge/python-%E2%89%A53.9-3776AB?logo=python&amp;logoColor=white"></a>
+</div>
+</div>
+
+
+<div class="no-row-height column-margin column-container"><div class="">
+<section id="links" class="level3">
+<h3 class="anchored" data-anchor-id="links">Links</h3>
+<p><a href="https://pypi.org/project/polarstate/">View on PyPI<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -0.05em; margin-left: 0em; margin-top: 0.1em;" viewbox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><br> <a href="https://github.com/uriahf/polarstate">Browse source code<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -0.05em; margin-left: 0em; margin-top: 0.1em;" viewbox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><br> <a href="https://github.com/uriahf/polarstate/issues">Issues<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -0.05em; margin-left: 0em; margin-top: 0.1em;" viewbox="0 0 24 24"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><br></p>
+</section>
+<section id="ai-agents" class="level3">
+<h3 class="anchored" data-anchor-id="ai-agents">AI / Agents</h3>
+<p><a href="skills.html">Skills<svg class="gd-sparkle" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -0.1em; margin-left: 0.25em;"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .963L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path></svg></a><br> <a href="llms.txt">llms.txt</a><br> <a href="llms-full.txt">llms-full.txt</a><br></p>
+</section>
+<section id="developers" class="level3">
+<h3 class="anchored" data-anchor-id="developers">Developers</h3>
+<div>
+<span>
+<p>
+<strong style="padding-bottom: 4px;">Uriah Finkel</strong>
+</p>
+</span><span style="margin-top: -0.15em; display: block;"><a href="mailto:Ufinkel@gmail.com" title="Email"><i class="bi bi-envelope-fill"></i></a> <a href="https://github.com/uriahf" title="GitHub"><i class="bi bi-github"></i></a></span>
+</div>
+</section>
+<section id="meta" class="level3">
+<h3 class="anchored" data-anchor-id="meta">Meta</h3>
+<p><strong>Requires:</strong> Python <code>&gt;=3.9</code><br> <a href="package-info.html">Package Info</a></p>
+</section>
+</div></div><section id="polarstate" class="level1">
+<h1>polarstate</h1>
+<p>Fast, Polars-native Aalen-Johansen estimates for time-to-event data.</p>
+<p><code>polarstate</code> turns event times and outcomes into state-occupancy probabilities at the time horizons you care about. It supports ordinary single-event analyses and binary event/censoring data, with optional competing events.</p>
+<p>The workflow has two explicit steps:</p>
+<ol type="1">
+<li><a href="reference/prepare_event_table.html#polarstate.prepare_event_table" class="gdls-link gdls-code">prepare_event_table()</a> turns subject-level observations into an inspectable Aalen-Johansen event table at each observed time.</li>
+<li><a href="reference/predict_aj_estimates.html#polarstate.predict_aj_estimates" class="gdls-link gdls-code">predict_aj_estimates()</a> evaluates those estimates at the time horizons you request.</li>
+</ol>
+<section id="install" class="level2">
+<h2 class="anchored" data-anchor-id="install">Install</h2>
+<p>With <a href="https://docs.astral.sh/uv/">uv</a>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add polarstate</span></code></pre></div>
+<p>Alternatively, with pip:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install polarstate</span></code></pre></div>
+</section>
+<section id="quick-start" class="level2">
+<h2 class="anchored" data-anchor-id="quick-start">Quick start</h2>
+<p>Start with one row per observation:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>observations <span class="op">=</span> pl.DataFrame(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"times"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<section id="prepare-the-event-table" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-the-event-table">1. Prepare the event table</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>event_table <span class="op">=</span> prepare_event_table(observations)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>event_table.select(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"at_risk"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"count_0"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"count_1"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"count_2"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"overall_survival"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"state_occupancy_probability_1_at_times"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"state_occupancy_probability_2_at_times"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Selected columns from the output:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">times</th>
+<th style="text-align: right;">at_risk</th>
+<th style="text-align: right;">count_0</th>
+<th style="text-align: right;">count_1</th>
+<th style="text-align: right;">count_2</th>
+<th style="text-align: right;">overall_survival</th>
+<th style="text-align: right;">state 1 probability</th>
+<th style="text-align: right;">state 2 probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.900000</td>
+<td style="text-align: right;">0.100000</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9.7</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.800000</td>
+<td style="text-align: right;">0.200000</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14.2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.700000</td>
+<td style="text-align: right;">0.200000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18.6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.600000</td>
+<td style="text-align: right;">0.300000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">24.1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.500000</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">31.5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.500000</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">34.8</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.500000</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">39.2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.333333</td>
+<td style="text-align: right;">0.566667</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">46.0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.166667</td>
+<td style="text-align: right;">0.566667</td>
+<td style="text-align: right;">0.266667</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">49.9</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: right;">0.733333</td>
+<td style="text-align: right;">0.266667</td>
+</tr>
+</tbody>
+</table>
+<p>The complete event table also retains the intermediate hazards, survival increments, and transition probabilities used in the calculation.</p>
+</section>
+<section id="query-fixed-time-horizons" class="level3">
+<h3 class="anchored" data-anchor-id="query-fixed-time-horizons">2. Query fixed time horizons</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>estimates <span class="op">=</span> predict_aj_estimates(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    event_table,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>]),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>estimates</span></code></pre></div>
+<p>Output:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">times</th>
+<th style="text-align: right;">state 0 probability</th>
+<th style="text-align: right;">state 1 probability</th>
+<th style="text-align: right;">state 2 probability</th>
+<th>estimate_origin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10.0</td>
+<td style="text-align: right;">0.800000</td>
+<td style="text-align: right;">0.200000</td>
+<td style="text-align: right;">0.000000</td>
+<td>fixed_time_horizons</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20.0</td>
+<td style="text-align: right;">0.600000</td>
+<td style="text-align: right;">0.300000</td>
+<td style="text-align: right;">0.100000</td>
+<td>fixed_time_horizons</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30.0</td>
+<td style="text-align: right;">0.500000</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+<td>fixed_time_horizons</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">40.0</td>
+<td style="text-align: right;">0.333333</td>
+<td style="text-align: right;">0.566667</td>
+<td style="text-align: right;">0.100000</td>
+<td>fixed_time_horizons</td>
+</tr>
+</tbody>
+</table>
+<p>State 0 is remaining event-free, state 1 is the event of interest, and state 2 is the competing event.</p>
+<p>Code <code>0</code> in the input indicates right-censoring: follow-up ended without an observed event. This includes administrative censoring at the end of observation. Code <code>1</code> indicates the event of interest, and optional code <code>2</code> a competing event.</p>
+</section>
+</section>
+<section id="why-polarstate" class="level2">
+<h2 class="anchored" data-anchor-id="why-polarstate">Why polarstate?</h2>
+<ul>
+<li>Polars-native inputs and outputs</li>
+<li>A compact, explicit event table you can inspect</li>
+<li>Predictions at arbitrary time horizons</li>
+<li>Support for single-event, binary event/censoring, and competing-risks data</li>
+</ul>
+</section>
+<section id="learn-more" class="level2">
+<h2 class="anchored" data-anchor-id="learn-more">Learn more</h2>
+<ul>
+<li><a href="user-guide/how-it-works.html">How the estimator works</a> explains the Aalen-Johansen calculation and every returned column.</li>
+<li><a href="user-guide/package-comparisons.html">Package comparisons</a> checks the same estimates against Python’s lifelines and R’s tidycmprsk.</li>
+<li><a href="user-guide/recipes.html">Recipes</a> covers single-event, competing-risks, grouped, and pandas-to-Polars workflows.</li>
+<li>The <a href="https://uriahf.github.io/polarstate/reference/">API Reference</a> provides complete signatures and parameter details.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/uriahf\.github\.io\/polarstate\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+<div class="nav-footer-center">
+<p>Developed by <strong>Uriah&nbsp;Finkel</strong>.<br>Site created with <strong>Great&nbsp;Docs</strong>.</p>
+</div>
+</div>
+</footer>
+<script src="github-widget.js"></script>
+<script src="sidebar-wrap.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
+<script src="sidebar-filter.js"></script>
+<script src="dark-mode-toggle.js"></script>
+<script src="back-to-top.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'on-this-page.js';document.body.appendChild(s);})();</script>
+<script src="keyboard-nav.js"></script>
+<script src="copy-code.js"></script>
+<script src="details.js"></script>
+<script src="mermaid-renderer.js"></script>
+<script src="tooltips.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
+<script src="responsive-tables.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
+<script src="navbar-widgets.js"></script>
+<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>"}}</script>
+<script>/**
+ * Navigation Icons for Great Docs
+ *
+ * Reads a JSON icon map from a <script id="gd-nav-icons-data"> element
+ * and prepends inline SVG icons to matching navbar and sidebar entries.
+ *
+ * The icon map is emitted by the Python build pipeline and has the shape:
+ *   { "navbar": { "Label": "<svg .../>", ... },
+ *     "sidebar": { "Label": "<svg .../>", ... } }
+ */
+(function () {
+  "use strict";
+
+  /**
+   * Inject an SVG icon before the text of a navigation link.
+   *
+   * @param {Element} menuText - The .menu-text span element.
+   * @param {string} svgHtml - The inline SVG markup to prepend.
+   */
+  function injectIcon(menuText, svgHtml) {
+    // Avoid double-injection on re-runs
+    if (menuText.querySelector(".gd-nav-icon")) return;
+
+    // Create a temporary container to parse the SVG string
+    var wrapper = document.createElement("span");
+    wrapper.innerHTML = svgHtml;
+    var svg = wrapper.firstElementChild;
+    if (!svg) return;
+
+    menuText.insertBefore(svg, menuText.firstChild);
+  }
+
+  /**
+   * Process a set of navigation items, matching by their text content.
+   *
+   * @param {string} selector - CSS selector to find .menu-text elements.
+   * @param {Object} mapping - Label -> SVG HTML mapping.
+   */
+  function processNavItems(selector, mapping) {
+    if (!mapping || typeof mapping !== "object") return;
+
+    var items = document.querySelectorAll(selector);
+    items.forEach(function (el) {
+      // Get the trimmed text content (may include child node text)
+      var text = el.textContent.trim();
+      if (mapping[text]) {
+        injectIcon(el, mapping[text]);
+      }
+    });
+  }
+
+  function run() {
+    var dataEl = document.getElementById("gd-nav-icons-data");
+    if (!dataEl) return;
+
+    var iconMap;
+    try {
+      iconMap = JSON.parse(dataEl.textContent);
+    } catch (_) {
+      return;
+    }
+    if (!iconMap) return;
+
+    // Process navbar items: look for .navbar .menu-text spans
+    processNavItems(".navbar .nav-link > .menu-text", iconMap.navbar || {});
+
+    // Process sidebar items: look for .sidebar .menu-text spans
+    // This covers sidebar section titles and individual items
+    processNavItems(
+      "#quarto-sidebar .sidebar-item .menu-text",
+      iconMap.sidebar || {}
+    );
+
+    // Also handle sidebar section headers (the collapsible section titles)
+    processNavItems(
+      "#quarto-sidebar .sidebar-item-section .sidebar-item-text",
+      iconMap.sidebar || {}
+    );
+  }
+
+  // Run after DOM is ready so that other scripts (e.g. sidebar-wrap.js)
+  // that also use DOMContentLoaded have already processed the sidebar.
+  // Listeners fire in registration order, and sidebar-wrap.js is loaded
+  // earlier in include-after-body, so its handler runs first.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+})();
+</script>
+<script src="navbar-style.js"></script>
+<script src="content-style.js"></script>
+<style>
+/* Great Docs: accent_color overrides */
+:root, html.quarto-light, :root[data-bs-theme='light'] {
+    --gd-accent: #1f5f82;
+}
+html.quarto-dark, :root[data-bs-theme='dark'] {
+    --gd-accent: #73c7e8;
+}
+</style>
+
+
+
+
+</body></html>
