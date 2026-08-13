@@ -1,6 +1,7 @@
 display_name: "Polars State"
 package: polarstate
 parser: numpy
+repo: https://github.com/uriahf/polarstate
 user_guide: user_guide
 homepage: index
 site_url: https://uriahf.github.io/polarstate/
@@ -13,35 +14,15 @@ markdown_pages: true
 
 site:
   css:
-    - assets/uriah-brand.css
+    - assets/uriah-docs/docs.css
 
-include_in_header:
-  - file: assets/site-navigation.html
-
-navbar_style: sky
-content_style:
-  preset: mint
-  pages: all
 accent_color:
-  light: "#1f5f82"
-  dark: "#73c7e8"
+  light: "#2f6f8f"
+  dark: "#83bdd6"
 
-logo:
-  light: docs/logo.png
-  dark: docs/logo.png
-  alt: Polars State
-logo_show_title: true
-hero:
-  name: "Polars State"
-  tagline: "Fast time-to-event estimates, built for Polars."
-  logo_height: 180px
-  badges:
-    - alt: PyPI version
-      img: https://img.shields.io/pypi/v/polarstate
-      url: https://pypi.org/project/polarstate/
-    - alt: Requires Python 3.9 or newer
-      img: https://img.shields.io/badge/python-%E2%89%A53.9-3776AB?logo=python&logoColor=white
-      url: https://pypi.org/project/polarstate/
+logo: false
+favicon: docs/logo.png
+hero: false
 
 nav_icons:
   navbar:
@@ -49,6 +30,7 @@ nav_icons:
     API Reference: code-2
   sidebar:
     User Guide: book-open
+    API Reference: code-2
 
 source:
   enabled: true
@@ -73,3 +55,4 @@ reference:
       desc: "Return state-occupancy estimates at requested time horizons."
       contents:
         - predict_aj_estimates
+
