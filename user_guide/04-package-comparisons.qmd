@@ -1,7 +1,7 @@
 ---
 title: "Package Comparisons"
 description: "Compare Aalen-Johansen estimates across polarstate, lifelines, and tidycmprsk."
-guide-section: "Package Comparisons"
+guide-section: "User Guide"
 ---
 
 This page runs the same competing-risks example at the same five horizons in

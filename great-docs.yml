@@ -41,9 +41,7 @@ nav_icons:
     User Guide: book-open
     API Reference: code-2
   sidebar:
-    Concepts: orbit
-    Package Comparisons: scale
-    Recipes: cooking-pot
+    User Guide: book-open
 
 source:
   enabled: true
