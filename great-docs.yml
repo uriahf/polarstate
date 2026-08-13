@@ -15,6 +15,9 @@ site:
   css:
     - assets/uriah-brand.css
 
+include_in_header:
+  - file: assets/site-navigation.html
+
 navbar_style: sky
 content_style:
   preset: mint
