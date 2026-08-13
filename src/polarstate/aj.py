@@ -164,16 +164,16 @@ def add_transition_probabilities_at_times_columns(
     -------
     pl.DataFrame
         The input DataFrame with additional columns:
-        - 'trainsition_probabilities_to_1_at_times': transition probability to event type 1 at each time point,
-        - 'trainsition_probabilities_to_2_at_times': transition probability to event type 2 at each time point.
+        - 'transition_probabilities_to_1_at_times': transition probability to event type 1 at each time point,
+        - 'transition_probabilities_to_2_at_times': transition probability to event type 2 at each time point.
     """
     return events_data.with_columns(
         [
             (pl.col("csh_1") * pl.col("previous_overall_survival")).alias(
-                "trainsition_probabilities_to_1_at_times"
+                "transition_probabilities_to_1_at_times"
             ),
             (pl.col("csh_2") * pl.col("previous_overall_survival")).alias(
-                "trainsition_probabilities_to_2_at_times"
+                "transition_probabilities_to_2_at_times"
             ),
         ]
     )
@@ -183,11 +183,11 @@ def add_state_occupancy_probabilities_at_times_columns(
     events_data: pl.DataFrame,
 ) -> pl.DataFrame:
     """
-    Add columns for state occupancy probabilities at each time point based on trainsition_probabilities_to_1_at_times and trainsition_probabilities_to_2_at_times columns.
+    Add columns for state occupancy probabilities at each time point based on transition probability columns.
     Parameters
     ----------
     events_data : pl.DataFrame
-        A Polars DataFrame with columns 'trainsition_probabilities_to_1_at_times' and 'trainsition_probabilities_to_2_at_times'.
+        A Polars DataFrame with columns 'transition_probabilities_to_1_at_times' and 'transition_probabilities_to_2_at_times'.
     Returns
     -------
     pl.DataFrame
@@ -197,10 +197,10 @@ def add_state_occupancy_probabilities_at_times_columns(
     """
     return events_data.with_columns(
         [
-            pl.col("trainsition_probabilities_to_1_at_times")
+            pl.col("transition_probabilities_to_1_at_times")
             .cum_sum()
             .alias("state_occupancy_probability_1_at_times"),
-            pl.col("trainsition_probabilities_to_2_at_times")
+            pl.col("transition_probabilities_to_2_at_times")
             .cum_sum()
             .alias("state_occupancy_probability_2_at_times"),
         ]
@@ -240,16 +240,16 @@ def _validate_observations(times_and_reals: pl.DataFrame) -> None:
         raise ValueError("The 'reals' column may contain only 0, 1, and 2.")
 
 
-def _add_correctly_spelled_transition_aliases(
+def _add_legacy_transition_aliases(
     events_data: pl.DataFrame,
 ) -> pl.DataFrame:
-    """Add corrected names while retaining the historical misspellings."""
+    """Retain the historical misspellings as backward-compatible aliases."""
     return events_data.with_columns(
-        pl.col("trainsition_probabilities_to_1_at_times").alias(
-            "transition_probabilities_to_1_at_times"
+        pl.col("transition_probabilities_to_1_at_times").alias(
+            "trainsition_probabilities_to_1_at_times"
         ),
-        pl.col("trainsition_probabilities_to_2_at_times").alias(
-            "transition_probabilities_to_2_at_times"
+        pl.col("transition_probabilities_to_2_at_times").alias(
+            "trainsition_probabilities_to_2_at_times"
         ),
     )
 
@@ -316,5 +316,6 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
         .pipe(add_previous_overal_survival_column)
         .pipe(add_transition_probabilities_at_times_columns)
         .pipe(add_state_occupancy_probabilities_at_times_columns)
-        .pipe(_add_correctly_spelled_transition_aliases)
+        .pipe(_add_legacy_transition_aliases)
     )
+
