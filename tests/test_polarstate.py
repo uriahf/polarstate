@@ -244,12 +244,12 @@ def test_add_transition_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5) * 0.0,
             ],
             "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
-            "trainsition_probabilities_to_1_at_times": [
+            "transition_probabilities_to_1_at_times": [
                 1.0 * (1 / 7),
                 (6 / 7) * (1 / 5),
                 (6 / 7) * (3 / 5) * 0.0,
             ],
-            "trainsition_probabilities_to_2_at_times": [
+            "transition_probabilities_to_2_at_times": [
                 1.0 * 0.0,
                 (6 / 7) * (1 / 5),
                 (6 / 7) * (3 / 5) * 1.0,
@@ -278,12 +278,12 @@ def test_add_state_occupancy_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5) * 0.0,
             ],
             "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
-            "trainsition_probabilities_to_1_at_times": [
+            "transition_probabilities_to_1_at_times": [
                 (1.0 * (1 / 7)),
                 ((6 / 7) * (1 / 5)),
                 ((6 / 7) * (3 / 5) * 0.0),
             ],
-            "trainsition_probabilities_to_2_at_times": [
+            "transition_probabilities_to_2_at_times": [
                 (1.0 * 0.0),
                 ((6 / 7) * (1 / 5)),
                 ((6 / 7) * (3 / 5) * 1.0),
@@ -310,12 +310,12 @@ def test_add_state_occupancy_probabilities_at_times_columns() -> None:
                 (6 / 7) * (3 / 5) * 0.0,
             ],
             "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
-            "trainsition_probabilities_to_1_at_times": [
+            "transition_probabilities_to_1_at_times": [
                 (1.0 * (1 / 7)),
                 ((6 / 7) * (1 / 5)),
                 ((6 / 7) * (3 / 5) * 0.0),
             ],
-            "trainsition_probabilities_to_2_at_times": [
+            "transition_probabilities_to_2_at_times": [
                 (1.0 * 0.0),
                 ((6 / 7) * (1 / 5)),
                 ((6 / 7) * (3 / 5) * 1.0),
@@ -360,12 +360,12 @@ def test_prepare_event_table() -> None:
                 (6 / 7) * (3 / 5) * 0.0,
             ],
             "previous_overall_survival": [1.0, (6 / 7), (6 / 7) * (3 / 5)],
-            "trainsition_probabilities_to_1_at_times": [
+            "transition_probabilities_to_1_at_times": [
                 (1.0 * (1 / 7)),
                 ((6 / 7) * (1 / 5)),
                 ((6 / 7) * (3 / 5) * 0.0),
             ],
-            "trainsition_probabilities_to_2_at_times": [
+            "transition_probabilities_to_2_at_times": [
                 (1.0 * 0.0),
                 ((6 / 7) * (1 / 5)),
                 ((6 / 7) * (3 / 5) * 1.0),
@@ -432,3 +432,4 @@ def test_predict_aj_estimates() -> None:
     )
 
     assert_frame_equal(result, expected_output)
+
