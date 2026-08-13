@@ -207,6 +207,53 @@ def add_state_occupancy_probabilities_at_times_columns(
     )
 
 
+def _validate_observations(times_and_reals: pl.DataFrame) -> None:
+    """Validate subject-level input before performing event-table arithmetic."""
+    if not isinstance(times_and_reals, pl.DataFrame):
+        raise TypeError("times_and_reals must be a Polars DataFrame.")
+
+    missing = {"times", "reals"} - set(times_and_reals.columns)
+    if missing:
+        raise ValueError(
+            "times_and_reals is missing required column(s): "
+            + ", ".join(sorted(missing))
+        )
+    if times_and_reals.is_empty():
+        raise ValueError("times_and_reals must contain at least one observation.")
+
+    if not times_and_reals.schema["times"].is_numeric():
+        raise TypeError("The 'times' column must have a numeric dtype.")
+    if not times_and_reals.schema["reals"].is_integer():
+        raise TypeError("The 'reals' column must have an integer dtype.")
+
+    if times_and_reals.select(pl.col("times").is_null().any()).item():
+        raise ValueError("The 'times' column must not contain null values.")
+    if times_and_reals.select(pl.col("reals").is_null().any()).item():
+        raise ValueError("The 'reals' column must not contain null values.")
+    if times_and_reals.select((~pl.col("times").is_finite()).any()).item():
+        raise ValueError("The 'times' column must contain only finite values.")
+    if times_and_reals.select((pl.col("times") < 0).any()).item():
+        raise ValueError("The 'times' column must contain non-negative values.")
+    if times_and_reals.select(
+        (~pl.col("reals").is_in([0, 1, 2])).any()
+    ).item():
+        raise ValueError("The 'reals' column may contain only 0, 1, and 2.")
+
+
+def _add_correctly_spelled_transition_aliases(
+    events_data: pl.DataFrame,
+) -> pl.DataFrame:
+    """Add corrected names while retaining the historical misspellings."""
+    return events_data.with_columns(
+        pl.col("trainsition_probabilities_to_1_at_times").alias(
+            "transition_probabilities_to_1_at_times"
+        ),
+        pl.col("trainsition_probabilities_to_2_at_times").alias(
+            "transition_probabilities_to_2_at_times"
+        ),
+    )
+
+
 def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     """Compute an inspectable Aalen-Johansen event table.
 
@@ -226,11 +273,20 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
         survival, transition increments, and cumulative state-occupancy
         probabilities for states 1 and 2.
 
+    Raises
+    ------
+    TypeError
+        If the input is not a Polars DataFrame, times is not numeric, or
+        reals is not integer-valued.
+    ValueError
+        If required columns are missing, the input is empty, values are null,
+        times are non-finite or negative, or outcome codes are outside
+        {0, 1, 2}.
+
     Notes
     -----
-    Input rows need not be sorted. The function assumes the required columns
-    are present, non-null, correctly typed, and use only supported outcome
-    codes. Validate or recode data upstream.
+    Input rows need not be sorted. Extra columns are ignored. Duplicate times
+    are allowed and are aggregated into a single event-table row.
 
     Examples
     --------
@@ -249,6 +305,8 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     predict_aj_estimates : Evaluate the event table at fixed horizons.
     """
 
+    _validate_observations(times_and_reals)
+
     return (
         times_and_reals.pipe(group_reals_by_times)
         .pipe(add_events_at_times_column)
@@ -258,4 +316,5 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
         .pipe(add_previous_overal_survival_column)
         .pipe(add_transition_probabilities_at_times_columns)
         .pipe(add_state_occupancy_probabilities_at_times_columns)
+        .pipe(_add_correctly_spelled_transition_aliases)
     )
