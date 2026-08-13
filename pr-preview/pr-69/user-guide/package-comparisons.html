@@ -84,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-360b2068b25b2f2099f2f47bce35ebf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-bf476c94c8758bc321fd5fd3b984c438.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -235,8 +235,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul class="collapse">
   <li><a href="#shared-example" id="toc-shared-example" class="nav-link active" data-scroll-target="#shared-example">Shared example</a></li>
-  <li><a href="#estimate-comparison-at-fixed-horizons" id="toc-estimate-comparison-at-fixed-horizons" class="nav-link" data-scroll-target="#estimate-comparison-at-fixed-horizons">Estimate comparison at fixed horizons</a></li>
-  <li><a href="#what-differs" id="toc-what-differs" class="nav-link" data-scroll-target="#what-differs">What differs?</a></li>
   </ul>
 </nav>
     </div>
@@ -474,88 +472,6 @@ Name: CIF_2, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-</section>
-<section id="estimate-comparison-at-fixed-horizons" class="level1">
-<h1>Estimate comparison at fixed horizons</h1>
-<p>The native results have different shapes, but the estimates agree after rounding.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th style="text-align: right;">time</th>
-<th style="text-align: right;">polarstate primary</th>
-<th style="text-align: right;">lifelines primary</th>
-<th style="text-align: right;">tidycmprsk primary</th>
-<th style="text-align: right;">competing event</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">0.200000</td>
-<td style="text-align: right;">0.200000</td>
-<td style="text-align: right;">0.200000</td>
-<td style="text-align: right;">0.000000</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">0.300000</td>
-<td style="text-align: right;">0.300000</td>
-<td style="text-align: right;">0.300000</td>
-<td style="text-align: right;">0.100000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">0.400000</td>
-<td style="text-align: right;">0.400000</td>
-<td style="text-align: right;">0.400000</td>
-<td style="text-align: right;">0.100000</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">40</td>
-<td style="text-align: right;">0.566667</td>
-<td style="text-align: right;">0.566667</td>
-<td style="text-align: right;">0.566667</td>
-<td style="text-align: right;">0.100000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">0.733333</td>
-<td style="text-align: right;">0.733333</td>
-<td style="text-align: right;">0.733333</td>
-<td style="text-align: right;">0.266667</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="what-differs" class="level1">
-<h1>What differs?</h1>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Package</th>
-<th>Native result</th>
-<th>Practical distinction</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>polarstate</code></td>
-<td>One Polars event table and one horizon table containing every state</td>
-<td>Separates event-table preparation from horizon lookup</td>
-</tr>
-<tr class="even">
-<td><code>lifelines</code></td>
-<td>One pandas cumulative-density table per event type</td>
-<td>Fits an Aalen-Johansen object separately for each event of interest</td>
-</tr>
-<tr class="odd">
-<td><code>tidycmprsk</code></td>
-<td>Outcome-specific rows in a tibble</td>
-<td>Uses an R formula interface and factor-coded outcomes</td>
-</tr>
-</tbody>
-</table>
-<p>For data with no competing event, use only codes <code>0</code> and <code>1</code> in <code>polarstate</code>; the competing-event probability remains zero. See <a href="../user-guide/recipes.html">Recipes</a> for that shorter pattern.</p>
 
 
 </section>

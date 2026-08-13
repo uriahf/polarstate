@@ -216,27 +216,3 @@ Native tibble output:
 19 competing_event    46.0    0.267
 20 competing_event    49.9    0.267
 ```
-
-
-# Estimate comparison at fixed horizons
-
-The native results have different shapes, but the estimates agree after rounding.
-
-| time | polarstate primary | lifelines primary | tidycmprsk primary | competing event |
-|-----:|-------------------:|------------------:|-------------------:|----------------:|
-|   10 |           0.200000 |          0.200000 |           0.200000 |        0.000000 |
-|   20 |           0.300000 |          0.300000 |           0.300000 |        0.100000 |
-|   30 |           0.400000 |          0.400000 |           0.400000 |        0.100000 |
-|   40 |           0.566667 |          0.566667 |           0.566667 |        0.100000 |
-|   50 |           0.733333 |          0.733333 |           0.733333 |        0.266667 |
-
-
-# What differs?
-
-| Package | Native result | Practical distinction |
-|----|----|----|
-| `polarstate` | One Polars event table and one horizon table containing every state | Separates event-table preparation from horizon lookup |
-| `lifelines` | One pandas cumulative-density table per event type | Fits an Aalen-Johansen object separately for each event of interest |
-| `tidycmprsk` | Outcome-specific rows in a tibble | Uses an R formula interface and factor-coded outcomes |
-
-For data with no competing event, use only codes `0` and `1` in `polarstate`; the competing-event probability remains zero. See [Recipes](recipes.md) for that shorter pattern.
