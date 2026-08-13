@@ -86,3 +86,9 @@ polars_data = pl.from_pandas(pandas_data).select(
 ```
 
 Recode outcomes before estimation and confirm that only `0`, `1`, and optional `2` are present.
+
+
+# Next steps
+
+- Read [How the estimator works](how-it-works.md) for the statistical calculation and output-column definitions.
+- Consult the [API Reference](../reference/index.md) for complete signatures and parameter details.

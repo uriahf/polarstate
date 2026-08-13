@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="The calculation behind polarstate’s event table.">
+<meta name="description" content="Understand the calculation and the tables returned by polarstate.">
 
 <title>How the Estimator Works – Polars State | Polars State</title>
 <style>
@@ -37,8 +37,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../user-guide/understanding-output.html" rel="next">
-<link href="../user-guide/getting-started.html" rel="prev">
+<link href="../user-guide/recipes.html" rel="next">
 <link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -145,12 +144,12 @@ window.Quarto = {
   <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/how-it-works.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="How the Estimator Works – Polars State | Polars State">
-  <meta property="og:description" content="The calculation behind polarstate’s event table.">
+  <meta property="og:description" content="Understand the calculation and the tables returned by polarstate.">
   <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/how-it-works.html">
   <meta property="og:site_name" content="Polars State">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="How the Estimator Works – Polars State | Polars State">
-  <meta name="twitter:description" content="The calculation behind polarstate’s event table.">
+  <meta name="twitter:description" content="Understand the calculation and the tables returned by polarstate.">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -172,7 +171,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../user-guide/getting-started.html" aria-current="page"> 
+    <a class="nav-link active" href="../user-guide/how-it-works.html" aria-current="page"> 
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
@@ -212,47 +211,13 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Getting Started</span></a>
+ <span class="menu-text">Concepts</span></a>
 </div>
       <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../user-guide/getting-started.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Getting Started</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Concepts</span></a>
-</div>
-      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../user-guide/how-it-works.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">How the Estimator Works</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../user-guide/understanding-output.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Understanding the Output</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Tutorial</span></a>
-</div>
-      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../user-guide/worked-example.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Worked Example</span></a>
   </div>
 </li>
       </ul>
@@ -262,7 +227,7 @@ window.Quarto = {
             <a class="sidebar-item-text sidebar-link text-start">
  <span class="menu-text">Recipes</span></a>
 </div>
-      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link">
@@ -282,7 +247,12 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#the-estimator" id="toc-the-estimator" class="nav-link active" data-scroll-target="#the-estimator">The estimator</a></li>
-  <li><a href="#calculation-flow" id="toc-calculation-flow" class="nav-link" data-scroll-target="#calculation-flow">Calculation flow</a></li>
+  <li><a href="#from-observations-to-estimates" id="toc-from-observations-to-estimates" class="nav-link" data-scroll-target="#from-observations-to-estimates">From observations to estimates</a>
+  <ul class="collapse">
+  <li><a href="#event-table-columns" id="toc-event-table-columns" class="nav-link" data-scroll-target="#event-table-columns">Event-table columns</a></li>
+  </ul></li>
+  <li><a href="#from-the-event-table-to-requested-horizons" id="toc-from-the-event-table-to-requested-horizons" class="nav-link" data-scroll-target="#from-the-event-table-to-requested-horizons">From the event table to requested horizons</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   </ul>
 </nav>
     </div>
@@ -296,7 +266,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    The calculation behind polarstate’s event table.
+    Understand the calculation and the tables returned by polarstate.
   </div>
 </div>
 
@@ -313,7 +283,7 @@ window.Quarto = {
 </header>
 
 
-<p>The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes <code>0</code> and <code>1</code>, <code>polarstate</code> handles an ordinary single-event or binary event/censoring analysis. Adding outcome code <code>2</code> introduces a competing event. Each calculation stage remains available as a column in the event table.</p>
+<p>The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. In <code>polarstate</code>, code <code>0</code> means that follow-up ended without an observed event, code <code>1</code> is the event of interest, and optional code <code>2</code> is a competing event.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/aalen-johansen.webp" class="img-fluid figure-img" style="width:80.0%" alt="A watercolor illustration of Aalen and Johansen presenting state-occupancy curves, surrounded by polar bears."></p>
@@ -326,7 +296,7 @@ window.Quarto = {
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    O["Under observation"] --&gt;|"Code 0"| C["Censored"]
+    O["Under observation"] --&gt;|"Code 0"| C["Right-censored"]
     O --&gt;|"Code 1"| E["Event of interest"]
     O -.-&gt;|"Optional code 2"| R["Competing event"]
     style O fill:#dff3f8,stroke:#1f5f82
@@ -338,7 +308,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Codes <code>0</code> and <code>1</code> are sufficient for the single-event case. Code <code>2</code> adds a second absorbing state; it is not required by the API.</p>
+<p>Codes <code>0</code> and <code>1</code> are sufficient for a single-event analysis. Code <code>2</code> adds a second absorbing state; it is not required by the API.</p>
 <section id="the-estimator" class="level1">
 <h1>The estimator</h1>
 <p>For event type <span class="math inline">j</span>, the estimated state-occupancy probability is</p>
@@ -351,8 +321,8 @@ window.Quarto = {
 \tag{1}</span></span></p>
 <p>Here, <span class="math inline">Y(u)</span> is the risk set immediately before time <span class="math inline">u</span>, <span class="math inline">dN_j(u)</span> is the number of type-<span class="math inline">j</span> events at that time, and <span class="math inline">\widehat S(u-)</span> is the probability of remaining in state 0 immediately beforehand.</p>
 </section>
-<section id="calculation-flow" class="level1">
-<h1>Calculation flow</h1>
+<section id="from-observations-to-estimates" class="level1">
+<h1>From observations to estimates</h1>
 <p>The columns returned by <a href="../reference/prepare_event_table.html#polarstate.prepare_event_table" class="gdls-link gdls-code">prepare_event_table()</a> expose each component of <a href="#eq-aalen-johansen" class="quarto-xref">Equation&nbsp;1</a>:</p>
 <ol type="1">
 <li>Observations are grouped by time and counted by outcome.</li>
@@ -362,21 +332,125 @@ window.Quarto = {
 <li><code>trainsition_probabilities_to_*_at_times</code> contains each weighted increment.</li>
 <li><code>state_occupancy_probability_*_at_times</code> cumulatively sums those increments.</li>
 </ol>
-<p>For a requested time horizon, the prediction function performs a backward as-of join: it returns the latest estimate available at or before that horizon. Horizons before the first observed event receive probability 1 for state 0 and 0 for the absorbing states.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<section id="event-table-columns" class="level2">
+<h2 class="anchored" data-anchor-id="event-table-columns">Event-table columns</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>times</code></td>
+<td>Unique observed time</td>
+</tr>
+<tr class="even">
+<td><code>count_0</code></td>
+<td>Observations right-censored at that time</td>
+</tr>
+<tr class="odd">
+<td><code>count_1</code></td>
+<td>Events of interest at that time</td>
+</tr>
+<tr class="even">
+<td><code>count_2</code></td>
+<td>Competing events at that time; zero in a single-event analysis</td>
+</tr>
+<tr class="odd">
+<td><code>events_at_times</code></td>
+<td>Total observations ending follow-up at that time</td>
+</tr>
+<tr class="even">
+<td><code>at_risk</code></td>
+<td>Observations still under observation immediately before that time</td>
+</tr>
+<tr class="odd">
+<td><code>csh_1</code>, <code>csh_2</code></td>
+<td>Cause-specific event increments: event count divided by risk set</td>
+</tr>
+<tr class="even">
+<td><code>conditional_survival</code></td>
+<td>Probability of avoiding either event at that time, conditional on being at risk</td>
+</tr>
+<tr class="odd">
+<td><code>overall_survival</code></td>
+<td>Product of conditional-survival increments through that time</td>
+</tr>
+<tr class="even">
+<td><code>previous_overall_survival</code></td>
+<td>Survival immediately before the current time</td>
+</tr>
+<tr class="odd">
+<td><code>trainsition_probabilities_to_*_at_times</code></td>
+<td>Probability mass entering each absorbing state at that time</td>
+</tr>
+<tr class="even">
+<td><code>state_occupancy_probability_*_at_times</code></td>
+<td>Cumulative probability of occupying each absorbing state</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>trainsition</code> spelling is retained for compatibility with the current public output schema.</p>
+</section>
+</section>
+<section id="from-the-event-table-to-requested-horizons" class="level1">
+<h1>From the event table to requested horizons</h1>
+<p><a href="../reference/predict_aj_estimates.html#polarstate.predict_aj_estimates" class="gdls-link gdls-code">predict_aj_estimates()</a> performs a backward as-of join: for each requested horizon, it returns the latest estimate available at or before that time. Horizons before the first observed event receive probability 1 for state 0 and 0 for the absorbing states.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>times</code></td>
+<td>Requested horizon or observed event time</td>
+</tr>
+<tr class="even">
+<td><code>state_occupancy_probability_0</code></td>
+<td>Probability of remaining event-free</td>
+</tr>
+<tr class="odd">
+<td><code>state_occupancy_probability_1</code></td>
+<td>Probability of the event of interest</td>
+</tr>
+<tr class="even">
+<td><code>state_occupancy_probability_2</code></td>
+<td>Probability of the competing event</td>
+</tr>
+<tr class="odd">
+<td><code>estimate_origin</code></td>
+<td>Whether the row came from a requested horizon or the full event table</td>
+</tr>
+</tbody>
+</table>
+<p>At each horizon,</p>
+<p><span class="math display">
+P_0(t) + P_1(t) + P_2(t) = 1.
+</span></p>
+<p>For a single-event analysis, <span class="math inline">P_2(t)=0</span>, so <span class="math inline">P_0(t)</span> is the Kaplan-Meier survival estimate and <span class="math inline">P_1(t)=1-P_0(t)</span>.</p>
+</section>
+<section id="interpretation" class="level1">
+<h1>Interpretation</h1>
+<p>A raw event proportion ignores how long each observation was followed. Aalen-Johansen uses the risk set at each event time, so right-censoring removes an observation from later risk sets without treating it as an event.</p>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Input contract
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Code <code>0</code> means follow-up ended without an observed event: administrative or other right-censoring. Code <code>1</code> is the event of interest, and optional code <code>2</code> is a competing event. Validate and recode upstream data before preparing the event table.</p>
+<p>The estimates describe the observed cohort under the usual independent censoring assumptions. They do not by themselves adjust for confounding or establish causal effects.</p>
 </div>
 </div>
-<p>Continue with <a href="../user-guide/understanding-output.html">Understanding the output</a> for a column-by-column interpretation, or open the <a href="../user-guide/worked-example.html">worked example</a> to inspect Equation <a href="#eq-aalen-johansen" class="quarto-xref">Equation&nbsp;1</a> numerically.</p>
+<p>Continue with <a href="../user-guide/recipes.html">Recipes</a> for common data structures, or consult the <a href="../reference/index.html">API Reference</a> for complete function details.</p>
 
 
 </section>
@@ -722,13 +796,10 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../user-guide/getting-started.html" class="pagination-link" aria-label="Getting Started">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Getting Started</span>
-      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../user-guide/understanding-output.html" class="pagination-link" aria-label="Understanding the Output">
-        <span class="nav-page-text">Understanding the Output</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../user-guide/recipes.html" class="pagination-link" aria-label="Recipes">
+        <span class="nav-page-text">Recipes</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -758,7 +829,7 @@ window.Quarto = {
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
 <script src="../navbar-widgets.js"></script>
-<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"Getting Started":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5\"/><path d=\"M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09\"/><path d=\"M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z\"/><path d=\"M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05\"/></svg>","Concepts":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M20.341 6.484A10 10 0 0 1 10.266 21.85\"/><path d=\"M3.659 17.516A10 10 0 0 1 13.74 2.152\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/><circle cx=\"19\" cy=\"5\" r=\"2\"/><circle cx=\"5\" cy=\"19\" r=\"2\"/></svg>"}}</script>
+<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"Concepts":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M20.341 6.484A10 10 0 0 1 10.266 21.85\"/><path d=\"M3.659 17.516A10 10 0 0 1 13.74 2.152\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/><circle cx=\"19\" cy=\"5\" r=\"2\"/><circle cx=\"5\" cy=\"19\" r=\"2\"/></svg>","Recipes":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M2 12h20\"/><path d=\"M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8\"/><path d=\"m4 8 16-4\"/><path d=\"m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8\"/></svg>"}}</script>
 <script>/**
  * Navigation Icons for Great Docs
  *
