@@ -12,7 +12,7 @@ explains what the columns represent and which ones usually matter downstream.
 | Column | Interpretation |
 |---|---|
 | `times` | Unique observed time |
-| `count_0` | Censored observations at that time |
+| `count_0` | Observations right-censored at that time: follow-up ended without an observed event |
 | `count_1` | Events of interest at that time |
 | `count_2` | Competing events at that time; zero in a single-event analysis |
 | `events_at_times` | Total observations ending follow-up at that time |

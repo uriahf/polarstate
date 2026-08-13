@@ -12,8 +12,8 @@ The estimation workflow is unchanged; only the outcome coding differs.
 
 ### Single event
 
-Use `0` for censoring and `1` for the event. No competing-event rows are
-required.
+Use `0` when follow-up ended without an observed event (right-censoring) and
+`1` for the event. No competing-event rows are required.
 
 ```python
 import polars as pl

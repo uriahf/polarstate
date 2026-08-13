@@ -23,7 +23,7 @@ def group_reals_by_times(df: pl.DataFrame) -> pl.DataFrame:
         A Polars DataFrame with at least two columns:
         - 'times' (int): The observed time for each record.
         - 'reals' (int): The event type for each record, where:
-            - 0 indicates censoring,
+            - 0 indicates right-censoring (follow-up ended without an observed event),
             - 1 indicates the primary event,
             - 2 indicates a competing event.
 
@@ -214,9 +214,9 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     ----------
     times_and_reals : pl.DataFrame
         Subject-level observations containing a numeric ``times`` column and
-        an integer ``reals`` column. Outcome code ``0`` means censored, ``1``
-        means the event of interest, and optional ``2`` means a competing
-        event. A simple event/censoring analysis uses only ``0`` and ``1``.
+        an integer ``reals`` column. Outcome code ``0`` means follow-up ended
+        without an observed event (right-censoring), ``1`` means the event of
+        interest, and optional ``2`` means a competing event. A simple event/censoring analysis uses only ``0`` and ``1``.
 
     Returns
     -------

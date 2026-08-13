@@ -44,8 +44,9 @@ estimates = predict_aj_estimates(
 print(estimates)
 ```
 
-Outcomes use `0` for censoring and `1` for the event of interest. Use `2`
-only when the data include a competing event. See the
+Code `0` indicates right-censoring: follow-up ended without an observed event.
+This includes administrative censoring at the end of observation. Code `1`
+indicates the event of interest, and optional code `2` a competing event. See the
 [documentation](https://uriahf.github.io/polarstate/) for a complete
 walkthrough and API reference.
 

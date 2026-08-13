@@ -61,9 +61,10 @@ Horizons before the first observed event receive probability 1 for state 0 and
 ::: {.callout-note}
 ## Input contract
 
-The estimator expects outcomes encoded as `0` or `1`, with `2` used only
-when a competing event is present. Validate and recode upstream data before
-preparing the event table.
+Code `0` means follow-up ended without an observed event: administrative or
+other right-censoring. Code `1` is the event of interest, and optional code `2`
+is a competing event. Validate and recode upstream data before preparing the
+event table.
 :::
 
 Continue with [Understanding the output](04-understanding-output.qmd) for a

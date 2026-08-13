@@ -14,8 +14,9 @@ so it also acts as a continuously checked example.
 
 ## Create the observations
 
-Each row contains an observed time and an outcome code: `0` for censoring,
-`1` for the event of interest, and optional `2` for a competing event.
+Each row contains an observed time and an outcome code. Code `0` means
+follow-up ended without an observed event (right-censoring), code `1` is the
+event of interest, and optional code `2` is a competing event.
 
 ```{python}
 import polars as pl
