@@ -1,77 +1,87 @@
 ---
 title: "Recipes"
-description: "Short patterns for common polarstate analyses."
+description: "Executable patterns for common polarstate analyses."
 guide-section: "User Guide"
+jupyter: python3
+execute:
+  echo: true
+  warning: false
 ---
+
+Every example on this page is executed when the documentation builds. If an
+API change breaks a recipe, the documentation check fails with it.
+
+```{python}
+import pandas as pd
+import polars as pl
+from polarstate import prepare_event_table, predict_aj_estimates
+```
 
 ## Choose the event structure
 
-The estimation workflow is unchanged; only the outcome coding differs.
+The workflow stays the same; only the outcome coding changes.
 
 ::: {.panel-tabset}
 
 ### Single event
 
-Use `0` when follow-up ended without an observed event (right-censoring) and
-`1` for the event. No competing-event rows are required.
+Use `0` for right-censoring and `1` for the event.
 
-```python
-import polars as pl
-from polarstate import prepare_event_table, predict_aj_estimates
-
-data = pl.DataFrame({
+```{python}
+single_event_data = pl.DataFrame({
     "times": [2.0, 4.0, 5.0, 8.0, 10.0],
     "reals": [1, 0, 1, 0, 1],
 })
-
-table = prepare_event_table(data)
-result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 12.0]))
+single_table = prepare_event_table(single_event_data)
+single_result = predict_aj_estimates(
+    single_table, pl.Series([3.0, 6.0, 12.0])
+)
+single_result
 ```
 
-Here, `state_occupancy_probability_2` is zero and state 0 is the
-event-free probability.
+State 2 remains zero, while state 0 is the event-free probability.
 
 ### Competing risks
 
 Encode the event of interest as `1` and the competing event as `2`.
 
-```python
-import polars as pl
-from polarstate import prepare_event_table, predict_aj_estimates
-
-data = pl.DataFrame({
+```{python}
+competing_data = pl.DataFrame({
     "times": [2.0, 4.0, 5.0, 8.0, 10.0, 12.0],
     "reals": [1, 2, 0, 1, 2, 1],
 })
-
-table = prepare_event_table(data)
-result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 9.0, 12.0]))
+competing_table = prepare_event_table(competing_data)
+competing_result = predict_aj_estimates(
+    competing_table, pl.Series([3.0, 6.0, 9.0, 12.0])
+)
+competing_result
 ```
 
-Do not censor competing events. Encoding them as `0` changes the estimand and
-generally overstates the cumulative incidence of the event of interest.
+Do not censor competing events: coding them as `0` changes the estimand.
 
 :::
 
 ## Return horizons and event times together
 
-```python
-result = predict_aj_estimates(
-    table,
+```{python}
+combined_result = predict_aj_estimates(
+    competing_table,
     pl.Series([3.0, 6.0, 9.0, 12.0]),
     full_event_table=True,
 )
+combined_result.select("times", "estimate_origin")
 ```
 
-Use `estimate_origin` to distinguish requested horizons from rows copied from
-the event table.
+Use `estimate_origin` to distinguish requested horizons from observed times.
 
 ## Estimate within groups
 
-The public functions operate on one cohort at a time. Split explicitly when
-you need stratum-specific estimates.
+The public functions operate on one cohort at a time.
 
-```python
+```{python}
+data_with_groups = competing_data.with_columns(
+    pl.Series("group", ["A", "A", "A", "B", "B", "B"])
+)
 estimates_by_group = {
     group[0]: predict_aj_estimates(
         prepare_event_table(group_data.select("times", "reals")),
@@ -79,29 +89,31 @@ estimates_by_group = {
     )
     for group, group_data in data_with_groups.group_by("group")
 }
+{k: value.shape for k, value in estimates_by_group.items()}
 ```
 
-This produces descriptive estimates within each group; it is not an adjusted
-regression model.
+These are descriptive within-group estimates, not an adjusted regression model.
 
 ## Convert pandas input
 
-```python
+```{python}
+pandas_data = pd.DataFrame({
+    "time": [2, 4, 6, 8],
+    "event": [1, 0, 2, 1],
+})
 polars_data = pl.from_pandas(pandas_data).select(
     pl.col("time").cast(pl.Float64).alias("times"),
     pl.col("event").cast(pl.Int64).alias("reals"),
 )
+prepare_event_table(polars_data).select("times", "at_risk")
 ```
 
 Recode outcomes before estimation and confirm that only `0`, `1`, and
 optional `2` are present.
 
-
 ## Next steps
 
-- Read [How the estimator works](02-how-it-works.qmd) for the statistical
-  calculation and output-column definitions.
-- See [Package comparisons](04-package-comparisons.qmd) for equivalent
-  estimates from lifelines and tidycmprsk.
-- Consult the [API Reference](../reference/index.html) for complete signatures
-  and parameter details.
+- Read [How the estimator works](02-how-it-works.qmd).
+- Review [Assumptions and limitations](06-assumptions-limitations.qmd).
+- See [Package comparisons](04-package-comparisons.qmd).
+- Consult the [API Reference](../reference/index.html).
