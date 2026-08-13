@@ -1,0 +1,154 @@
+---
+title: "Package Comparisons"
+description: "Compare Aalen-Johansen estimates across polarstate, lifelines, and tidycmprsk."
+guide-section: "Package Comparisons"
+---
+
+This page runs the same competing-risks example at the same five horizons in
+three implementations. The estimates agree after rounding; what differs is the
+API and the shape of the returned result.
+
+## Shared example
+
+Each row is one observation. Code `0` means right-censored, `1` is the event of
+interest, and `2` is the competing event.
+
+| `times` | 24.1 | 9.7 | 49.9 | 18.6 | 34.8 | 14.2 | 39.2 | 46.0 | 31.5 | 4.3 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `reals` | 1 | 1 | 1 | 1 | 0 | 2 | 1 | 2 | 0 | 1 |
+
+::: {.panel-tabset}
+
+## polarstate (Python)
+
+`polarstate` prepares one inspectable event table, then returns all state
+probabilities together.
+
+```python
+import polars as pl
+from polarstate import prepare_event_table, predict_aj_estimates
+
+data = pl.DataFrame({
+    "times": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],
+    "reals": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],
+})
+
+event_table = prepare_event_table(data)
+
+predict_aj_estimates(
+    event_table,
+    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),
+).select(
+    pl.col("times"),
+    pl.col("state_occupancy_probability_0").alias("event_free"),
+    pl.col("state_occupancy_probability_1").alias("primary_event"),
+    pl.col("state_occupancy_probability_2").alias("competing_event"),
+)
+```
+
+Rounded output:
+
+| time | event-free | primary event | competing event |
+|---:|---:|---:|---:|
+| 10 | 0.800000 | 0.200000 | 0.000000 |
+| 20 | 0.600000 | 0.300000 | 0.100000 |
+| 30 | 0.500000 | 0.400000 | 0.100000 |
+| 40 | 0.333333 | 0.566667 | 0.100000 |
+| 50 | 0.000000 | 0.733333 | 0.266667 |
+
+## lifelines (Python)
+
+`lifelines` fits one
+[AalenJohansenFitter](https://lifelines.readthedocs.io/en/latest/fitters/univariate/AalenJohansenFitter.html)
+per event type. Combining the two predictions makes the comparison explicit.
+
+```python
+import pandas as pd
+from lifelines import AalenJohansenFitter
+
+data = pd.DataFrame({
+    "times": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],
+    "reals": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],
+})
+horizons = [10.0, 20.0, 30.0, 40.0, 50.0]
+
+primary = AalenJohansenFitter(calculate_variance=False)
+primary.fit(data["times"], data["reals"], event_of_interest=1)
+
+competing = AalenJohansenFitter(calculate_variance=False)
+competing.fit(data["times"], data["reals"], event_of_interest=2)
+
+comparison = pd.DataFrame({
+    "time": horizons,
+    "primary_event": primary.predict(horizons).to_numpy(),
+    "competing_event": competing.predict(horizons).to_numpy(),
+})
+comparison
+```
+
+Rounded output:
+
+| time | primary event | competing event |
+|---:|---:|---:|
+| 10 | 0.200000 | 0.000000 |
+| 20 | 0.300000 | 0.100000 |
+| 30 | 0.400000 | 0.100000 |
+| 40 | 0.566667 | 0.100000 |
+| 50 | 0.733333 | 0.266667 |
+
+## tidycmprsk (R)
+
+`tidycmprsk` returns outcome-specific estimates in a tidy table. The final
+pivot only places the two outcomes side by side.
+
+```r
+library(dplyr)
+library(tidyr)
+library(tidycmprsk)
+
+data <- tibble(
+  times = c(24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3),
+  reals = factor(
+    c(1, 1, 1, 1, 0, 2, 1, 2, 0, 1),
+    levels = c(0, 1, 2),
+    labels = c("censored", "primary_event", "competing_event")
+  )
+)
+horizons <- c(10, 20, 30, 40, 50)
+
+fit <- cuminc(Surv(times, reals) ~ 1, data)
+
+tidy(fit, time = horizons) |>
+  select(outcome, time, estimate) |>
+  pivot_wider(names_from = outcome, values_from = estimate)
+```
+
+Rounded output:
+
+| time | primary event | competing event |
+|---:|---:|---:|
+| 10 | 0.200000 | 0.000000 |
+| 20 | 0.300000 | 0.100000 |
+| 30 | 0.400000 | 0.100000 |
+| 40 | 0.566667 | 0.100000 |
+| 50 | 0.733333 | 0.266667 |
+
+See the official
+[`cuminc()` documentation](https://mskcc-epi-bio.github.io/tidycmprsk/reference/cuminc.html)
+and
+[tidying methods](https://mskcc-epi-bio.github.io/tidycmprsk/reference/broom_methods_cuminc.html)
+for the complete R API.
+
+:::
+
+## What differs?
+
+| Package | Typical result | Practical distinction |
+|---|---|---|
+| `polarstate` | One Polars table with all three state probabilities | Separates event-table preparation from horizon lookup |
+| `lifelines` | One pandas result per event of interest | Fits an Aalen-Johansen object separately for each event type |
+| `tidycmprsk` | Outcome-specific rows in a tidy R table | Uses an R formula interface and factor-coded outcomes |
+
+For data with no competing event, use only codes `0` and `1` in `polarstate`;
+the competing-event probability remains zero. See [Recipes](05-recipes.qmd)
+for that shorter pattern.

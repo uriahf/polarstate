@@ -108,5 +108,7 @@ censoring assumptions. They do not by themselves adjust for confounding or
 establish causal effects.
 :::
 
-Continue with [Recipes](05-recipes.qmd) for common data structures, or consult
-the [API Reference](../reference/index.html) for complete function details.
+Compare the same estimates with other implementations in
+[Package Comparisons](04-package-comparisons.qmd), continue with
+[Recipes](05-recipes.qmd) for common data structures, or consult the
+[API Reference](../reference/index.html) for complete function details.

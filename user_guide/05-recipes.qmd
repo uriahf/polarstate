@@ -101,5 +101,7 @@ optional `2` are present.
 
 - Read [How the estimator works](02-how-it-works.qmd) for the statistical
   calculation and output-column definitions.
+- See [Package comparisons](04-package-comparisons.qmd) for equivalent
+  estimates from lifelines and tidycmprsk.
 - Consult the [API Reference](../reference/index.html) for complete signatures
   and parameter details.

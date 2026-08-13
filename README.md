@@ -118,6 +118,8 @@ a competing event.
 
 - [How the estimator works](user-guide/how-it-works.html) explains the
   Aalen-Johansen calculation and every returned column.
+- [Package comparisons](user-guide/package-comparisons.html) checks the same
+  estimates against Python's lifelines and R's tidycmprsk.
 - [Recipes](user-guide/recipes.html) covers single-event, competing-risks,
   grouped, and pandas-to-Polars workflows.
 - The [API Reference](https://uriahf.github.io/polarstate/reference/) provides
