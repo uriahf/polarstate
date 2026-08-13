@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         if: github.event.action != 'closed'
         run: |
-          pip install great-docs
+          pip install great-docs ipykernel pandas pyarrow
           pip install -e .
 
       - name: Build documentation
