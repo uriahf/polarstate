@@ -83,4 +83,4 @@ A raw event proportion ignores how long each observation was followed. Aalen-Joh
 >
 > The estimates describe the observed cohort under the usual independent censoring assumptions. They do not by themselves adjust for confounding or establish causal effects.
 
-Continue with [Recipes](recipes.md) for common data structures, or consult the [API Reference](../reference/index.md) for complete function details.
+Compare the same estimates with other implementations in [Package Comparisons](package-comparisons.md), continue with [Recipes](recipes.md) for common data structures, or consult the [API Reference](../reference/index.md) for complete function details.

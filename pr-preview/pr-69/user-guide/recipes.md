@@ -91,4 +91,5 @@ Recode outcomes before estimation and confirm that only `0`, `1`, and optional `
 # Next steps
 
 - Read [How the estimator works](how-it-works.md) for the statistical calculation and output-column definitions.
+- See [Package comparisons](package-comparisons.md) for equivalent estimates from lifelines and tidycmprsk.
 - Consult the [API Reference](../reference/index.md) for complete signatures and parameter details.

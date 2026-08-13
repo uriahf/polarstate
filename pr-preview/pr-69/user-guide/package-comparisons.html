@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Short patterns for common polarstate analyses.">
+<meta name="description" content="Compare Aalen-Johansen estimates across polarstate, lifelines, and tidycmprsk.">
 
-<title>Recipes – Polars State | Polars State</title>
+<title>Package Comparisons – Polars State | Polars State</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -72,7 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../user-guide/package-comparisons.html" rel="prev">
+<link href="../user-guide/recipes.html" rel="next">
+<link href="../user-guide/how-it-works.html" rel="prev">
 <link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -128,16 +129,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="gd-content-style" data-preset="mint" data-pages="all">
 
 
-  <link rel="alternate" type="text/markdown" href="recipes.md">
-  <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/recipes.html">
+  <link rel="alternate" type="text/markdown" href="package-comparisons.md">
+  <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/package-comparisons.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Recipes – Polars State | Polars State">
-  <meta property="og:description" content="Short patterns for common polarstate analyses.">
-  <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/recipes.html">
+  <meta property="og:title" content="Package Comparisons – Polars State | Polars State">
+  <meta property="og:description" content="Compare Aalen-Johansen estimates across polarstate, lifelines, and tidycmprsk.">
+  <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/package-comparisons.html">
   <meta property="og:site_name" content="Polars State">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Recipes – Polars State | Polars State">
-  <meta name="twitter:description" content="Short patterns for common polarstate analyses.">
+  <meta name="twitter:title" content="Package Comparisons – Polars State | Polars State">
+  <meta name="twitter:description" content="Compare Aalen-Johansen estimates across polarstate, lifelines, and tidycmprsk.">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -184,7 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Recipes</h1>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Package Comparisons</h1>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -218,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../user-guide/package-comparisons.html" class="sidebar-item-text sidebar-link">
+  <a href="../user-guide/package-comparisons.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Package Comparisons</span></a>
   </div>
 </li>
@@ -232,7 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Recipes</span></a>
   </div>
 </li>
@@ -248,11 +249,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#choose-the-event-structure" id="toc-choose-the-event-structure" class="nav-link active" data-scroll-target="#choose-the-event-structure">Choose the event structure</a></li>
-  <li><a href="#return-horizons-and-event-times-together" id="toc-return-horizons-and-event-times-together" class="nav-link" data-scroll-target="#return-horizons-and-event-times-together">Return horizons and event times together</a></li>
-  <li><a href="#estimate-within-groups" id="toc-estimate-within-groups" class="nav-link" data-scroll-target="#estimate-within-groups">Estimate within groups</a></li>
-  <li><a href="#convert-pandas-input" id="toc-convert-pandas-input" class="nav-link" data-scroll-target="#convert-pandas-input">Convert pandas input</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
+  <li><a href="#shared-example" id="toc-shared-example" class="nav-link active" data-scroll-target="#shared-example">Shared example</a></li>
+  <li><a href="#what-differs" id="toc-what-differs" class="nav-link" data-scroll-target="#what-differs">What differs?</a></li>
   </ul>
 </nav>
     </div>
@@ -261,12 +259,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Recipes</h1>
+<h1 class="title d-none d-lg-block">Package Comparisons</h1>
 </div>
 
 <div>
   <div class="description">
-    Short patterns for common polarstate analyses.
+    Compare Aalen-Johansen estimates across polarstate, lifelines, and tidycmprsk.
   </div>
 </div>
 
@@ -283,79 +281,263 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="choose-the-event-structure" class="level1">
-<h1>Choose the event structure</h1>
-<p>The estimation workflow is unchanged; only the outcome coding differs.</p>
+<p>This page runs the same competing-risks example at the same five horizons in three implementations. The estimates agree after rounding; what differs is the API and the shape of the returned result.</p>
+<section id="shared-example" class="level1">
+<h1>Shared example</h1>
+<p>Each row is one observation. Code <code>0</code> means right-censored, <code>1</code> is the event of interest, and <code>2</code> is the competing event.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><code>times</code></th>
+<th style="text-align: right;">24.1</th>
+<th style="text-align: right;">9.7</th>
+<th style="text-align: right;">49.9</th>
+<th style="text-align: right;">18.6</th>
+<th style="text-align: right;">34.8</th>
+<th style="text-align: right;">14.2</th>
+<th style="text-align: right;">39.2</th>
+<th style="text-align: right;">46.0</th>
+<th style="text-align: right;">31.5</th>
+<th style="text-align: right;">4.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><code>reals</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Single event</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Competing risks</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">polarstate (Python)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">lifelines (Python)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">tidycmprsk (R)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>Use <code>0</code> when follow-up ended without an observed event (right-censoring) and <code>1</code> for the event. No competing-event rows are required.</p>
+<p><code>polarstate</code> prepares one inspectable event table, then returns all state probabilities together.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>],</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> prepare_event_table(data)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> predict_aj_estimates(table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">12.0</span>]))</span></code></pre></div>
-<p>Here, <code>state_occupancy_probability_2</code> is zero and state 0 is the event-free probability.</p>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>event_table <span class="op">=</span> prepare_event_table(data)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>predict_aj_estimates(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    event_table,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>).select(</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"times"</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"state_occupancy_probability_0"</span>).alias(<span class="st">"event_free"</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"state_occupancy_probability_1"</span>).alias(<span class="st">"primary_event"</span>),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"state_occupancy_probability_2"</span>).alias(<span class="st">"competing_event"</span>),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Rounded output:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">time</th>
+<th style="text-align: right;">event-free</th>
+<th style="text-align: right;">primary event</th>
+<th style="text-align: right;">competing event</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.800000</td>
+<td style="text-align: right;">0.200000</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.600000</td>
+<td style="text-align: right;">0.300000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.500000</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">0.333333</td>
+<td style="text-align: right;">0.566667</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">0.000000</td>
+<td style="text-align: right;">0.733333</td>
+<td style="text-align: right;">0.266667</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>Encode the event of interest as <code>1</code> and the competing event as <code>2</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
+<p><code>lifelines</code> fits one <a href="https://lifelines.readthedocs.io/en/latest/fitters/univariate/AalenJohansenFitter.html">AalenJohansenFitter</a> per event type. Combining the two predictions makes the comparison explicit.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>, <span class="fl">12.0</span>],</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> prepare_event_table(data)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> predict_aj_estimates(table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]))</span></code></pre></div>
-<p>Do not censor competing events. Encoding them as <code>0</code> changes the estimand and generally overstates the cumulative incidence of the event of interest.</p>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> [<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>primary <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>primary.fit(data[<span class="st">"times"</span>], data[<span class="st">"reals"</span>], event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>competing <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>competing.fit(data[<span class="st">"times"</span>], data[<span class="st">"reals"</span>], event_of_interest<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"time"</span>: horizons,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"primary_event"</span>: primary.predict(horizons).to_numpy(),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"competing_event"</span>: competing.predict(horizons).to_numpy(),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>comparison</span></code></pre></div>
+<p>Rounded output:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">time</th>
+<th style="text-align: right;">primary event</th>
+<th style="text-align: right;">competing event</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.200000</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.300000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">0.566667</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">0.733333</td>
+<td style="text-align: right;">0.266667</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><code>tidycmprsk</code> returns outcome-specific estimates in a tidy table. The final pivot only places the two outcomes side by side.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycmprsk)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">c</span>(<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reals =</span> <span class="fu">factor</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"censored"</span>, <span class="st">"primary_event"</span>, <span class="st">"competing_event"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>horizons <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">cuminc</span>(<span class="fu">Surv</span>(times, reals) <span class="sc">~</span> <span class="dv">1</span>, data)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(fit, <span class="at">time =</span> horizons) <span class="sc">|&gt;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(outcome, time, estimate) <span class="sc">|&gt;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> outcome, <span class="at">values_from =</span> estimate)</span></code></pre></div>
+<p>Rounded output:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">time</th>
+<th style="text-align: right;">primary event</th>
+<th style="text-align: right;">competing event</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.200000</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.300000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.400000</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">0.566667</td>
+<td style="text-align: right;">0.100000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">0.733333</td>
+<td style="text-align: right;">0.266667</td>
+</tr>
+</tbody>
+</table>
+<p>See the official <a href="https://mskcc-epi-bio.github.io/tidycmprsk/reference/cuminc.html"><code>cuminc()</code> documentation</a> and <a href="https://mskcc-epi-bio.github.io/tidycmprsk/reference/broom_methods_cuminc.html">tidying methods</a> for the complete R API.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="return-horizons-and-event-times-together" class="level1">
-<h1>Return horizons and event times together</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> predict_aj_estimates(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    table,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    full_event_table<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>Use <code>estimate_origin</code> to distinguish requested horizons from rows copied from the event table.</p>
-</section>
-<section id="estimate-within-groups" class="level1">
-<h1>Estimate within groups</h1>
-<p>The public functions operate on one cohort at a time. Split explicitly when you need stratum-specific estimates.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>estimates_by_group <span class="op">=</span> {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    group[<span class="dv">0</span>]: predict_aj_estimates(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        prepare_event_table(group_data.select(<span class="st">"times"</span>, <span class="st">"reals"</span>)),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        pl.Series([<span class="fl">6.0</span>, <span class="fl">12.0</span>]),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> group, group_data <span class="kw">in</span> data_with_groups.group_by(<span class="st">"group"</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>This produces descriptive estimates within each group; it is not an adjusted regression model.</p>
-</section>
-<section id="convert-pandas-input" class="level1">
-<h1>Convert pandas input</h1>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>polars_data <span class="op">=</span> pl.from_pandas(pandas_data).select(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"time"</span>).cast(pl.Float64).alias(<span class="st">"times"</span>),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"event"</span>).cast(pl.Int64).alias(<span class="st">"reals"</span>),</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>Recode outcomes before estimation and confirm that only <code>0</code>, <code>1</code>, and optional <code>2</code> are present.</p>
-</section>
-<section id="next-steps" class="level1">
-<h1>Next steps</h1>
-<ul>
-<li>Read <a href="../user-guide/how-it-works.html">How the estimator works</a> for the statistical calculation and output-column definitions.</li>
-<li>See <a href="../user-guide/package-comparisons.html">Package comparisons</a> for equivalent estimates from lifelines and tidycmprsk.</li>
-<li>Consult the <a href="../reference/index.html">API Reference</a> for complete signatures and parameter details.</li>
-</ul>
+<section id="what-differs" class="level1">
+<h1>What differs?</h1>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Package</th>
+<th>Typical result</th>
+<th>Practical distinction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>polarstate</code></td>
+<td>One Polars table with all three state probabilities</td>
+<td>Separates event-table preparation from horizon lookup</td>
+</tr>
+<tr class="even">
+<td><code>lifelines</code></td>
+<td>One pandas result per event of interest</td>
+<td>Fits an Aalen-Johansen object separately for each event type</td>
+</tr>
+<tr class="odd">
+<td><code>tidycmprsk</code></td>
+<td>Outcome-specific rows in a tidy R table</td>
+<td>Uses an R formula interface and factor-coded outcomes</td>
+</tr>
+</tbody>
+</table>
+<p>For data with no competing event, use only codes <code>0</code> and <code>1</code> in <code>polarstate</code>; the competing-event probability remains zero. See <a href="../user-guide/recipes.html">Recipes</a> for that shorter pattern.</p>
 
 
 </section>
@@ -701,11 +883,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../user-guide/package-comparisons.html" class="pagination-link" aria-label="Package Comparisons">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Package Comparisons</span>
+      <a href="../user-guide/how-it-works.html" class="pagination-link" aria-label="How the Estimator Works">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">How the Estimator Works</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../user-guide/recipes.html" class="pagination-link" aria-label="Recipes">
+        <span class="nav-page-text">Recipes</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
