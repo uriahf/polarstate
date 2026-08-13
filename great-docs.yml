@@ -11,6 +11,13 @@ back_to_top: true
 keyboard_nav: true
 markdown_pages: true
 
+site:
+  css:
+    - assets/uriah-brand.css
+
+include_in_header:
+  - file: assets/site-navigation.html
+
 navbar_style: sky
 content_style:
   preset: mint
@@ -39,10 +46,9 @@ hero:
 nav_icons:
   navbar:
     User Guide: book-open
-    Reference: code-2
+    API Reference: code-2
   sidebar:
-    Getting Started: rocket
-    Concepts: orbit
+    User Guide: book-open
 
 source:
   enabled: true
@@ -59,11 +65,11 @@ reference:
     The complete public API for preparing time-to-event tables and predicting
     state-occupancy probabilities, with or without competing events.
   sections:
-    - title: "Estimation"
-      desc: "Build an inspectable event table from time-to-event observations."
+    - title: "Event table"
+      desc: "Compute an inspectable Aalen-Johansen event table from time-to-event observations."
       contents:
         - prepare_event_table
-    - title: "Prediction"
-      desc: "Evaluate state-occupancy probabilities at fixed time horizons."
+    - title: "Time-horizon estimates"
+      desc: "Return state-occupancy estimates at requested time horizons."
       contents:
         - predict_aj_estimates

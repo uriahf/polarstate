@@ -34,12 +34,20 @@ jobs:
       - name: Install dependencies
         if: github.event.action != 'closed'
         run: |
-          pip install great-docs
+          pip install great-docs ipykernel pandas pyarrow
           pip install -e .
 
       - name: Build documentation
         if: github.event.action != 'closed'
         run: great-docs build
+
+      - name: Lint public API documentation
+        if: github.event.action != 'closed'
+        run: great-docs lint
+
+      - name: Check documentation links
+        if: github.event.action != 'closed'
+        run: great-docs check-links --docs-only --timeout 20
 
       - name: Upload rendered site
         if: github.event.action != 'closed'
