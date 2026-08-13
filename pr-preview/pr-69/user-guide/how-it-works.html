@@ -49,7 +49,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bf476c94c8758bc321fd5fd3b984c438.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-360b2068b25b2f2099f2f47bce35ebf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -314,6 +314,12 @@ window.Quarto = {
 
 
 <p>The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes <code>0</code> and <code>1</code>, <code>polarstate</code> handles an ordinary single-event or binary event/censoring analysis. Adding outcome code <code>2</code> introduces a competing event. Each calculation stage remains available as a column in the event table.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/aalen-johansen.webp" class="img-fluid figure-img" style="width:80.0%" alt="A watercolor illustration of Aalen and Johansen presenting state-occupancy curves, surrounded by polar bears."></p>
+<figcaption>An illustrated introduction to the Aalen-Johansen estimator.</figcaption>
+</figure>
+</div>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -335,7 +341,7 @@ window.Quarto = {
 <p>Codes <code>0</code> and <code>1</code> are sufficient for the single-event case. Code <code>2</code> adds a second absorbing state; it is not required by the API.</p>
 <section id="the-estimator" class="level1">
 <h1>The estimator</h1>
-<p>For event type (j), the estimated state-occupancy probability is</p>
+<p>For event type <span class="math inline">j</span>, the estimated state-occupancy probability is</p>
 <p><span id="eq-aalen-johansen"><span class="math display">
 \widehat F_j(t)
 =
@@ -343,16 +349,16 @@ window.Quarto = {
 \widehat S(u-)
 \frac{dN_j(u)}{Y(u)}.
 \tag{1}</span></span></p>
-<p>Here, (Y(u)) is the risk set immediately before time (u), (dN_j(u)) is the number of type-(j) events at that time, and (widehat S(u-)) is the probability of remaining in state 0 immediately beforehand.</p>
+<p>Here, <span class="math inline">Y(u)</span> is the risk set immediately before time <span class="math inline">u</span>, <span class="math inline">dN_j(u)</span> is the number of type-<span class="math inline">j</span> events at that time, and <span class="math inline">\widehat S(u-)</span> is the probability of remaining in state 0 immediately beforehand.</p>
 </section>
 <section id="calculation-flow" class="level1">
 <h1>Calculation flow</h1>
 <p>The columns returned by <a href="../reference/prepare_event_table.html#polarstate.prepare_event_table" class="gdls-link gdls-code">prepare_event_table()</a> expose each component of <a href="#eq-aalen-johansen" class="quarto-xref">Equation&nbsp;1</a>:</p>
 <ol type="1">
 <li>Observations are grouped by time and counted by outcome.</li>
-<li><code>at_risk</code> supplies (Y(u)).</li>
-<li><code>csh_1</code> and <code>csh_2</code> supply (dN_j(u)/Y(u)).</li>
-<li><code>previous_overall_survival</code> supplies (widehat S(u-)).</li>
+<li><code>at_risk</code> supplies <span class="math inline">Y(u)</span>.</li>
+<li><code>csh_1</code> and <code>csh_2</code> supply <span class="math inline">dN_j(u)/Y(u)</span>.</li>
+<li><code>previous_overall_survival</code> supplies <span class="math inline">\widehat S(u-)</span>.</li>
 <li><code>trainsition_probabilities_to_*_at_times</code> contains each weighted increment.</li>
 <li><code>state_occupancy_probability_*_at_times</code> cumulatively sums those increments.</li>
 </ol>

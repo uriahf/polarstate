@@ -3,6 +3,12 @@
 The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes `0` and `1`, `polarstate` handles an ordinary single-event or binary event/censoring analysis. Adding outcome code `2` introduces a competing event. Each calculation stage remains available as a column in the event table.
 
 
+<figure class="figure">
+<p><img src="images/aalen-johansen.webp" class="img-fluid figure-img" style="width:80.0%" alt="A watercolor illustration of Aalen and Johansen presenting state-occupancy curves, surrounded by polar bears." /></p>
+<figcaption>An illustrated introduction to the Aalen-Johansen estimator.</figcaption>
+</figure>
+
+
 *\[Rich HTML output -- view on the documentation site\]*
 
 
@@ -11,11 +17,11 @@ Codes `0` and `1` are sufficient for the single-event case. Code `2` adds a seco
 
 # The estimator
 
-For event type (j), the estimated state-occupancy probability is
+For event type j, the estimated state-occupancy probability is
 
 <span id="eq-aalen-johansen"> \widehat F_j(t) = \sum\_{u \le t} \widehat S(u-) \frac{dN_j(u)}{Y(u)}. \tag{1}</span>
 
-Here, (Y(u)) is the risk set immediately before time (u), (dN_j(u)) is the number of type-(j) events at that time, and (widehat S(u-)) is the probability of remaining in state 0 immediately beforehand.
+Here, Y(u) is the risk set immediately before time u, dN_j(u) is the number of type-j events at that time, and \widehat S(u-) is the probability of remaining in state 0 immediately beforehand.
 
 
 # Calculation flow
@@ -23,9 +29,9 @@ Here, (Y(u)) is the risk set immediately before time (u), (dN_j(u)) is the numbe
 The columns returned by [prepare_event_table()](../reference/prepare_event_table.md#polarstate.prepare_event_table) expose each component of [Equation 1](#eq-aalen-johansen):
 
 1.  Observations are grouped by time and counted by outcome.
-2.  `at_risk` supplies (Y(u)).
-3.  `csh_1` and `csh_2` supply (dN_j(u)/Y(u)).
-4.  `previous_overall_survival` supplies (widehat S(u-)).
+2.  `at_risk` supplies Y(u).
+3.  `csh_1` and `csh_2` supply dN_j(u)/Y(u).
+4.  `previous_overall_survival` supplies \widehat S(u-).
 5.  `trainsition_probabilities_to_*_at_times` contains each weighted increment.
 6.  `state_occupancy_probability_*_at_times` cumulatively sums those increments.
 
