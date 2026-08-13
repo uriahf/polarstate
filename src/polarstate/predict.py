@@ -1,6 +1,43 @@
 import polars as pl
 
 
+def _validate_prediction_inputs(
+    event_table: pl.DataFrame,
+    fixed_time_horizons: pl.Series,
+    full_event_table: bool,
+) -> None:
+    if not isinstance(event_table, pl.DataFrame):
+        raise TypeError("event_table must be a Polars DataFrame.")
+    if not isinstance(fixed_time_horizons, pl.Series):
+        raise TypeError("fixed_time_horizons must be a Polars Series.")
+    if not isinstance(full_event_table, bool):
+        raise TypeError("full_event_table must be a boolean.")
+
+    required = {
+        "times",
+        "state_occupancy_probability_1_at_times",
+        "state_occupancy_probability_2_at_times",
+    }
+    missing = required - set(event_table.columns)
+    if missing:
+        raise ValueError(
+            "event_table is missing required column(s): "
+            + ", ".join(sorted(missing))
+        )
+    if event_table.is_empty():
+        raise ValueError("event_table must contain at least one row.")
+    if fixed_time_horizons.is_empty():
+        raise ValueError("fixed_time_horizons must contain at least one value.")
+    if not fixed_time_horizons.dtype.is_numeric():
+        raise TypeError("fixed_time_horizons must have a numeric dtype.")
+    if fixed_time_horizons.null_count():
+        raise ValueError("fixed_time_horizons must not contain null values.")
+    if fixed_time_horizons.is_finite().not_().any():
+        raise ValueError("fixed_time_horizons must contain only finite values.")
+    if (fixed_time_horizons < 0).any():
+        raise ValueError("fixed_time_horizons must contain non-negative values.")
+
+
 def predict_aj_estimates(
     event_table: pl.DataFrame,
     fixed_time_horizons: pl.Series,
@@ -29,6 +66,15 @@ def predict_aj_estimates(
         competing event. The probabilities sum to one up to floating-point
         precision.
 
+    Raises
+    ------
+    TypeError
+        If inputs are not the documented Polars types, horizons are not
+        numeric, or full_event_table is not boolean.
+    ValueError
+        If required event-table columns are missing, either input is empty,
+        or horizons contain null, non-finite, or negative values.
+
     Notes
     -----
     Estimates are step functions. At a horizon between observed times, the
@@ -50,6 +96,10 @@ def predict_aj_estimates(
     --------
     prepare_event_table : Build the event table from subject-level data.
     """
+
+    _validate_prediction_inputs(
+        event_table, fixed_time_horizons, full_event_table
+    )
 
     estimate_origin_enum = pl.Enum(["fixed_time_horizons", "event_table"])
 
