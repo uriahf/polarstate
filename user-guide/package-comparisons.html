@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Compare native Aalen-Johansen outputs from polarstate, lifelines, and tidycmprsk.">
 
-<title>API Reference – Polars State | Polars State</title>
+<title>Package Comparisons – Polars State | Polars State</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,6 +27,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -36,6 +72,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../user-guide/recipes.html" rel="next">
+<link href="../user-guide/how-it-works.html" rel="prev">
 <link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -136,35 +174,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <link rel="stylesheet" href="../uriah-brand.css">
-  <link rel="alternate" type="text/markdown" href="index.md">
-  <link rel="canonical" href="https://uriahf.github.io/polarstate/reference/">
-  <meta name="description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareSourceCode",
-  "name": "Polars State",
-  "description": "Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames",
-  "codeRepository": "https://github.com/uriahf/polarstate",
-  "url": "https://uriahf.github.io/polarstate",
-  "documentation": "https://uriahf.github.io/polarstate",
-  "programmingLanguage": {
-    "@type": "ComputerLanguage",
-    "name": "Python"
-  }
-}
-</script>
+  <link rel="alternate" type="text/markdown" href="package-comparisons.md">
+  <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/package-comparisons.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="API Reference – Polars State | Polars State">
-  <meta property="og:description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
-  <meta property="og:url" content="https://uriahf.github.io/polarstate/reference/">
+  <meta property="og:title" content="Package Comparisons – Polars State | Polars State">
+  <meta property="og:description" content="Compare native Aalen-Johansen outputs from polarstate, lifelines, and tidycmprsk.">
+  <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/package-comparisons.html">
   <meta property="og:site_name" content="Polars State">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="API Reference – Polars State | Polars State">
-  <meta name="twitter:description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
+  <meta name="twitter:title" content="Package Comparisons – Polars State | Polars State">
+  <meta name="twitter:description" content="Compare native Aalen-Johansen outputs from polarstate, lifelines, and tidycmprsk.">
 </head>
 
-<body class="gd-ref-sidebar nav-sidebar floating nav-fixed doc-reference quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -183,11 +205,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../user-guide/how-it-works.html"> 
+    <a class="nav-link active" href="../user-guide/how-it-works.html" aria-current="page"> 
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../reference/index.html" aria-current="page"> 
+    <a class="nav-link" href="../reference/index.html"> 
 <span class="menu-text">API Reference</span></a>
   </li>  
 </ul>
@@ -208,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <h1 class="quarto-secondary-nav-title no-breadcrumbs gd-ref-title"><span class="gd-ref-title-prefix">API</span><span class="gd-ref-title-sep">/</span><span class="gd-ref-title-name">Index</span></h1>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Package Comparisons</h1>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -220,36 +242,34 @@ document.addEventListener("DOMContentLoaded", () => {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container" style="padding-bottom: 0.5rem; padding-top: 0.25rem;"> 
-  <a href="../reference/index.html" style="font-family: &quot;Open Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">API Index</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Event table</span></a>
+ <span class="menu-text">User Guide</span></a>
 </div>
       <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/prepare_event_table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">prepare_event_table</span></a>
+  <a href="../user-guide/how-it-works.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How the Estimator Works</span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Time-horizon estimates</span></a>
-</div>
-      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/predict_aj_estimates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">predict_aj_estimates</span></a>
+  <a href="../user-guide/package-comparisons.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Package Comparisons</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recipes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/assumptions-limitations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assumptions and limitations</span></a>
   </div>
 </li>
       </ul>
@@ -264,8 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#event-table" id="toc-event-table" class="nav-link active" data-scroll-target="#event-table">Event table</a></li>
-  <li><a href="#time-horizon-estimates" id="toc-time-horizon-estimates" class="nav-link" data-scroll-target="#time-horizon-estimates">Time-horizon estimates</a></li>
+  <li><a href="#shared-example" id="toc-shared-example" class="nav-link active" data-scroll-target="#shared-example">Shared example</a></li>
   </ul>
 </nav>
     </div>
@@ -274,9 +293,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">API Reference</h1>
+<h1 class="title d-none d-lg-block">Package Comparisons</h1>
 </div>
 
+<div>
+  <div class="description">
+    Compare native Aalen-Johansen outputs from polarstate, lifelines, and tidycmprsk.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -291,32 +315,213 @@ document.addEventListener("DOMContentLoaded", () => {
 </header>
 
 
-<div class="doc-description">
-<p>The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.</p>
-</div>
-<section id="event-table" class="level2 doc-group">
-<h2 class="doc-group">Event table</h2>
-<div class="doc-description">
-<p>Compute an inspectable Aalen-Johansen event table from time-to-event observations.</p>
-</div>
-<dl>
-<dt><a href="../reference/prepare_event_table.html#polarstate.prepare_event_table" class="doc-function doc-label doc-label-function">prepare_event_table()</a></dt>
-<dd>
-<p>Compute an inspectable Aalen-Johansen event table.</p>
-</dd>
-</dl>
+<p>This page uses the same competing-risks data in three implementations. As in the original polarstate documentation, each tab shows the package’s <strong>native output</strong>, not only a normalized summary.</p>
+<section id="shared-example" class="level1">
+<h1>Shared example</h1>
+<p>Each row is one observation. Code <code>0</code> means right-censored, <code>1</code> is the event of interest, and <code>2</code> is the competing event.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><code>times</code></th>
+<th style="text-align: right;">24.1</th>
+<th style="text-align: right;">9.7</th>
+<th style="text-align: right;">49.9</th>
+<th style="text-align: right;">18.6</th>
+<th style="text-align: right;">34.8</th>
+<th style="text-align: right;">14.2</th>
+<th style="text-align: right;">39.2</th>
+<th style="text-align: right;">46.0</th>
+<th style="text-align: right;">31.5</th>
+<th style="text-align: right;">4.3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><code>reals</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">polarstate (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">lifelines (Py 🐍)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">tidycmprsk (R 🔵)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><code>polarstate</code> first returns the complete Polars event table, exposing the risk set, cause-specific hazards, survival, transition increments, and state occupancy probabilities.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>event_table <span class="op">=</span> prepare_event_table(data)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(event_table)</span></code></pre></div>
+<p>Native Polars output:</p>
+<pre class="text"><code>shape: (10, 16)
+┌───────┬─────────┬─────────┬─────────┬───┬────────────────┬────────────────┬────────────────┬────────────────┐
+│ times ┆ count_0 ┆ count_1 ┆ count_2 ┆ … ┆ trainsition_pr ┆ state_occupanc ┆ state_occupanc ┆ state_occupanc │
+│ ---   ┆ ---     ┆ ---     ┆ ---     ┆   ┆ obabilities_to ┆ y_probability_ ┆ y_probability_ ┆ y_probability_ │
+│ f64   ┆ u32     ┆ u32     ┆ u32     ┆   ┆ _2_at_times    ┆ 0_at_times     ┆ 1_at_times     ┆ 2_at_times     │
+│       ┆         ┆         ┆         ┆   ┆ ---            ┆ ---            ┆ ---            ┆ ---            │
+│       ┆         ┆         ┆         ┆   ┆ f64            ┆ f64            ┆ f64            ┆ f64            │
+╞═══════╪═════════╪═════════╪═════════╪═══╪════════════════╪════════════════╪════════════════╪════════════════╡
+│ 4.3   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0            ┆ 0.9            ┆ 0.1            ┆ 0.0            │
+│ 9.7   ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0            ┆ 0.8            ┆ 0.2            ┆ 0.0            │
+│ 14.2  ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.1            ┆ 0.7            ┆ 0.2            ┆ 0.1            │
+│ 18.6  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0            ┆ 0.6            ┆ 0.3            ┆ 0.1            │
+│ 24.1  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0            ┆ 0.5            ┆ 0.4            ┆ 0.1            │
+│ 31.5  ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0            ┆ 0.5            ┆ 0.4            ┆ 0.1            │
+│ 34.8  ┆ 1       ┆ 0       ┆ 0       ┆ … ┆ 0.0            ┆ 0.5            ┆ 0.4            ┆ 0.1            │
+│ 39.2  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0            ┆ 0.333333       ┆ 0.566667       ┆ 0.1            │
+│ 46.0  ┆ 0       ┆ 0       ┆ 1       ┆ … ┆ 0.166667       ┆ 0.166667       ┆ 0.566667       ┆ 0.266667       │
+│ 49.9  ┆ 0       ┆ 1       ┆ 0       ┆ … ┆ 0.0            ┆ 0.0            ┆ 0.733333       ┆ 0.266667       │
+└───────┴─────────┴─────────┴─────────┴───┴────────────────┴────────────────┴────────────────┴────────────────┘</code></pre>
+<section id="prediction-for-specific-time-horizons" class="level2">
+<h2 class="anchored" data-anchor-id="prediction-for-specific-time-horizons">Prediction for specific time horizons</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>estimates <span class="op">=</span> predict_aj_estimates(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    event_table,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(estimates)</span></code></pre></div>
+<p>Native Polars output:</p>
+<pre class="text"><code>shape: (5, 5)
+┌───────┬────────────────────────┬────────────────────────┬────────────────────────┬─────────────────────┐
+│ times ┆ state_occupancy_prob…  ┆ state_occupancy_prob…  ┆ state_occupancy_prob…  ┆ estimate_origin     │
+│ ---   ┆ ---                    ┆ ---                    ┆ ---                    ┆ ---                 │
+│ f64   ┆ f64                    ┆ f64                    ┆ f64                    ┆ enum                │
+╞═══════╪════════════════════════╪════════════════════════╪════════════════════════╪═════════════════════╡
+│ 10.0  ┆ 0.8                    ┆ 0.2                    ┆ 0.0                    ┆ fixed_time_horizons │
+│ 20.0  ┆ 0.6                    ┆ 0.3                    ┆ 0.1                    ┆ fixed_time_horizons │
+│ 30.0  ┆ 0.5                    ┆ 0.4                    ┆ 0.1                    ┆ fixed_time_horizons │
+│ 40.0  ┆ 0.333333               ┆ 0.566667               ┆ 0.1                    ┆ fixed_time_horizons │
+│ 50.0  ┆ 0.0                    ┆ 0.733333               ┆ 0.266667               ┆ fixed_time_horizons │
+└───────┴────────────────────────┴────────────────────────┴────────────────────────┴─────────────────────┘</code></pre>
 </section>
-<section id="time-horizon-estimates" class="level2 doc-group">
-<h2 class="doc-group">Time-horizon estimates</h2>
-<div class="doc-description">
-<p>Return state-occupancy estimates at requested time horizons.</p>
 </div>
-<dl>
-<dt><a href="../reference/predict_aj_estimates.html#polarstate.predict_aj_estimates" class="doc-function doc-label doc-label-function">predict_aj_estimates()</a></dt>
-<dd>
-<p>Evaluate state-occupancy probabilities at fixed time horizons.</p>
-</dd>
-</dl>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><code>lifelines</code> fits and returns one cumulative-incidence table for each event type.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lifelines <span class="im">import</span> AalenJohansenFitter</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"duration"</span>: [<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>],</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>primary <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>primary.fit(data[<span class="st">"duration"</span>], data[<span class="st">"event"</span>], event_of_interest<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Event table for event type 1"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(primary.cumulative_density_)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>competing <span class="op">=</span> AalenJohansenFitter(calculate_variance<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>competing.fit(data[<span class="st">"duration"</span>], data[<span class="st">"event"</span>], event_of_interest<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Event table for event type 2"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(competing.cumulative_density_)</span></code></pre></div>
+<p>Native pandas output:</p>
+<pre class="text"><code>Event table for event type 1
+          CIF_1
+event_at
+0.0    0.000000
+4.3    0.100000
+9.7    0.200000
+14.2   0.200000
+18.6   0.300000
+24.1   0.400000
+31.5   0.400000
+34.8   0.400000
+39.2   0.566667
+46.0   0.566667
+49.9   0.733333
+
+Event table for event type 2
+          CIF_2
+event_at
+0.0    0.000000
+4.3    0.000000
+9.7    0.000000
+14.2   0.100000
+18.6   0.100000
+24.1   0.100000
+31.5   0.100000
+34.8   0.100000
+39.2   0.100000
+46.0   0.266667
+49.9   0.266667</code></pre>
+<section id="prediction-for-specific-time-horizons-1" class="level2">
+<h2 class="anchored" data-anchor-id="prediction-for-specific-time-horizons-1">Prediction for specific time horizons</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(primary.predict([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(competing.predict([<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">40.0</span>, <span class="fl">50.0</span>]))</span></code></pre></div>
+<p>Native pandas output:</p>
+<pre class="text"><code>10.0    0.200000
+20.0    0.300000
+30.0    0.400000
+40.0    0.566667
+50.0    0.733333
+Name: CIF_1, dtype: float64
+
+10.0    0.000000
+20.0    0.100000
+30.0    0.100000
+40.0    0.100000
+50.0    0.266667
+Name: CIF_2, dtype: float64</code></pre>
+</section>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><code>tidycmprsk</code> returns outcome-specific rows in a tibble.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycmprsk)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">c</span>(<span class="fl">24.1</span>, <span class="fl">9.7</span>, <span class="fl">49.9</span>, <span class="fl">18.6</span>, <span class="fl">34.8</span>, <span class="fl">14.2</span>, <span class="fl">39.2</span>, <span class="fl">46.0</span>, <span class="fl">31.5</span>, <span class="fl">4.3</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">reals =</span> <span class="fu">factor</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"censored"</span>, <span class="st">"primary_event"</span>, <span class="st">"competing_event"</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">cuminc</span>(<span class="fu">Surv</span>(times, reals) <span class="sc">~</span> <span class="dv">1</span>, data)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(fit) <span class="sc">|&gt;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(outcome, time, estimate) <span class="sc">|&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code></pre></div>
+<p>Native tibble output:</p>
+<pre class="text"><code># A tibble: 20 × 3
+   outcome           time estimate
+   &lt;chr&gt;             &lt;dbl&gt;    &lt;dbl&gt;
+ 1 primary_event       4.3    0.100
+ 2 primary_event       9.7    0.200
+ 3 primary_event      14.2    0.200
+ 4 primary_event      18.6    0.300
+ 5 primary_event      24.1    0.400
+ 6 primary_event      31.5    0.400
+ 7 primary_event      34.8    0.400
+ 8 primary_event      39.2    0.567
+ 9 primary_event      46.0    0.567
+10 primary_event      49.9    0.733
+11 competing_event     4.3    0
+12 competing_event     9.7    0
+13 competing_event    14.2    0.100
+14 competing_event    18.6    0.100
+15 competing_event    24.1    0.100
+16 competing_event    31.5    0.100
+17 competing_event    34.8    0.100
+18 competing_event    39.2    0.100
+19 competing_event    46.0    0.267
+20 competing_event    49.9    0.267</code></pre>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -660,6 +865,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/how-it-works.html" class="pagination-link" aria-label="How the Estimator Works">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">How the Estimator Works</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../user-guide/recipes.html" class="pagination-link" aria-label="Recipes">
+        <span class="nav-page-text">Recipes</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -669,6 +886,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 </footer>
 <script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
 <script src="../sidebar-wrap.js"></script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
 <script src="../sidebar-filter.js"></script>

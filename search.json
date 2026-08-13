@@ -1,13 +1,34 @@
 [
   {
+    "objectID": "user-guide/recipes.html",
+    "href": "user-guide/recipes.html",
+    "title": "Recipes",
+    "section": "",
+    "text": "Every example on this page is executed when the documentation builds. If an API change breaks a recipe, the documentation check fails with it.\n\nimport pandas as pd\nimport polars as pl\nfrom polarstate import prepare_event_table, predict_aj_estimates\n\n\nChoose the event structure\nThe workflow stays the same; only the outcome coding changes.\n\nSingle eventCompeting risks\n\n\nUse 0 for right-censoring and 1 for the event.\n\nsingle_event_data = pl.DataFrame({\n    \"times\": [2.0, 4.0, 5.0, 8.0, 10.0],\n    \"reals\": [1, 0, 1, 0, 1],\n})\nsingle_table = prepare_event_table(single_event_data)\nsingle_result = predict_aj_estimates(\n    single_table, pl.Series([3.0, 6.0, 12.0])\n)\nsingle_result\n\n\nshape: (3, 5)timesstate_occupancy_probability_0state_occupancy_probability_1state_occupancy_probability_2estimate_originf64f64f64f64enum3.00.80.20.0\"fixed_time_horizons\"6.00.5333330.4666670.0\"fixed_time_horizons\"12.00.01.00.0\"fixed_time_horizons\"\n\n\nState 2 remains zero, while state 0 is the event-free probability.\n\n\nEncode the event of interest as 1 and the competing event as 2.\n\ncompeting_data = pl.DataFrame({\n    \"times\": [2.0, 4.0, 5.0, 8.0, 10.0, 12.0],\n    \"reals\": [1, 2, 0, 1, 2, 1],\n})\ncompeting_table = prepare_event_table(competing_data)\ncompeting_result = predict_aj_estimates(\n    competing_table, pl.Series([3.0, 6.0, 9.0, 12.0])\n)\ncompeting_result\n\n\nshape: (4, 5)timesstate_occupancy_probability_0state_occupancy_probability_1state_occupancy_probability_2estimate_originf64f64f64f64enum3.00.8333330.1666670.0\"fixed_time_horizons\"6.00.6666670.1666670.166667\"fixed_time_horizons\"9.00.4444440.3888890.166667\"fixed_time_horizons\"12.0-1.1102e-160.6111110.388889\"fixed_time_horizons\"\n\n\nDo not censor competing events: coding them as 0 changes the estimand.\n\n\n\n\n\nReturn horizons and event times together\n\ncombined_result = predict_aj_estimates(\n    competing_table,\n    pl.Series([3.0, 6.0, 9.0, 12.0]),\n    full_event_table=True,\n)\ncombined_result.select(\"times\", \"estimate_origin\")\n\n\nshape: (10, 2)timesestimate_originf64enum3.0\"fixed_time_horizons\"6.0\"fixed_time_horizons\"9.0\"fixed_time_horizons\"12.0\"fixed_time_horizons\"2.0\"event_table\"4.0\"event_table\"5.0\"event_table\"8.0\"event_table\"10.0\"event_table\"12.0\"event_table\"\n\n\nUse estimate_origin to distinguish requested horizons from observed times.\n\n\nEstimate within groups\nThe public functions operate on one cohort at a time.\n\ndata_with_groups = competing_data.with_columns(\n    pl.Series(\"group\", [\"A\", \"A\", \"A\", \"B\", \"B\", \"B\"])\n)\nestimates_by_group = {\n    group[0]: predict_aj_estimates(\n        prepare_event_table(group_data.select(\"times\", \"reals\")),\n        pl.Series([6.0, 12.0]),\n    )\n    for group, group_data in data_with_groups.group_by(\"group\")\n}\n{k: value.shape for k, value in estimates_by_group.items()}\n\n{'B': (2, 5), 'A': (2, 5)}\n\n\nThese are descriptive within-group estimates, not an adjusted regression model.\n\n\nConvert pandas input\n\npandas_data = pd.DataFrame({\n    \"time\": [2, 4, 6, 8],\n    \"event\": [1, 0, 2, 1],\n})\npolars_data = pl.from_pandas(pandas_data).select(\n    pl.col(\"time\").cast(pl.Float64).alias(\"times\"),\n    pl.col(\"event\").cast(pl.Int64).alias(\"reals\"),\n)\nprepare_event_table(polars_data).select(\"times\", \"at_risk\")\n\n\nshape: (4, 2)timesat_riskf64i642.044.036.028.01\n\n\nRecode outcomes before estimation and confirm that only 0, 1, and optional 2 are present.\n\n\nNext steps\n\nRead How the estimator works.\nReview Assumptions and limitations.\nSee Package comparisons.\nConsult the API Reference.",
+    "crumbs": [
+      "User Guide",
+      "Recipes"
+    ]
+  },
+  {
     "objectID": "user-guide/how-it-works.html",
     "href": "user-guide/how-it-works.html",
     "title": "How the Estimator Works",
     "section": "",
-    "text": "The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. With only outcome codes 0 and 1, polarstate handles an ordinary single-event or binary event/censoring analysis. Adding outcome code 2 introduces a competing event. Each calculation stage remains available as a column in the event table.\n\nCalculation flow\n\nObservations are grouped by time and counted by outcome.\nThe risk set is computed at each observed time.\nCause-specific hazards are calculated for the event of interest and the optional competing event.\nConditional survival is accumulated into overall survival.\nThe previous survival probability weights each cause-specific hazard.\nWeighted transitions are cumulatively summed into state-occupancy probabilities.\n\nFor a requested time horizon, the prediction function performs a backward as-of join: it returns the latest estimate available at or before that horizon. Horizons before the first observed event receive probability 1 for state 0 and 0 for the absorbing states.\n\n\n\n\n\n\nNoteInput contract\n\n\n\nThe estimator expects outcomes encoded as 0 or 1, with 2 used only when a competing event is present. Validate and recode upstream data before preparing the event table.",
+    "text": "The Aalen-Johansen estimator generalizes Kaplan-Meier reasoning to one or more absorbing outcomes. In polarstate, code 0 means that follow-up ended without an observed event, code 1 is the event of interest, and optional code 2 is a competing event.\nflowchart LR\n    O[\"Under observation\"] --&gt;|\"Code 0\"| C[\"Right-censored\"]\n    O --&gt;|\"Code 1\"| E[\"Event of interest\"]\n    O -.-&gt;|\"Optional code 2\"| R[\"Competing event\"]\n    style O fill:#dff3f8,stroke:#1f5f82\n    style E fill:#e3f4ea,stroke:#287a4b\n    style R fill:#f8e8ef,stroke:#9b4668\nCodes 0 and 1 are sufficient for a single-event analysis. Code 2 adds a second absorbing state; it is not required by the API.",
     "crumbs": [
       "User Guide",
-      "Concepts",
+      "How the Estimator Works"
+    ]
+  },
+  {
+    "objectID": "user-guide/how-it-works.html#event-table-columns",
+    "href": "user-guide/how-it-works.html#event-table-columns",
+    "title": "How the Estimator Works",
+    "section": "Event-table columns",
+    "text": "Event-table columns\n\n\n\n\n\n\n\nColumn\nInterpretation\n\n\n\n\ntimes\nUnique observed time\n\n\ncount_0\nObservations right-censored at that time\n\n\ncount_1\nEvents of interest at that time\n\n\ncount_2\nCompeting events at that time; zero in a single-event analysis\n\n\nevents_at_times\nTotal observations ending follow-up at that time\n\n\nat_risk\nObservations still under observation immediately before that time\n\n\ncsh_1, csh_2\nCause-specific event increments: event count divided by risk set\n\n\nconditional_survival\nProbability of avoiding either event at that time, conditional on being at risk\n\n\noverall_survival\nProduct of conditional-survival increments through that time\n\n\nprevious_overall_survival\nSurvival immediately before the current time\n\n\ntransition_probabilities_to_*_at_times\nProbability mass entering each absorbing state at that time\n\n\nstate_occupancy_probability_*_at_times\nCumulative probability of occupying each absorbing state\n\n\n\nThe historical trainsition_probabilities_to_*_at_times spelling remains as a backward-compatible alias. New code should use the correctly spelled name.",
+    "crumbs": [
+      "User Guide",
       "How the Estimator Works"
     ]
   },
@@ -16,17 +37,17 @@
     "href": "skills.html",
     "title": "Skills",
     "section": "",
-    "text": "A skill is a package of structured files that teaches an AI coding agent how to work with a specific tool or framework. The skill below was generated by Great Docs from this project’s documentation. Install it in your agent and it will be able to run commands, edit configuration, write content, and troubleshoot problems without step-by-step guidance from you.\n\n  \n    ▶    Install this skill\n  \n  \n    \n      \nAny agent — install with npx:\nnpx skills add https://uriahf.github.io/polarstate/\nCodex / OpenCode\nTell the agent:Fetch the skill file at https://uriahf.github.io/polarstate/skill.md and follow the instructions.\nManual — download the skill file:\ncurl -O https://uriahf.github.io/polarstate/skill.md\nOr browse the SKILL.md file.\n      \n    \n  \n\n\nSKILL.md\n---\nname: polarstate\ndescription: &gt;\n  Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames. Use when writing Python code that uses the polarstate package.\ncompatibility: Requires Python &gt;=3.9.\n---\n\n# Polars State\n\nFast Aalen-Johansen state-occupancy estimates for Polars DataFrames\n\n## Installation\n\n```bash\npip install polarstate\n```\n\n## API overview\n\n### Estimation\n\nBuild an inspectable event table from time-to-event observations.\n\n- `prepare_event_table`: Generate the full event table from raw ``times`` and ``reals`` data\n\n### Prediction\n\nEvaluate state-occupancy probabilities at fixed time horizons.\n\n- `predict_aj_estimates`: Predict state-occupancy probabilities at ``fixed_time_horizons``\n\n## Resources\n\n- [Full documentation](https://uriahf.github.io/polarstate/)\n- [llms.txt](llms.txt) — Indexed API reference for LLMs\n- [llms-full.txt](llms-full.txt) — Comprehensive documentation for LLMs\n- [Source code](https://github.com/uriahf/polarstate)"
+    "text": "A skill is a package of structured files that teaches an AI coding agent how to work with a specific tool or framework. The skill below was generated by Great Docs from this project’s documentation. Install it in your agent and it will be able to run commands, edit configuration, write content, and troubleshoot problems without step-by-step guidance from you.\n\n  \n    ▶    Install this skill\n  \n  \n    \n      \nAny agent — install with npx:\nnpx skills add https://uriahf.github.io/polarstate/\nCodex / OpenCode\nTell the agent:Fetch the skill file at https://uriahf.github.io/polarstate/skill.md and follow the instructions.\nManual — download the skill file:\ncurl -O https://uriahf.github.io/polarstate/skill.md\nOr browse the SKILL.md file.\n      \n    \n  \n\n\nSKILL.md\n---\nname: polarstate\ndescription: &gt;\n  Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames. Use when writing Python code that uses the polarstate package.\ncompatibility: Requires Python &gt;=3.9.\n---\n\n# Polars State\n\nFast Aalen-Johansen state-occupancy estimates for Polars DataFrames\n\n## Installation\n\n```bash\npip install polarstate\n```\n\n## API overview\n\n### Event table\n\nCompute an inspectable Aalen-Johansen event table from time-to-event observations.\n\n- `prepare_event_table`: Compute an inspectable Aalen-Johansen event table\n\n### Time-horizon estimates\n\nReturn state-occupancy estimates at requested time horizons.\n\n- `predict_aj_estimates`: Evaluate state-occupancy probabilities at fixed time horizons\n\n## Resources\n\n- [Full documentation](https://uriahf.github.io/polarstate/)\n- [llms.txt](llms.txt) — Indexed API reference for LLMs\n- [llms-full.txt](llms-full.txt) — Comprehensive documentation for LLMs\n- [Source code](https://github.com/uriahf/polarstate)"
   },
   {
     "objectID": "reference/predict_aj_estimates.html",
     "href": "reference/predict_aj_estimates.html",
     "title": "predict_aj_estimates()",
     "section": "",
-    "text": "Predict state-occupancy probabilities at fixed_time_horizons.\n\n\nUsage\nSource\n\n\npredict_aj_estimates(event_table, fixed_time_horizons, full_event_table=False)\n\n\nParameters\n\n\nevent_table: pl.DataFrame\n\nThe event table created by :func:prepare_event_table.\n\nfixed_time_horizons: pl.Series\n\nTimes at which to obtain the state-occupancy probabilities.\n\n\n\n\n\nReturns\n\n\n pl.DataFrame\n\nDataFrame with fixed_time_horizons and the estimated probabilities for states 0, 1 and 2.",
+    "text": "Evaluate state-occupancy probabilities at fixed time horizons.\n\n\nUsage\nSource\n\n\npredict_aj_estimates(event_table, fixed_time_horizons, full_event_table=False)\n\n\nParameters\n\n\nevent_table: pl.DataFrame\n\nEvent table returned by prepare_event_table.\n\nfixed_time_horizons: pl.Series\n\nNumeric horizons to evaluate. Horizons may be unsorted and need not coincide with observed event times.\n\nfull_event_table: bool = False\n\nIf True, append estimates at every observed event time. Use the estimate_origin column to distinguish those rows from requested horizons.\n\n\n\n\n\nReturns\n\n\n pl.DataFrame\n\nColumns are times, state-occupancy probabilities for states 0, 1, and 2, and estimate_origin. State 0 means no absorbing event by the horizon. States 1 and 2 are the event of interest and optional competing event. The probabilities sum to one up to floating-point precision.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf inputs are not the documented Polars types, horizons are not numeric, or full_event_table is not boolean.\n\n ValueError\n\nIf required event-table columns are missing, either input is empty, or horizons contain null, non-finite, or negative values.\n\n\n\n\n\nNotes\nEstimates are step functions. At a horizon between observed times, the latest estimate at or before that horizon is returned. Horizons before the first observed time receive probabilities (1, 0, 0).\n\n\nExamples\n&gt;&gt;&gt; import polars as pl\n&gt;&gt;&gt; from polarstate import prepare_event_table, predict_aj_estimates\n&gt;&gt;&gt; observations = pl.DataFrame(\n...     {\"times\": [2.0, 4.0, 5.0], \"reals\": [1, 0, 1]}\n... )\n&gt;&gt;&gt; table = prepare_event_table(observations)\n&gt;&gt;&gt; predict_aj_estimates(table, pl.Series([1.0, 3.0])).shape\n(2, 5)\n\n\nSee Also\n\n\n\nBuild the event table from subject-level data.",
     "crumbs": [
       "API Reference",
-      "Prediction",
+      "Time-horizon estimates",
       "predict_aj_estimates"
     ]
   },
@@ -49,14 +70,14 @@
     "href": "index.html#install",
     "title": "polarstate",
     "section": "Install",
-    "text": "Install\npip install polarstate"
+    "text": "Install\nWith uv:\nuv add polarstate\nAlternatively, with pip:\npip install polarstate"
   },
   {
     "objectID": "index.html#quick-start",
     "href": "index.html#quick-start",
     "title": "polarstate",
     "section": "Quick start",
-    "text": "Quick start\nimport polars as pl\nfrom polarstate import prepare_event_table, predict_aj_estimates\n\nobservations = pl.DataFrame(\n    {\n        \"times\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n        \"reals\": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],\n    }\n)\n\nevent_table = prepare_event_table(observations)\nestimates = predict_aj_estimates(\n    event_table,\n    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),\n)\n\nprint(estimates)\nOutcomes use 0 for censoring and 1 for the event of interest. Use 2 only when the data include a competing event. See the documentation for a complete walkthrough and API reference."
+    "text": "Quick start\nStart with one row per observation:\nimport polars as pl\nfrom polarstate import prepare_event_table, predict_aj_estimates\n\nobservations = pl.DataFrame(\n    {\n        \"times\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n        \"reals\": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],\n    }\n)\n\n1. Prepare the event table\nevent_table = prepare_event_table(observations)\n\nevent_table.select(\n    \"times\",\n    \"at_risk\",\n    \"count_0\",\n    \"count_1\",\n    \"count_2\",\n    \"overall_survival\",\n    \"state_occupancy_probability_1_at_times\",\n    \"state_occupancy_probability_2_at_times\",\n)\nSelected columns from the output:\n\n\n\n\n\n\n\n\n\n\n\n\n\ntimes\nat_risk\ncount_0\ncount_1\ncount_2\noverall_survival\nstate 1 probability\nstate 2 probability\n\n\n\n\n4.3\n10\n0\n1\n0\n0.900000\n0.100000\n0.000000\n\n\n9.7\n9\n0\n1\n0\n0.800000\n0.200000\n0.000000\n\n\n14.2\n8\n0\n0\n1\n0.700000\n0.200000\n0.100000\n\n\n18.6\n7\n0\n1\n0\n0.600000\n0.300000\n0.100000\n\n\n24.1\n6\n0\n1\n0\n0.500000\n0.400000\n0.100000\n\n\n31.5\n5\n1\n0\n0\n0.500000\n0.400000\n0.100000\n\n\n34.8\n4\n1\n0\n0\n0.500000\n0.400000\n0.100000\n\n\n39.2\n3\n0\n1\n0\n0.333333\n0.566667\n0.100000\n\n\n46.0\n2\n0\n0\n1\n0.166667\n0.566667\n0.266667\n\n\n49.9\n1\n0\n1\n0\n0.000000\n0.733333\n0.266667\n\n\n\nThe complete event table also retains the intermediate hazards, survival increments, and transition probabilities used in the calculation.\n\n\n2. Query fixed time horizons\nestimates = predict_aj_estimates(\n    event_table,\n    pl.Series([10.0, 20.0, 30.0, 40.0]),\n)\n\nestimates\nOutput:\n\n\n\n\n\n\n\n\n\n\ntimes\nstate 0 probability\nstate 1 probability\nstate 2 probability\nestimate_origin\n\n\n\n\n10.0\n0.800000\n0.200000\n0.000000\nfixed_time_horizons\n\n\n20.0\n0.600000\n0.300000\n0.100000\nfixed_time_horizons\n\n\n30.0\n0.500000\n0.400000\n0.100000\nfixed_time_horizons\n\n\n40.0\n0.333333\n0.566667\n0.100000\nfixed_time_horizons\n\n\n\nState 0 is remaining event-free, state 1 is the event of interest, and state 2 is the competing event.\nCode 0 in the input indicates right-censoring: follow-up ended without an observed event. This includes administrative censoring at the end of observation. Code 1 indicates the event of interest, and optional code 2 a competing event."
   },
   {
     "objectID": "index.html#why-polarstate",
@@ -66,11 +87,18 @@
     "text": "Why polarstate?\n\nPolars-native inputs and outputs\nA compact, explicit event table you can inspect\nPredictions at arbitrary time horizons\nSupport for single-event, binary event/censoring, and competing-risks data"
   },
   {
+    "objectID": "index.html#learn-more",
+    "href": "index.html#learn-more",
+    "title": "polarstate",
+    "section": "Learn more",
+    "text": "Learn more\n\nHow the estimator works explains the Aalen-Johansen calculation and every returned column.\nPackage comparisons checks the same estimates against Python’s lifelines and R’s tidycmprsk.\nRecipes covers single-event, competing-risks, grouped, and pandas-to-Polars workflows.\nThe API Reference provides complete signatures and parameter details."
+  },
+  {
     "objectID": "reference/index.html",
     "href": "reference/index.html",
     "title": "API Reference",
     "section": "",
-    "text": "The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.\n\n\nEstimation\n\nBuild an inspectable event table from time-to-event observations.\n\n\nprepare_event_table()\n\nGenerate the full event table from raw times and reals data.\n\n\n\n\nPrediction\n\nEvaluate state-occupancy probabilities at fixed time horizons.\n\n\npredict_aj_estimates()\n\nPredict state-occupancy probabilities at fixed_time_horizons.",
+    "text": "The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.\n\n\nEvent table\n\nCompute an inspectable Aalen-Johansen event table from time-to-event observations.\n\n\nprepare_event_table()\n\nCompute an inspectable Aalen-Johansen event table.\n\n\n\n\nTime-horizon estimates\n\nReturn state-occupancy estimates at requested time horizons.\n\n\npredict_aj_estimates()\n\nEvaluate state-occupancy probabilities at fixed time horizons.",
     "crumbs": [
       "API Reference",
       "API Index"
@@ -81,23 +109,55 @@
     "href": "reference/prepare_event_table.html",
     "title": "prepare_event_table()",
     "section": "",
-    "text": "Generate the full event table from raw times and reals data.\n\n\nUsage\nSource\n\n\nprepare_event_table(times_and_reals)\n\n\nParameters\n\n\ntimes_and_reals: pl.DataFrame\n\nA Polars DataFrame containing at least times and reals columns.\n\n\n\n\n\nReturns\n\n\n pl.DataFrame\n\nThe event table with all intermediate columns computed.",
+    "text": "Compute an inspectable Aalen-Johansen event table.\n\n\nUsage\nSource\n\n\nprepare_event_table(times_and_reals)\n\n\nParameters\n\n\ntimes_and_reals: pl.DataFrame\n\nSubject-level observations containing a numeric times column and an integer reals column. Outcome code 0 means follow-up ended without an observed event (right-censoring), 1 means the event of interest, and optional 2 means a competing event. A simple event/censoring analysis uses only 0 and 1.\n\n\n\n\n\nReturns\n\n\n pl.DataFrame\n\nOne row per unique observed time. The result includes outcome counts, the risk set, cause-specific event increments, conditional and overall survival, transition increments, and cumulative state-occupancy probabilities for states 1 and 2.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf the input is not a Polars DataFrame, times is not numeric, or reals is not integer-valued.\n\n ValueError\n\nIf required columns are missing, the input is empty, values are null, times are non-finite or negative, or outcome codes are outside {0, 1, 2}.\n\n\n\n\n\nNotes\nInput rows need not be sorted. Extra columns are ignored. Duplicate times are allowed and are aggregated into a single event-table row.\n\n\nExamples\n&gt;&gt;&gt; import polars as pl\n&gt;&gt;&gt; from polarstate import prepare_event_table\n&gt;&gt;&gt; observations = pl.DataFrame(\n...     {\"times\": [2.0, 4.0, 5.0], \"reals\": [1, 0, 1]}\n... )\n&gt;&gt;&gt; prepare_event_table(observations).select(\n...     \"times\", \"at_risk\", \"count_1\", \"overall_survival\"\n... ).shape\n(3, 4)\n\n\nSee Also\n\n\n\nEvaluate the event table at fixed horizons.",
     "crumbs": [
       "API Reference",
-      "Estimation",
+      "Event table",
       "prepare_event_table"
     ]
   },
   {
-    "objectID": "user-guide/getting-started.html",
-    "href": "user-guide/getting-started.html",
-    "title": "Getting Started",
+    "objectID": "user-guide/assumptions-limitations.html",
+    "href": "user-guide/assumptions-limitations.html",
+    "title": "Assumptions and limitations",
     "section": "",
-    "text": "polarstate implements a compact Aalen-Johansen workflow with Polars DataFrames. It works for ordinary single-event analyses and binary event/censoring data, while also supporting an optional competing event.\n\n\n\nCode\nMeaning\n\n\n\n\n0\nCensored\n\n\n1\nEvent of interest\n\n\n2\nCompeting event (optional)\n\n\n\nFor a simple time-to-event or binary event/censoring analysis, use only 0 and 1.\n\nInstall\npip install polarstate\n\n\nPrepare an event table\nStart with one row per observation. The times column contains the observed time and reals contains the outcome code.\nimport polars as pl\nfrom polarstate import prepare_event_table\n\nobservations = pl.DataFrame(\n    {\n        \"times\": [24.1, 9.7, 49.9, 18.6, 34.8, 14.2, 39.2, 46.0, 31.5, 4.3],\n        \"reals\": [1, 1, 1, 1, 0, 2, 1, 2, 0, 1],\n    }\n)\n\nevent_table = prepare_event_table(observations)\nThe returned table exposes the risk set, cause-specific hazards, overall survival, and cumulative state-occupancy probabilities. Keeping these intermediate quantities visible makes the estimate easy to inspect and audit.\n\n\nPredict at fixed horizons\nfrom polarstate import predict_aj_estimates\n\nestimates = predict_aj_estimates(\n    event_table,\n    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),\n)\nThe result contains the requested time and one probability for each state. Each row sums to one (up to floating-point precision).\n\n\n\n\n\n\nTipNeed the observed event times too?\n\n\n\nPass full_event_table=True to the prediction function to include estimates at every observed event time alongside your fixed horizons.\n\n\n\n\nWhere to go next\n\nRead How the estimator works for the statistical flow.\nOpen the API Reference for signatures, parameter details, and source links.",
+    "text": "What the estimate means\npolarstate computes non-parametric Aalen–Johansen state-occupancy probabilities. With codes 0 and 1, it describes a standard time-to-event outcome. Adding code 2 represents a competing event.\nThe estimates are descriptive probabilities for the supplied cohort. They are not causal effects and do not adjust for covariates.\n\n\nData assumptions\n\nEach row represents one independent subject with one observed follow-up time.\ntimes is numeric, finite, non-negative, and uses a consistent time unit.\nreals is integer-coded: 0 for right-censoring, 1 for the event of interest, and optionally 2 for a competing event.\nCensoring is assumed independent of the event process, conditional on the study design and any stratification performed before estimation.\nEvents tied at the same time are aggregated. Input rows need not be sorted.\n\nThe package validates the mechanical requirements above, but it cannot verify study-design assumptions such as independent censoring.\n\n\nScope and limitations\nThe current public API supports one event of interest and one optional competing event. It does not currently provide:\n\nconfidence intervals, standard errors, or hypothesis tests;\ncovariate-adjusted or causal estimates;\nleft truncation, interval censoring, or time-varying covariates;\nsurvey weights or clustered variance estimates;\nautomatic missing-data handling.\n\nFor group-specific estimates, split the data explicitly. Differences between groups remain unadjusted and should not be interpreted as causal effects.\n\n\nBoundary behavior\nPredictions are step functions. A requested horizon between observed times uses the most recent estimate at or before that horizon. A horizon before the first observation returns state probabilities (1, 0, 0).\n\n\nOutput-name compatibility\nCorrectly spelled transition columns are:\n\ntransition_probabilities_to_1_at_times\ntransition_probabilities_to_2_at_times\n\nThe historical misspelled names beginning with trainsition_ remain in the event table as backward-compatible aliases. New code should use the correctly spelled names.\n\n\nBefore reporting results\nConfirm the outcome coding, time origin, time unit, censoring definition, and the number at risk near the horizons you report. Inspect the event table rather than relying only on fixed-horizon output.",
     "crumbs": [
       "User Guide",
-      "Getting Started",
-      "Getting Started"
+      "Assumptions and limitations"
+    ]
+  },
+  {
+    "objectID": "user-guide/package-comparisons.html",
+    "href": "user-guide/package-comparisons.html",
+    "title": "Package Comparisons",
+    "section": "",
+    "text": "This page uses the same competing-risks data in three implementations. As in the original polarstate documentation, each tab shows the package’s native output, not only a normalized summary.",
+    "crumbs": [
+      "User Guide",
+      "Package Comparisons"
+    ]
+  },
+  {
+    "objectID": "user-guide/package-comparisons.html#prediction-for-specific-time-horizons",
+    "href": "user-guide/package-comparisons.html#prediction-for-specific-time-horizons",
+    "title": "Package Comparisons",
+    "section": "Prediction for specific time horizons",
+    "text": "Prediction for specific time horizons\nestimates = predict_aj_estimates(\n    event_table,\n    pl.Series([10.0, 20.0, 30.0, 40.0, 50.0]),\n)\nprint(estimates)\nNative Polars output:\nshape: (5, 5)\n┌───────┬────────────────────────┬────────────────────────┬────────────────────────┬─────────────────────┐\n│ times ┆ state_occupancy_prob…  ┆ state_occupancy_prob…  ┆ state_occupancy_prob…  ┆ estimate_origin     │\n│ ---   ┆ ---                    ┆ ---                    ┆ ---                    ┆ ---                 │\n│ f64   ┆ f64                    ┆ f64                    ┆ f64                    ┆ enum                │\n╞═══════╪════════════════════════╪════════════════════════╪════════════════════════╪═════════════════════╡\n│ 10.0  ┆ 0.8                    ┆ 0.2                    ┆ 0.0                    ┆ fixed_time_horizons │\n│ 20.0  ┆ 0.6                    ┆ 0.3                    ┆ 0.1                    ┆ fixed_time_horizons │\n│ 30.0  ┆ 0.5                    ┆ 0.4                    ┆ 0.1                    ┆ fixed_time_horizons │\n│ 40.0  ┆ 0.333333               ┆ 0.566667               ┆ 0.1                    ┆ fixed_time_horizons │\n│ 50.0  ┆ 0.0                    ┆ 0.733333               ┆ 0.266667               ┆ fixed_time_horizons │\n└───────┴────────────────────────┴────────────────────────┴────────────────────────┴─────────────────────┘",
+    "crumbs": [
+      "User Guide",
+      "Package Comparisons"
+    ]
+  },
+  {
+    "objectID": "user-guide/package-comparisons.html#prediction-for-specific-time-horizons-1",
+    "href": "user-guide/package-comparisons.html#prediction-for-specific-time-horizons-1",
+    "title": "Package Comparisons",
+    "section": "Prediction for specific time horizons",
+    "text": "Prediction for specific time horizons\nprint(primary.predict([10.0, 20.0, 30.0, 40.0, 50.0]))\nprint(competing.predict([10.0, 20.0, 30.0, 40.0, 50.0]))\nNative pandas output:\n10.0    0.200000\n20.0    0.300000\n30.0    0.400000\n40.0    0.566667\n50.0    0.733333\nName: CIF_1, dtype: float64\n\n10.0    0.000000\n20.0    0.100000\n30.0    0.100000\n40.0    0.100000\n50.0    0.266667\nName: CIF_2, dtype: float64",
+    "crumbs": [
+      "User Guide",
+      "Package Comparisons"
     ]
   }
 ]

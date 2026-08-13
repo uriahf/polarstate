@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="What polarstate estimates, what the data must represent, and what it does not provide.">
 
-<title>API Reference – Polars State | Polars State</title>
+<title>Assumptions and limitations – Polars State | Polars State</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -36,6 +37,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../user-guide/recipes.html" rel="prev">
 <link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -136,35 +138,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <link rel="stylesheet" href="../uriah-brand.css">
-  <link rel="alternate" type="text/markdown" href="index.md">
-  <link rel="canonical" href="https://uriahf.github.io/polarstate/reference/">
-  <meta name="description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareSourceCode",
-  "name": "Polars State",
-  "description": "Fast Aalen-Johansen state-occupancy estimates for Polars DataFrames",
-  "codeRepository": "https://github.com/uriahf/polarstate",
-  "url": "https://uriahf.github.io/polarstate",
-  "documentation": "https://uriahf.github.io/polarstate",
-  "programmingLanguage": {
-    "@type": "ComputerLanguage",
-    "name": "Python"
-  }
-}
-</script>
+  <link rel="alternate" type="text/markdown" href="assumptions-limitations.md">
+  <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/assumptions-limitations.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="API Reference – Polars State | Polars State">
-  <meta property="og:description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
-  <meta property="og:url" content="https://uriahf.github.io/polarstate/reference/">
+  <meta property="og:title" content="Assumptions and limitations – Polars State | Polars State">
+  <meta property="og:description" content="What polarstate estimates, what the data must represent, and what it does not provide.">
+  <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/assumptions-limitations.html">
   <meta property="og:site_name" content="Polars State">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="API Reference – Polars State | Polars State">
-  <meta name="twitter:description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
+  <meta name="twitter:title" content="Assumptions and limitations – Polars State | Polars State">
+  <meta name="twitter:description" content="What polarstate estimates, what the data must represent, and what it does not provide.">
 </head>
 
-<body class="gd-ref-sidebar nav-sidebar floating nav-fixed doc-reference quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -183,11 +169,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../user-guide/how-it-works.html"> 
+    <a class="nav-link active" href="../user-guide/how-it-works.html" aria-current="page"> 
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../reference/index.html" aria-current="page"> 
+    <a class="nav-link" href="../reference/index.html"> 
 <span class="menu-text">API Reference</span></a>
   </li>  
 </ul>
@@ -208,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <h1 class="quarto-secondary-nav-title no-breadcrumbs gd-ref-title"><span class="gd-ref-title-prefix">API</span><span class="gd-ref-title-sep">/</span><span class="gd-ref-title-name">Index</span></h1>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Assumptions and limitations</h1>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -220,36 +206,34 @@ document.addEventListener("DOMContentLoaded", () => {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container" style="padding-bottom: 0.5rem; padding-top: 0.25rem;"> 
-  <a href="../reference/index.html" style="font-family: &quot;Open Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">API Index</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Event table</span></a>
+ <span class="menu-text">User Guide</span></a>
 </div>
       <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/prepare_event_table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">prepare_event_table</span></a>
+  <a href="../user-guide/how-it-works.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How the Estimator Works</span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Time-horizon estimates</span></a>
-</div>
-      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/predict_aj_estimates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">predict_aj_estimates</span></a>
+  <a href="../user-guide/package-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Comparisons</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recipes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/assumptions-limitations.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assumptions and limitations</span></a>
   </div>
 </li>
       </ul>
@@ -264,8 +248,12 @@ document.addEventListener("DOMContentLoaded", () => {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#event-table" id="toc-event-table" class="nav-link active" data-scroll-target="#event-table">Event table</a></li>
-  <li><a href="#time-horizon-estimates" id="toc-time-horizon-estimates" class="nav-link" data-scroll-target="#time-horizon-estimates">Time-horizon estimates</a></li>
+  <li><a href="#what-the-estimate-means" id="toc-what-the-estimate-means" class="nav-link active" data-scroll-target="#what-the-estimate-means">What the estimate means</a></li>
+  <li><a href="#data-assumptions" id="toc-data-assumptions" class="nav-link" data-scroll-target="#data-assumptions">Data assumptions</a></li>
+  <li><a href="#scope-and-limitations" id="toc-scope-and-limitations" class="nav-link" data-scroll-target="#scope-and-limitations">Scope and limitations</a></li>
+  <li><a href="#boundary-behavior" id="toc-boundary-behavior" class="nav-link" data-scroll-target="#boundary-behavior">Boundary behavior</a></li>
+  <li><a href="#output-name-compatibility" id="toc-output-name-compatibility" class="nav-link" data-scroll-target="#output-name-compatibility">Output-name compatibility</a></li>
+  <li><a href="#before-reporting-results" id="toc-before-reporting-results" class="nav-link" data-scroll-target="#before-reporting-results">Before reporting results</a></li>
   </ul>
 </nav>
     </div>
@@ -274,9 +262,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">API Reference</h1>
+<h1 class="title d-none d-lg-block">Assumptions and limitations</h1>
 </div>
 
+<div>
+  <div class="description">
+    What polarstate estimates, what the data must represent, and what it does not provide.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -291,32 +284,50 @@ document.addEventListener("DOMContentLoaded", () => {
 </header>
 
 
-<div class="doc-description">
-<p>The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.</p>
-</div>
-<section id="event-table" class="level2 doc-group">
-<h2 class="doc-group">Event table</h2>
-<div class="doc-description">
-<p>Compute an inspectable Aalen-Johansen event table from time-to-event observations.</p>
-</div>
-<dl>
-<dt><a href="../reference/prepare_event_table.html#polarstate.prepare_event_table" class="doc-function doc-label doc-label-function">prepare_event_table()</a></dt>
-<dd>
-<p>Compute an inspectable Aalen-Johansen event table.</p>
-</dd>
-</dl>
+<section id="what-the-estimate-means" class="level1">
+<h1>What the estimate means</h1>
+<p><code>polarstate</code> computes non-parametric Aalen–Johansen state-occupancy probabilities. With codes <code>0</code> and <code>1</code>, it describes a standard time-to-event outcome. Adding code <code>2</code> represents a competing event.</p>
+<p>The estimates are descriptive probabilities for the supplied cohort. They are not causal effects and do not adjust for covariates.</p>
 </section>
-<section id="time-horizon-estimates" class="level2 doc-group">
-<h2 class="doc-group">Time-horizon estimates</h2>
-<div class="doc-description">
-<p>Return state-occupancy estimates at requested time horizons.</p>
-</div>
-<dl>
-<dt><a href="../reference/predict_aj_estimates.html#polarstate.predict_aj_estimates" class="doc-function doc-label doc-label-function">predict_aj_estimates()</a></dt>
-<dd>
-<p>Evaluate state-occupancy probabilities at fixed time horizons.</p>
-</dd>
-</dl>
+<section id="data-assumptions" class="level1">
+<h1>Data assumptions</h1>
+<ul>
+<li>Each row represents one independent subject with one observed follow-up time.</li>
+<li><code>times</code> is numeric, finite, non-negative, and uses a consistent time unit.</li>
+<li><code>reals</code> is integer-coded: <code>0</code> for right-censoring, <code>1</code> for the event of interest, and optionally <code>2</code> for a competing event.</li>
+<li>Censoring is assumed independent of the event process, conditional on the study design and any stratification performed before estimation.</li>
+<li>Events tied at the same time are aggregated. Input rows need not be sorted.</li>
+</ul>
+<p>The package validates the mechanical requirements above, but it cannot verify study-design assumptions such as independent censoring.</p>
+</section>
+<section id="scope-and-limitations" class="level1">
+<h1>Scope and limitations</h1>
+<p>The current public API supports one event of interest and one optional competing event. It does not currently provide:</p>
+<ul>
+<li>confidence intervals, standard errors, or hypothesis tests;</li>
+<li>covariate-adjusted or causal estimates;</li>
+<li>left truncation, interval censoring, or time-varying covariates;</li>
+<li>survey weights or clustered variance estimates;</li>
+<li>automatic missing-data handling.</li>
+</ul>
+<p>For group-specific estimates, split the data explicitly. Differences between groups remain unadjusted and should not be interpreted as causal effects.</p>
+</section>
+<section id="boundary-behavior" class="level1">
+<h1>Boundary behavior</h1>
+<p>Predictions are step functions. A requested horizon between observed times uses the most recent estimate at or before that horizon. A horizon before the first observation returns state probabilities <code>(1, 0, 0)</code>.</p>
+</section>
+<section id="output-name-compatibility" class="level1">
+<h1>Output-name compatibility</h1>
+<p>Correctly spelled transition columns are:</p>
+<ul>
+<li><code>transition_probabilities_to_1_at_times</code></li>
+<li><code>transition_probabilities_to_2_at_times</code></li>
+</ul>
+<p>The historical misspelled names beginning with <code>trainsition_</code> remain in the event table as backward-compatible aliases. New code should use the correctly spelled names.</p>
+</section>
+<section id="before-reporting-results" class="level1">
+<h1>Before reporting results</h1>
+<p>Confirm the outcome coding, time origin, time unit, censoring definition, and the number at risk near the horizons you report. Inspect the event table rather than relying only on fixed-horizon output.</p>
 
 
 </section>
@@ -660,6 +671,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/recipes.html" class="pagination-link" aria-label="Recipes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Recipes</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -669,6 +689,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 </footer>
 <script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
 <script src="../sidebar-wrap.js"></script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
 <script src="../sidebar-filter.js"></script>
