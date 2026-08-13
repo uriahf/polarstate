@@ -116,9 +116,9 @@ a competing event.
 
 ## Learn more
 
-- [How the estimator works](user_guide/02-how-it-works.qmd) explains the
+- [How the estimator works](user-guide/how-it-works.html) explains the
   Aalen-Johansen calculation and every returned column.
-- [Recipes](user_guide/05-recipes.qmd) covers single-event, competing-risks,
+- [Recipes](user-guide/recipes.html) covers single-event, competing-risks,
   grouped, and pandas-to-Polars workflows.
 - The [API Reference](https://uriahf.github.io/polarstate/reference/) provides
   complete signatures and parameter details.
