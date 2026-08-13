@@ -15,7 +15,7 @@ prepare_event_table(times_and_reals)
 
 
 `times_and_reals: pl.DataFrame`  
-Subject-level observations containing a numeric `times` column and an integer `reals` column. Outcome code `0` means censored, `1` means the event of interest, and optional `2` means a competing event. A simple event/censoring analysis uses only `0` and `1`.
+Subject-level observations containing a numeric `times` column and an integer `reals` column. Outcome code `0` means follow-up ended without an observed event (right-censoring), `1` means the event of interest, and optional `2` means a competing event. A simple event/censoring analysis uses only `0` and `1`.
 
 
 ## Returns

@@ -10,7 +10,7 @@ The estimation workflow is unchanged; only the outcome coding differs.
 - <a href="" id="tabset-1-2-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Competing risks</a>
 
 
-Use `0` for censoring and `1` for the event. No competing-event rows are required.
+Use `0` when follow-up ended without an observed event (right-censoring) and `1` for the event. No competing-event rows are required.
 
 ``` python
 import polars as pl

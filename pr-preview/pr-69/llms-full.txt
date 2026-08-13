@@ -16,9 +16,9 @@ Parameters
 ----------
 times_and_reals : pl.DataFrame
     Subject-level observations containing a numeric ``times`` column and
-    an integer ``reals`` column. Outcome code ``0`` means censored, ``1``
-    means the event of interest, and optional ``2`` means a competing
-    event. A simple event/censoring analysis uses only ``0`` and ``1``.
+    an integer ``reals`` column. Outcome code ``0`` means follow-up ended
+    without an observed event (right-censoring), ``1`` means the event of
+    interest, and optional ``2`` means a competing event. A simple event/censoring analysis uses only ``0`` and ``1``.
 
 Returns
 -------
@@ -118,12 +118,14 @@ event/censoring data, while also supporting an optional competing event.
 
 | Code | Meaning |
 |---:|---|
-| `0` | Censored |
+| `0` | Right-censored: follow-up ended without an observed event |
 | `1` | Event of interest |
 | `2` | Competing event (optional) |
 
-For a simple time-to-event or binary event/censoring analysis, use only `0`
-and `1`.
+Code `0` may represent administrative censoring at the end of observation or
+another form of right-censoring. It does not assert that the person would have
+remained event-free after follow-up ended. For a single-event analysis, use
+only codes `0` and `1`.
 
 ## Install
 
@@ -264,9 +266,10 @@ Horizons before the first observed event receive probability 1 for state 0 and
 ::: {.callout-note}
 ## Input contract
 
-The estimator expects outcomes encoded as `0` or `1`, with `2` used only
-when a competing event is present. Validate and recode upstream data before
-preparing the event table.
+Code `0` means follow-up ended without an observed event: administrative or
+other right-censoring. Code `1` is the event of interest, and optional code `2`
+is a competing event. Validate and recode upstream data before preparing the
+event table.
 :::
 
 Continue with [Understanding the output](04-understanding-output.qmd) for a
@@ -285,8 +288,9 @@ so it also acts as a continuously checked example.
 
 ## Create the observations
 
-Each row contains an observed time and an outcome code: `0` for censoring,
-`1` for the event of interest, and optional `2` for a competing event.
+Each row contains an observed time and an outcome code. Code `0` means
+follow-up ended without an observed event (right-censoring), code `1` is the
+event of interest, and optional code `2` is a competing event.
 
 ```{python}
 import polars as pl
@@ -384,7 +388,7 @@ explains what the columns represent and which ones usually matter downstream.
 | Column | Interpretation |
 |---|---|
 | `times` | Unique observed time |
-| `count_0` | Censored observations at that time |
+| `count_0` | Observations right-censored at that time: follow-up ended without an observed event |
 | `count_1` | Events of interest at that time |
 | `count_2` | Competing events at that time; zero in a single-event analysis |
 | `events_at_times` | Total observations ending follow-up at that time |
@@ -449,8 +453,8 @@ The estimation workflow is unchanged; only the outcome coding differs.
 
 ### Single event
 
-Use `0` for censoring and `1` for the event. No competing-event rows are
-required.
+Use `0` when follow-up ended without an observed event (right-censoring) and
+`1` for the event. No competing-event rows are required.
 
 ```python
 import polars as pl

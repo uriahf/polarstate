@@ -2,13 +2,13 @@
 
 `polarstate` implements a compact Aalen-Johansen workflow with Polars DataFrames. It works for ordinary single-event analyses and binary event/censoring data, while also supporting an optional competing event.
 
-| Code | Meaning                    |
-|-----:|----------------------------|
-|  `0` | Censored                   |
-|  `1` | Event of interest          |
-|  `2` | Competing event (optional) |
+| Code | Meaning                                                   |
+|-----:|-----------------------------------------------------------|
+|  `0` | Right-censored: follow-up ended without an observed event |
+|  `1` | Event of interest                                         |
+|  `2` | Competing event (optional)                                |
 
-For a simple time-to-event or binary event/censoring analysis, use only `0` and `1`.
+Code `0` may represent administrative censoring at the end of observation or another form of right-censoring. It does not assert that the person would have remained event-free after follow-up ended. For a single-event analysis, use only codes `0` and `1`.
 
 
 # Install

@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-360b2068b25b2f2099f2f47bce35ebf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bf476c94c8758bc321fd5fd3b984c438.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -277,7 +277,7 @@ section.level2:first-of-type > h2:first-child,
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(estimates)</span></code></pre></div>
-<p>Outcomes use <code>0</code> for censoring and <code>1</code> for the event of interest. Use <code>2</code> only when the data include a competing event. See the <a href="https://uriahf.github.io/polarstate/">documentation</a> for a complete walkthrough and API reference.</p>
+<p>Code <code>0</code> indicates right-censoring: follow-up ended without an observed event. This includes administrative censoring at the end of observation. Code <code>1</code> indicates the event of interest, and optional code <code>2</code> a competing event. See the <a href="https://uriahf.github.io/polarstate/">documentation</a> for a complete walkthrough and API reference.</p>
 </section>
 <section id="why-polarstate" class="level2">
 <h2 class="anchored" data-anchor-id="why-polarstate">Why polarstate?</h2>

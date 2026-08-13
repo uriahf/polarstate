@@ -39,6 +39,6 @@ For a requested time horizon, the prediction function performs a backward as-of 
 
 > **Note: Input contract**
 >
-> The estimator expects outcomes encoded as `0` or `1`, with `2` used only when a competing event is present. Validate and recode upstream data before preparing the event table.
+> Code `0` means follow-up ended without an observed event: administrative or other right-censoring. Code `1` is the event of interest, and optional code `2` is a competing event. Validate and recode upstream data before preparing the event table.
 
 Continue with [Understanding the output](understanding-output.md) for a column-by-column interpretation, or open the [worked example](worked-example.md) to inspect Equation [Equation 1](#eq-aalen-johansen) numerically.
