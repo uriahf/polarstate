@@ -111,6 +111,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const list = document.querySelector("#navbarCollapse .navbar-nav");
+  const brand = document.querySelector(".navbar-brand");
+  if (!list || !brand) return;
+
+  const root = new URL(brand.href);
+  const pages = [
+    ["Home", new URL(".", root).href],
+    ["How It Works", new URL("user-guide/how-it-works.html", root).href],
+    ["Package Comparisons", new URL("user-guide/package-comparisons.html", root).href],
+    ["Recipes", new URL("user-guide/recipes.html", root).href],
+  ];
+
+  const apiItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
+    item.textContent.trim().includes("API Reference")
+  );
+  const userGuideItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
+    item.textContent.trim().includes("User Guide")
+  );
+
+  for (const [label, href] of pages) {
+    const item = document.createElement("li");
+    item.className = "nav-item";
+
+    const link = document.createElement("a");
+    link.className = "nav-link";
+    link.href = href;
+    link.textContent = label;
+
+    const currentPath = window.location.pathname.replace(/index\.html$/, "");
+    const linkPath = new URL(href).pathname.replace(/index\.html$/, "");
+    if (currentPath === linkPath) {
+      link.classList.add("active");
+      link.setAttribute("aria-current", "page");
+    }
+
+    item.appendChild(link);
+    list.insertBefore(item, apiItem || null);
+  }
+
+  userGuideItem?.remove();
+});
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
