@@ -104,9 +104,7 @@ is the competing event.
 Code `0` in the input indicates right-censoring: follow-up ended without an
 observed event. This includes administrative censoring at the end of
 observation. Code `1` indicates the event of interest, and optional code `2`
-a competing event. See the
-[documentation](https://uriahf.github.io/polarstate/) for the complete
-executable walkthrough and API reference.
+a competing event.
 
 ## Why polarstate?
 
@@ -114,3 +112,13 @@ executable walkthrough and API reference.
 - A compact, explicit event table you can inspect
 - Predictions at arbitrary time horizons
 - Support for single-event, binary event/censoring, and competing-risks data
+
+
+## Learn more
+
+- [How the estimator works](user_guide/02-how-it-works.qmd) explains the
+  Aalen-Johansen calculation and every returned column.
+- [Recipes](user_guide/05-recipes.qmd) covers single-event, competing-risks,
+  grouped, and pandas-to-Polars workflows.
+- The [API Reference](https://uriahf.github.io/polarstate/reference/) provides
+  complete signatures and parameter details.

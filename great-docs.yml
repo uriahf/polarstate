@@ -39,10 +39,10 @@ hero:
 nav_icons:
   navbar:
     User Guide: book-open
-    Reference: code-2
+    API Reference: code-2
   sidebar:
-    Getting Started: rocket
     Concepts: orbit
+    Recipes: cooking-pot
 
 source:
   enabled: true
