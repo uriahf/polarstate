@@ -36,7 +36,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -74,50 +73,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const list = document.querySelector("#navbarCollapse .navbar-nav");
-  const brand = document.querySelector(".navbar-brand");
-  if (!list || !brand) return;
-
-  const root = new URL(brand.href);
-  const pages = [
-    ["Home", new URL(".", root).href],
-    ["How It Works", new URL("user-guide/how-it-works.html", root).href],
-    ["Package Comparisons", new URL("user-guide/package-comparisons.html", root).href],
-    ["Recipes", new URL("user-guide/recipes.html", root).href],
-  ];
-
-  const apiItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
-    item.textContent.trim().includes("API Reference")
-  );
-  const userGuideItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
-    item.textContent.trim().includes("User Guide")
-  );
-
-  for (const [label, href] of pages) {
-    const item = document.createElement("li");
-    item.className = "nav-item";
-
-    const link = document.createElement("a");
-    link.className = "nav-link";
-    link.href = href;
-    link.textContent = label;
-
-    const currentPath = window.location.pathname.replace(/index\.html$/, "");
-    const linkPath = new URL(href).pathname.replace(/index\.html$/, "");
-    if (currentPath === linkPath) {
-      link.classList.add("active");
-      link.setAttribute("aria-current", "page");
-    }
-
-    item.appendChild(link);
-    list.insertBefore(item, apiItem || null);
-  }
-
-  userGuideItem?.remove();
-});
-</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
@@ -126,16 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
-<link rel="icon" type="image/x-icon" href="https://uriahf.github.io/polarstate/favicon.ico" sizes="48x48">
-<link rel="icon" type="image/png" sizes="32x32" href="https://uriahf.github.io/polarstate/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://uriahf.github.io/polarstate/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://uriahf.github.io/polarstate/apple-touch-icon.png">
 <script src="../theme-init.js"></script>
-<meta name="gd-navbar-style" data-preset="sky">
-<meta name="gd-content-style" data-preset="mint" data-pages="all">
 
 
-<link rel="stylesheet" href="../uriah-brand.css">
+<link rel="stylesheet" href="../docs.css">
   <link rel="alternate" type="text/markdown" href="index.md">
   <link rel="canonical" href="https://uriahf.github.io/polarstate/reference/">
   <meta name="description" content="The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.">
@@ -171,9 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../logo.png" alt="Polars State" class="navbar-logo light-content">
-    <img src="../logo.png" alt="Polars State" class="navbar-logo dark-content">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Polars State</span>
     </a>
   </div>
             <div id="quarto-search" class=""></div>
@@ -685,7 +633,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
 <script src="../navbar-widgets.js"></script>
-<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>"}}</script>
+<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"}}</script>
 <script>/**
  * Navigation Icons for Great Docs
  *
@@ -777,15 +725,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })();
 </script>
-<script src="../navbar-style.js"></script>
-<script src="../content-style.js"></script>
 <style>
 /* Great Docs: accent_color overrides */
 :root, html.quarto-light, :root[data-bs-theme='light'] {
-    --gd-accent: #1f5f82;
+    --gd-accent: #2f6f8f;
 }
 html.quarto-dark, :root[data-bs-theme='dark'] {
-    --gd-accent: #73c7e8;
+    --gd-accent: #83bdd6;
 }
 </style>
 
