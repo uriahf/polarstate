@@ -53,7 +53,9 @@ The columns returned by [prepare_event_table()](../reference/prepare_event_table
 | `transition_probabilities_to_*_at_times` | Probability mass entering each absorbing state at that time |
 | `state_occupancy_probability_*_at_times` | Cumulative probability of occupying each absorbing state |
 
-The historical `trainsition_probabilities_to_*_at_times` spelling remains as a backward-compatible alias. New code should use the correctly spelled name.
+The historical `trainsition_probabilities_to_*_at_times` spelling remains as a backward-compatible alias. The corrected names were introduced in polarstate 0.1.8 and are the canonical names used by the implementation. New code should use the correctly spelled names and select event-table columns by name rather than position.
+
+There is currently no scheduled release that removes the historical aliases. If they are removed, polarstate will first announce the removal version and emit a deprecation warning during a documented compatibility window; removal will be released as a breaking schema change.
 
 
 # From the event table to requested horizons

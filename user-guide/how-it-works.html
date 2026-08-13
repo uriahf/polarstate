@@ -441,7 +441,8 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>The historical <code>trainsition_probabilities_to_*_at_times</code> spelling remains as a backward-compatible alias. New code should use the correctly spelled name.</p>
+<p>The historical <code>trainsition_probabilities_to_*_at_times</code> spelling remains as a backward-compatible alias. The corrected names were introduced in polarstate 0.1.8 and are the canonical names used by the implementation. New code should use the correctly spelled names and select event-table columns by name rather than position.</p>
+<p>There is currently no scheduled release that removes the historical aliases. If they are removed, polarstate will first announce the removal version and emit a deprecation warning during a documented compatibility window; removal will be released as a breaking schema change.</p>
 </section>
 </section>
 <section id="from-the-event-table-to-requested-horizons" class="level1">

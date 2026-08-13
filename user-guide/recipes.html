@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <p>Every example on this page is executed when the documentation builds. If an API change breaks a recipe, the documentation check fails with it.</p>
-<div id="88d0592e" class="cell" data-execution_count="1">
+<div id="1b3c364e" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span></code></pre></div>
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Use <code>0</code> for right-censoring and <code>1</code> for the event.</p>
-<div id="62d4711c" class="cell" data-execution_count="2">
+<div id="6f46c653" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>single_event_data <span class="op">=</span> pl.DataFrame({</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>],</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
@@ -361,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Encode the event of interest as <code>1</code> and the competing event as <code>2</code>.</p>
-<div id="a96ad1db" class="cell" data-execution_count="3">
+<div id="aa15ec66" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>competing_data <span class="op">=</span> pl.DataFrame({</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>, <span class="fl">12.0</span>],</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
@@ -389,7 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </section>
 <section id="return-horizons-and-event-times-together" class="level1">
 <h1>Return horizons and event times together</h1>
-<div id="a02a75d6" class="cell" data-execution_count="4">
+<div id="f72d3998" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>combined_result <span class="op">=</span> predict_aj_estimates(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    competing_table,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]),</span>
@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="estimate-within-groups" class="level1">
 <h1>Estimate within groups</h1>
 <p>The public functions operate on one cohort at a time.</p>
-<div id="32048ef0" class="cell" data-execution_count="5">
+<div id="3f1b59b5" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_with_groups <span class="op">=</span> competing_data.with_columns(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    pl.Series(<span class="st">"group"</span>, [<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -425,14 +425,14 @@ document.addEventListener("DOMContentLoaded", () => {
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>{k: value.shape <span class="cf">for</span> k, value <span class="kw">in</span> estimates_by_group.items()}</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>{'B': (2, 5), 'A': (2, 5)}</code></pre>
+<pre><code>{'A': (2, 5), 'B': (2, 5)}</code></pre>
 </div>
 </div>
 <p>These are descriptive within-group estimates, not an adjusted regression model.</p>
 </section>
 <section id="convert-pandas-input" class="level1">
 <h1>Convert pandas input</h1>
-<div id="63caae07" class="cell" data-execution_count="6">
+<div id="2ff6d303" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pandas_data <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"time"</span>: [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>],</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>

@@ -131,7 +131,7 @@ estimates_by_group = {
 ```
 
 
-    {'B': (2, 5), 'A': (2, 5)}
+    {'A': (2, 5), 'B': (2, 5)}
 
 
 These are descriptive within-group estimates, not an adjusted regression model.
