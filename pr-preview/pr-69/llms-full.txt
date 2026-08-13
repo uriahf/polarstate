@@ -108,7 +108,7 @@ This is the User Guide documentation for the package.
 ----------------------------------------------------------------------
 
 
-## Concepts
+## User Guide
 
 ### How the Estimator Works
 
@@ -221,9 +221,6 @@ Compare the same estimates with other implementations in
 [Recipes](05-recipes.qmd) for common data structures, or consult the
 [API Reference](../reference/index.html) for complete function details.
 
-
-
-## Package Comparisons
 
 ### Package Comparisons
 
@@ -376,9 +373,6 @@ For data with no competing event, use only codes `0` and `1` in `polarstate`;
 the competing-event probability remains zero. See [Recipes](05-recipes.qmd)
 for that shorter pattern.
 
-
-
-## Recipes
 
 ## Choose the event structure
 
