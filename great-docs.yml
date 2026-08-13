@@ -11,6 +11,10 @@ back_to_top: true
 keyboard_nav: true
 markdown_pages: true
 
+site:
+  css:
+    - assets/uriah-brand.css
+
 navbar_style: sky
 content_style:
   preset: mint
