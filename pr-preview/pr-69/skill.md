@@ -17,15 +17,15 @@ pip install polarstate
 
 ## API overview
 
-### Estimation
+### Event table
 
-Build an inspectable event table from time-to-event observations.
+Compute an inspectable Aalen-Johansen event table from time-to-event observations.
 
-- `prepare_event_table`: Build an inspectable Aalen-Johansen event table
+- `prepare_event_table`: Compute an inspectable Aalen-Johansen event table
 
-### Prediction
+### Time-horizon estimates
 
-Evaluate state-occupancy probabilities at fixed time horizons.
+Return state-occupancy estimates at requested time horizons.
 
 - `predict_aj_estimates`: Evaluate state-occupancy probabilities at fixed time horizons
 

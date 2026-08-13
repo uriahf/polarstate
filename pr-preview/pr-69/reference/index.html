@@ -184,7 +184,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Estimation</span></a>
+ <span class="menu-text">Event table</span></a>
 </div>
       <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
@@ -198,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Prediction</span></a>
+ <span class="menu-text">Time-horizon estimates</span></a>
 </div>
       <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
@@ -219,8 +219,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#estimation" id="toc-estimation" class="nav-link active" data-scroll-target="#estimation">Estimation</a></li>
-  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction">Prediction</a></li>
+  <li><a href="#event-table" id="toc-event-table" class="nav-link active" data-scroll-target="#event-table">Event table</a></li>
+  <li><a href="#time-horizon-estimates" id="toc-time-horizon-estimates" class="nav-link" data-scroll-target="#time-horizon-estimates">Time-horizon estimates</a></li>
   </ul>
 </nav>
     </div>
@@ -249,22 +249,22 @@ ul.task-list li input[type="checkbox"] {
 <div class="doc-description">
 <p>The complete public API for preparing time-to-event tables and predicting state-occupancy probabilities, with or without competing events.</p>
 </div>
-<section id="estimation" class="level2 doc-group">
-<h2 class="doc-group">Estimation</h2>
+<section id="event-table" class="level2 doc-group">
+<h2 class="doc-group">Event table</h2>
 <div class="doc-description">
-<p>Build an inspectable event table from time-to-event observations.</p>
+<p>Compute an inspectable Aalen-Johansen event table from time-to-event observations.</p>
 </div>
 <dl>
 <dt><a href="../reference/prepare_event_table.html#polarstate.prepare_event_table" class="doc-function doc-label doc-label-function">prepare_event_table()</a></dt>
 <dd>
-<p>Build an inspectable Aalen-Johansen event table.</p>
+<p>Compute an inspectable Aalen-Johansen event table.</p>
 </dd>
 </dl>
 </section>
-<section id="prediction" class="level2 doc-group">
-<h2 class="doc-group">Prediction</h2>
+<section id="time-horizon-estimates" class="level2 doc-group">
+<h2 class="doc-group">Time-horizon estimates</h2>
 <div class="doc-description">
-<p>Evaluate state-occupancy probabilities at fixed time horizons.</p>
+<p>Return state-occupancy estimates at requested time horizons.</p>
 </div>
 <dl>
 <dt><a href="../reference/predict_aj_estimates.html#polarstate.predict_aj_estimates" class="doc-function doc-label doc-label-function">predict_aj_estimates()</a></dt>

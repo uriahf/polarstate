@@ -1,7 +1,7 @@
 ## prepare_event_table()
 
 
-Build an inspectable Aalen-Johansen event table.
+Compute an inspectable Aalen-Johansen event table.
 
 
 Usage

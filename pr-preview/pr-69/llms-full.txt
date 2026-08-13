@@ -3,14 +3,14 @@ This is the API documentation for the polarstate library.
 ----------------------------------------------------------------------
 
 
-## Estimation
+## Event table
 
-Build an inspectable event table from time-to-event observations.
+Compute an inspectable Aalen-Johansen event table from time-to-event observations.
 
 
 prepare_event_table(times_and_reals: polars.dataframe.frame.DataFrame) -> polars.dataframe.frame.DataFrame
 
-Build an inspectable Aalen-Johansen event table.
+Compute an inspectable Aalen-Johansen event table.
 
 Parameters
 ----------
@@ -51,9 +51,9 @@ See Also
 predict_aj_estimates : Evaluate the event table at fixed horizons.
 
 
-## Prediction
+## Time-horizon estimates
 
-Evaluate state-occupancy probabilities at fixed time horizons.
+Return state-occupancy estimates at requested time horizons.
 
 
 predict_aj_estimates(event_table: polars.dataframe.frame.DataFrame, fixed_time_horizons: polars.series.series.Series, full_event_table: bool = False) -> polars.dataframe.frame.DataFrame
