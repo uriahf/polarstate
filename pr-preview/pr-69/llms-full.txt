@@ -28,11 +28,20 @@ pl.DataFrame
     survival, transition increments, and cumulative state-occupancy
     probabilities for states 1 and 2.
 
+Raises
+------
+TypeError
+    If the input is not a Polars DataFrame, times is not numeric, or
+    reals is not integer-valued.
+ValueError
+    If required columns are missing, the input is empty, values are null,
+    times are non-finite or negative, or outcome codes are outside
+    {0, 1, 2}.
+
 Notes
 -----
-Input rows need not be sorted. The function assumes the required columns
-are present, non-null, correctly typed, and use only supported outcome
-codes. Validate or recode data upstream.
+Input rows need not be sorted. Extra columns are ignored. Duplicate times
+are allowed and are aggregated into a single event-table row.
 
 Examples
 --------
@@ -80,6 +89,15 @@ pl.DataFrame
     horizon. States 1 and 2 are the event of interest and optional
     competing event. The probabilities sum to one up to floating-point
     precision.
+
+Raises
+------
+TypeError
+    If inputs are not the documented Polars types, horizons are not
+    numeric, or full_event_table is not boolean.
+ValueError
+    If required event-table columns are missing, either input is empty,
+    or horizons contain null, non-finite, or negative values.
 
 Notes
 -----
@@ -157,7 +175,7 @@ The columns returned by `prepare_event_table()` expose each component of
 2. `at_risk` supplies $Y(u)$.
 3. `csh_1` and `csh_2` supply $dN_j(u)/Y(u)$.
 4. `previous_overall_survival` supplies $\widehat S(u-)$.
-5. `trainsition_probabilities_to_*_at_times` contains each weighted increment.
+5. `transition_probabilities_to_*_at_times` contains each weighted increment.
 6. `state_occupancy_probability_*_at_times` cumulatively sums those increments.
 
 ### Event-table columns
@@ -174,11 +192,11 @@ The columns returned by `prepare_event_table()` expose each component of
 | `conditional_survival` | Probability of avoiding either event at that time, conditional on being at risk |
 | `overall_survival` | Product of conditional-survival increments through that time |
 | `previous_overall_survival` | Survival immediately before the current time |
-| `trainsition_probabilities_to_*_at_times` | Probability mass entering each absorbing state at that time |
+| `transition_probabilities_to_*_at_times` | Probability mass entering each absorbing state at that time |
 | `state_occupancy_probability_*_at_times` | Cumulative probability of occupying each absorbing state |
 
-The `trainsition` spelling is retained for compatibility with the current
-public output schema.
+The historical `trainsition_probabilities_to_*_at_times` spelling remains as
+a backward-compatible alias. New code should use the correctly spelled name.
 
 ## From the event table to requested horizons
 
@@ -447,74 +465,82 @@ Native tibble output:
 :::
 
 
+### Recipes
+
+Every example on this page is executed when the documentation builds. If an
+API change breaks a recipe, the documentation check fails with it.
+
+```{python}
+import pandas as pd
+import polars as pl
+from polarstate import prepare_event_table, predict_aj_estimates
+```
+
 ## Choose the event structure
 
-The estimation workflow is unchanged; only the outcome coding differs.
+The workflow stays the same; only the outcome coding changes.
 
 ::: {.panel-tabset}
 
 ### Single event
 
-Use `0` when follow-up ended without an observed event (right-censoring) and
-`1` for the event. No competing-event rows are required.
+Use `0` for right-censoring and `1` for the event.
 
-```python
-import polars as pl
-from polarstate import prepare_event_table, predict_aj_estimates
-
-data = pl.DataFrame({
+```{python}
+single_event_data = pl.DataFrame({
     "times": [2.0, 4.0, 5.0, 8.0, 10.0],
     "reals": [1, 0, 1, 0, 1],
 })
-
-table = prepare_event_table(data)
-result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 12.0]))
+single_table = prepare_event_table(single_event_data)
+single_result = predict_aj_estimates(
+    single_table, pl.Series([3.0, 6.0, 12.0])
+)
+single_result
 ```
 
-Here, `state_occupancy_probability_2` is zero and state 0 is the
-event-free probability.
+State 2 remains zero, while state 0 is the event-free probability.
 
 ### Competing risks
 
 Encode the event of interest as `1` and the competing event as `2`.
 
-```python
-import polars as pl
-from polarstate import prepare_event_table, predict_aj_estimates
-
-data = pl.DataFrame({
+```{python}
+competing_data = pl.DataFrame({
     "times": [2.0, 4.0, 5.0, 8.0, 10.0, 12.0],
     "reals": [1, 2, 0, 1, 2, 1],
 })
-
-table = prepare_event_table(data)
-result = predict_aj_estimates(table, pl.Series([3.0, 6.0, 9.0, 12.0]))
+competing_table = prepare_event_table(competing_data)
+competing_result = predict_aj_estimates(
+    competing_table, pl.Series([3.0, 6.0, 9.0, 12.0])
+)
+competing_result
 ```
 
-Do not censor competing events. Encoding them as `0` changes the estimand and
-generally overstates the cumulative incidence of the event of interest.
+Do not censor competing events: coding them as `0` changes the estimand.
 
 :::
 
 ## Return horizons and event times together
 
-```python
-result = predict_aj_estimates(
-    table,
+```{python}
+combined_result = predict_aj_estimates(
+    competing_table,
     pl.Series([3.0, 6.0, 9.0, 12.0]),
     full_event_table=True,
 )
+combined_result.select("times", "estimate_origin")
 ```
 
-Use `estimate_origin` to distinguish requested horizons from rows copied from
-the event table.
+Use `estimate_origin` to distinguish requested horizons from observed times.
 
 ## Estimate within groups
 
-The public functions operate on one cohort at a time. Split explicitly when
-you need stratum-specific estimates.
+The public functions operate on one cohort at a time.
 
-```python
+```{python}
+data_with_groups = competing_data.with_columns(
+    pl.Series("group", ["A", "A", "A", "B", "B", "B"])
+)
 estimates_by_group = {
     group[0]: predict_aj_estimates(
         prepare_event_table(group_data.select("times", "reals")),
@@ -522,30 +548,92 @@ estimates_by_group = {
     )
     for group, group_data in data_with_groups.group_by("group")
 }
+{k: value.shape for k, value in estimates_by_group.items()}
 ```
 
-This produces descriptive estimates within each group; it is not an adjusted
-regression model.
+These are descriptive within-group estimates, not an adjusted regression model.
 
 ## Convert pandas input
 
-```python
+```{python}
+pandas_data = pd.DataFrame({
+    "time": [2, 4, 6, 8],
+    "event": [1, 0, 2, 1],
+})
 polars_data = pl.from_pandas(pandas_data).select(
     pl.col("time").cast(pl.Float64).alias("times"),
     pl.col("event").cast(pl.Int64).alias("reals"),
 )
+prepare_event_table(polars_data).select("times", "at_risk")
 ```
 
 Recode outcomes before estimation and confirm that only `0`, `1`, and
 optional `2` are present.
 
-
 ## Next steps
 
-- Read [How the estimator works](02-how-it-works.qmd) for the statistical
-  calculation and output-column definitions.
-- See [Package comparisons](04-package-comparisons.qmd) for equivalent
-  estimates from lifelines and tidycmprsk.
-- Consult the [API Reference](../reference/index.html) for complete signatures
-  and parameter details.
+- Read [How the estimator works](02-how-it-works.qmd).
+- Review [Assumptions and limitations](06-assumptions-limitations.qmd).
+- See [Package comparisons](04-package-comparisons.qmd).
+- Consult the [API Reference](../reference/index.html).
+
+
+## What the estimate means
+
+`polarstate` computes non-parametric Aalen–Johansen state-occupancy
+probabilities. With codes `0` and `1`, it describes a standard
+time-to-event outcome. Adding code `2` represents a competing event.
+
+The estimates are descriptive probabilities for the supplied cohort. They are
+not causal effects and do not adjust for covariates.
+
+## Data assumptions
+
+- Each row represents one independent subject with one observed follow-up time.
+- `times` is numeric, finite, non-negative, and uses a consistent time unit.
+- `reals` is integer-coded: `0` for right-censoring, `1` for the event of
+  interest, and optionally `2` for a competing event.
+- Censoring is assumed independent of the event process, conditional on the
+  study design and any stratification performed before estimation.
+- Events tied at the same time are aggregated. Input rows need not be sorted.
+
+The package validates the mechanical requirements above, but it cannot verify
+study-design assumptions such as independent censoring.
+
+## Scope and limitations
+
+The current public API supports one event of interest and one optional
+competing event. It does not currently provide:
+
+- confidence intervals, standard errors, or hypothesis tests;
+- covariate-adjusted or causal estimates;
+- left truncation, interval censoring, or time-varying covariates;
+- survey weights or clustered variance estimates;
+- automatic missing-data handling.
+
+For group-specific estimates, split the data explicitly. Differences between
+groups remain unadjusted and should not be interpreted as causal effects.
+
+## Boundary behavior
+
+Predictions are step functions. A requested horizon between observed times
+uses the most recent estimate at or before that horizon. A horizon before the
+first observation returns state probabilities `(1, 0, 0)`.
+
+## Output-name compatibility
+
+Correctly spelled transition columns are:
+
+- `transition_probabilities_to_1_at_times`
+- `transition_probabilities_to_2_at_times`
+
+The historical misspelled names beginning with `trainsition_` remain in the
+event table as backward-compatible aliases. New code should use the correctly
+spelled names.
+
+## Before reporting results
+
+Confirm the outcome coding, time origin, time unit, censoring definition, and
+the number at risk near the horizons you report. Inspect the event table rather
+than relying only on fixed-horizon output.
 

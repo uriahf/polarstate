@@ -25,9 +25,19 @@ Subject-level observations containing a numeric `times` column and an integer `r
 One row per unique observed time. The result includes outcome counts, the risk set, cause-specific event increments, conditional and overall survival, transition increments, and cumulative state-occupancy probabilities for states 1 and 2.
 
 
+## Raises
+
+
+`TypeError`  
+If the input is not a Polars DataFrame, times is not numeric, or reals is not integer-valued.
+
+`ValueError`  
+If required columns are missing, the input is empty, values are null, times are non-finite or negative, or outcome codes are outside {0, 1, 2}.
+
+
 ## Notes
 
-Input rows need not be sorted. The function assumes the required columns are present, non-null, correctly typed, and use only supported outcome codes. Validate or recode data upstream.
+Input rows need not be sorted. Extra columns are ignored. Duplicate times are allowed and are aggregated into a single event-table row.
 
 
 ## Examples

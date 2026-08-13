@@ -35,6 +35,16 @@ If `True`, append estimates at every observed event time. Use the `estimate_orig
 Columns are `times`, state-occupancy probabilities for states 0, 1, and 2, and `estimate_origin`. State 0 means no absorbing event by the horizon. States 1 and 2 are the event of interest and optional competing event. The probabilities sum to one up to floating-point precision.
 
 
+## Raises
+
+
+`TypeError`  
+If inputs are not the documented Polars types, horizons are not numeric, or full_event_table is not boolean.
+
+`ValueError`  
+If required event-table columns are missing, either input is empty, or horizons contain null, non-finite, or negative values.
+
+
 ## Notes
 
 Estimates are step functions. At a horizon between observed times, the latest estimate at or before that horizon is returned. Horizons before the first observed time receive probabilities `(1, 0, 0)`.

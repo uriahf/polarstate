@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Executable patterns for common polarstate analyses.">
+<meta name="description" content="What polarstate estimates, what the data must represent, and what it does not provide.">
 
-<title>Recipes – Polars State | Polars State</title>
+<title>Assumptions and limitations – Polars State | Polars State</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -27,53 +27,17 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../user-guide/assumptions-limitations.html" rel="next">
-<link href="../user-guide/package-comparisons.html" rel="prev">
+<link href="../user-guide/recipes.html" rel="prev">
 <link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -112,9 +76,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const list = document.querySelector("#navbarCollapse .navbar-nav");
@@ -177,16 +138,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <link rel="stylesheet" href="../uriah-brand.css">
-  <link rel="alternate" type="text/markdown" href="recipes.md">
-  <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/recipes.html">
+  <link rel="alternate" type="text/markdown" href="assumptions-limitations.md">
+  <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/assumptions-limitations.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Recipes – Polars State | Polars State">
-  <meta property="og:description" content="Executable patterns for common polarstate analyses.">
-  <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/recipes.html">
+  <meta property="og:title" content="Assumptions and limitations – Polars State | Polars State">
+  <meta property="og:description" content="What polarstate estimates, what the data must represent, and what it does not provide.">
+  <meta property="og:url" content="https://uriahf.github.io/polarstate/user-guide/assumptions-limitations.html">
   <meta property="og:site_name" content="Polars State">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Recipes – Polars State | Polars State">
-  <meta name="twitter:description" content="Executable patterns for common polarstate analyses.">
+  <meta name="twitter:title" content="Assumptions and limitations – Polars State | Polars State">
+  <meta name="twitter:description" content="What polarstate estimates, what the data must represent, and what it does not provide.">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light">
@@ -233,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Recipes</h1>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Assumptions and limitations</h1>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -265,13 +226,13 @@ document.addEventListener("DOMContentLoaded", () => {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../user-guide/recipes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Recipes</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../user-guide/assumptions-limitations.html" class="sidebar-item-text sidebar-link">
+  <a href="../user-guide/assumptions-limitations.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Assumptions and limitations</span></a>
   </div>
 </li>
@@ -287,11 +248,12 @@ document.addEventListener("DOMContentLoaded", () => {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#choose-the-event-structure" id="toc-choose-the-event-structure" class="nav-link active" data-scroll-target="#choose-the-event-structure">Choose the event structure</a></li>
-  <li><a href="#return-horizons-and-event-times-together" id="toc-return-horizons-and-event-times-together" class="nav-link" data-scroll-target="#return-horizons-and-event-times-together">Return horizons and event times together</a></li>
-  <li><a href="#estimate-within-groups" id="toc-estimate-within-groups" class="nav-link" data-scroll-target="#estimate-within-groups">Estimate within groups</a></li>
-  <li><a href="#convert-pandas-input" id="toc-convert-pandas-input" class="nav-link" data-scroll-target="#convert-pandas-input">Convert pandas input</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
+  <li><a href="#what-the-estimate-means" id="toc-what-the-estimate-means" class="nav-link active" data-scroll-target="#what-the-estimate-means">What the estimate means</a></li>
+  <li><a href="#data-assumptions" id="toc-data-assumptions" class="nav-link" data-scroll-target="#data-assumptions">Data assumptions</a></li>
+  <li><a href="#scope-and-limitations" id="toc-scope-and-limitations" class="nav-link" data-scroll-target="#scope-and-limitations">Scope and limitations</a></li>
+  <li><a href="#boundary-behavior" id="toc-boundary-behavior" class="nav-link" data-scroll-target="#boundary-behavior">Boundary behavior</a></li>
+  <li><a href="#output-name-compatibility" id="toc-output-name-compatibility" class="nav-link" data-scroll-target="#output-name-compatibility">Output-name compatibility</a></li>
+  <li><a href="#before-reporting-results" id="toc-before-reporting-results" class="nav-link" data-scroll-target="#before-reporting-results">Before reporting results</a></li>
   </ul>
 </nav>
     </div>
@@ -300,12 +262,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Recipes</h1>
+<h1 class="title d-none d-lg-block">Assumptions and limitations</h1>
 </div>
 
 <div>
   <div class="description">
-    Executable patterns for common polarstate analyses.
+    What polarstate estimates, what the data must represent, and what it does not provide.
   </div>
 </div>
 
@@ -322,147 +284,50 @@ document.addEventListener("DOMContentLoaded", () => {
 </header>
 
 
-<p>Every example on this page is executed when the documentation builds. If an API change breaks a recipe, the documentation check fails with it.</p>
-<div id="c7ed5fb8" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span></code></pre></div>
-</div>
-<section id="choose-the-event-structure" class="level1">
-<h1>Choose the event structure</h1>
-<p>The workflow stays the same; only the outcome coding changes.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Single event</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Competing risks</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>Use <code>0</code> for right-censoring and <code>1</code> for the event.</p>
-<div id="bfa81b4d" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>single_event_data <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>],</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>single_table <span class="op">=</span> prepare_event_table(single_event_data)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>single_result <span class="op">=</span> predict_aj_estimates(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    single_table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">12.0</span>])</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>single_result</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-  text-align: right;
-  white-space: pre-wrap;
-}
-</style>
-<small>shape: (3, 5)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>times</th><th>state_occupancy_probability_0</th><th>state_occupancy_probability_1</th><th>state_occupancy_probability_2</th><th>estimate_origin</th></tr><tr><td>f64</td><td>f64</td><td>f64</td><td>f64</td><td>enum</td></tr></thead><tbody><tr><td>3.0</td><td>0.8</td><td>0.2</td><td>0.0</td><td>"fixed_time_horizons"</td></tr><tr><td>6.0</td><td>0.533333</td><td>0.466667</td><td>0.0</td><td>"fixed_time_horizons"</td></tr><tr><td>12.0</td><td>0.0</td><td>1.0</td><td>0.0</td><td>"fixed_time_horizons"</td></tr></tbody></table></div>
-</div>
-</div>
-<p>State 2 remains zero, while state 0 is the event-free probability.</p>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>Encode the event of interest as <code>1</code> and the competing event as <code>2</code>.</p>
-<div id="1227865f" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>competing_data <span class="op">=</span> pl.DataFrame({</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>, <span class="fl">12.0</span>],</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>competing_table <span class="op">=</span> prepare_event_table(competing_data)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>competing_result <span class="op">=</span> predict_aj_estimates(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    competing_table, pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>])</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>competing_result</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-  text-align: right;
-  white-space: pre-wrap;
-}
-</style>
-<small>shape: (4, 5)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>times</th><th>state_occupancy_probability_0</th><th>state_occupancy_probability_1</th><th>state_occupancy_probability_2</th><th>estimate_origin</th></tr><tr><td>f64</td><td>f64</td><td>f64</td><td>f64</td><td>enum</td></tr></thead><tbody><tr><td>3.0</td><td>0.833333</td><td>0.166667</td><td>0.0</td><td>"fixed_time_horizons"</td></tr><tr><td>6.0</td><td>0.666667</td><td>0.166667</td><td>0.166667</td><td>"fixed_time_horizons"</td></tr><tr><td>9.0</td><td>0.444444</td><td>0.388889</td><td>0.166667</td><td>"fixed_time_horizons"</td></tr><tr><td>12.0</td><td>-1.1102e-16</td><td>0.611111</td><td>0.388889</td><td>"fixed_time_horizons"</td></tr></tbody></table></div>
-</div>
-</div>
-<p>Do not censor competing events: coding them as <code>0</code> changes the estimand.</p>
-</div>
-</div>
-</div>
+<section id="what-the-estimate-means" class="level1">
+<h1>What the estimate means</h1>
+<p><code>polarstate</code> computes non-parametric Aalen–Johansen state-occupancy probabilities. With codes <code>0</code> and <code>1</code>, it describes a standard time-to-event outcome. Adding code <code>2</code> represents a competing event.</p>
+<p>The estimates are descriptive probabilities for the supplied cohort. They are not causal effects and do not adjust for covariates.</p>
 </section>
-<section id="return-horizons-and-event-times-together" class="level1">
-<h1>Return horizons and event times together</h1>
-<div id="40cf1ee3" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>combined_result <span class="op">=</span> predict_aj_estimates(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    competing_table,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    full_event_table<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>combined_result.select(<span class="st">"times"</span>, <span class="st">"estimate_origin"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-  text-align: right;
-  white-space: pre-wrap;
-}
-</style>
-<small>shape: (10, 2)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>times</th><th>estimate_origin</th></tr><tr><td>f64</td><td>enum</td></tr></thead><tbody><tr><td>3.0</td><td>"fixed_time_horizons"</td></tr><tr><td>6.0</td><td>"fixed_time_horizons"</td></tr><tr><td>9.0</td><td>"fixed_time_horizons"</td></tr><tr><td>12.0</td><td>"fixed_time_horizons"</td></tr><tr><td>2.0</td><td>"event_table"</td></tr><tr><td>4.0</td><td>"event_table"</td></tr><tr><td>5.0</td><td>"event_table"</td></tr><tr><td>8.0</td><td>"event_table"</td></tr><tr><td>10.0</td><td>"event_table"</td></tr><tr><td>12.0</td><td>"event_table"</td></tr></tbody></table></div>
-</div>
-</div>
-<p>Use <code>estimate_origin</code> to distinguish requested horizons from observed times.</p>
-</section>
-<section id="estimate-within-groups" class="level1">
-<h1>Estimate within groups</h1>
-<p>The public functions operate on one cohort at a time.</p>
-<div id="74c1233a" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_with_groups <span class="op">=</span> competing_data.with_columns(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    pl.Series(<span class="st">"group"</span>, [<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>])</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>estimates_by_group <span class="op">=</span> {</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    group[<span class="dv">0</span>]: predict_aj_estimates(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        prepare_event_table(group_data.select(<span class="st">"times"</span>, <span class="st">"reals"</span>)),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        pl.Series([<span class="fl">6.0</span>, <span class="fl">12.0</span>]),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> group, group_data <span class="kw">in</span> data_with_groups.group_by(<span class="st">"group"</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>{k: value.shape <span class="cf">for</span> k, value <span class="kw">in</span> estimates_by_group.items()}</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>{'A': (2, 5), 'B': (2, 5)}</code></pre>
-</div>
-</div>
-<p>These are descriptive within-group estimates, not an adjusted regression model.</p>
-</section>
-<section id="convert-pandas-input" class="level1">
-<h1>Convert pandas input</h1>
-<div id="9d809024" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pandas_data <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"time"</span>: [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>],</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>polars_data <span class="op">=</span> pl.from_pandas(pandas_data).select(</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"time"</span>).cast(pl.Float64).alias(<span class="st">"times"</span>),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"event"</span>).cast(pl.Int64).alias(<span class="st">"reals"</span>),</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>prepare_event_table(polars_data).select(<span class="st">"times"</span>, <span class="st">"at_risk"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-  text-align: right;
-  white-space: pre-wrap;
-}
-</style>
-<small>shape: (4, 2)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>times</th><th>at_risk</th></tr><tr><td>f64</td><td>i64</td></tr></thead><tbody><tr><td>2.0</td><td>4</td></tr><tr><td>4.0</td><td>3</td></tr><tr><td>6.0</td><td>2</td></tr><tr><td>8.0</td><td>1</td></tr></tbody></table></div>
-</div>
-</div>
-<p>Recode outcomes before estimation and confirm that only <code>0</code>, <code>1</code>, and optional <code>2</code> are present.</p>
-</section>
-<section id="next-steps" class="level1">
-<h1>Next steps</h1>
+<section id="data-assumptions" class="level1">
+<h1>Data assumptions</h1>
 <ul>
-<li>Read <a href="../user-guide/how-it-works.html">How the estimator works</a>.</li>
-<li>Review <a href="../user-guide/assumptions-limitations.html">Assumptions and limitations</a>.</li>
-<li>See <a href="../user-guide/package-comparisons.html">Package comparisons</a>.</li>
-<li>Consult the <a href="../reference/index.html">API Reference</a>.</li>
+<li>Each row represents one independent subject with one observed follow-up time.</li>
+<li><code>times</code> is numeric, finite, non-negative, and uses a consistent time unit.</li>
+<li><code>reals</code> is integer-coded: <code>0</code> for right-censoring, <code>1</code> for the event of interest, and optionally <code>2</code> for a competing event.</li>
+<li>Censoring is assumed independent of the event process, conditional on the study design and any stratification performed before estimation.</li>
+<li>Events tied at the same time are aggregated. Input rows need not be sorted.</li>
 </ul>
+<p>The package validates the mechanical requirements above, but it cannot verify study-design assumptions such as independent censoring.</p>
+</section>
+<section id="scope-and-limitations" class="level1">
+<h1>Scope and limitations</h1>
+<p>The current public API supports one event of interest and one optional competing event. It does not currently provide:</p>
+<ul>
+<li>confidence intervals, standard errors, or hypothesis tests;</li>
+<li>covariate-adjusted or causal estimates;</li>
+<li>left truncation, interval censoring, or time-varying covariates;</li>
+<li>survey weights or clustered variance estimates;</li>
+<li>automatic missing-data handling.</li>
+</ul>
+<p>For group-specific estimates, split the data explicitly. Differences between groups remain unadjusted and should not be interpreted as causal effects.</p>
+</section>
+<section id="boundary-behavior" class="level1">
+<h1>Boundary behavior</h1>
+<p>Predictions are step functions. A requested horizon between observed times uses the most recent estimate at or before that horizon. A horizon before the first observation returns state probabilities <code>(1, 0, 0)</code>.</p>
+</section>
+<section id="output-name-compatibility" class="level1">
+<h1>Output-name compatibility</h1>
+<p>Correctly spelled transition columns are:</p>
+<ul>
+<li><code>transition_probabilities_to_1_at_times</code></li>
+<li><code>transition_probabilities_to_2_at_times</code></li>
+</ul>
+<p>The historical misspelled names beginning with <code>trainsition_</code> remain in the event table as backward-compatible aliases. New code should use the correctly spelled names.</p>
+</section>
+<section id="before-reporting-results" class="level1">
+<h1>Before reporting results</h1>
+<p>Confirm the outcome coding, time origin, time unit, censoring definition, and the number at risk near the horizons you report. Inspect the event table rather than relying only on fixed-horizon output.</p>
 
 
 </section>
@@ -808,14 +673,11 @@ document.addEventListener("DOMContentLoaded", () => {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../user-guide/package-comparisons.html" class="pagination-link" aria-label="Package Comparisons">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Package Comparisons</span>
+      <a href="../user-guide/recipes.html" class="pagination-link" aria-label="Recipes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Recipes</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../user-guide/assumptions-limitations.html" class="pagination-link" aria-label="Assumptions and limitations">
-        <span class="nav-page-text">Assumptions and limitations</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

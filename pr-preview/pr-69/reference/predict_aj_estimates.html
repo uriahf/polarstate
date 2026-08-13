@@ -313,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
   <ul class="collapse">
   <li><a href="#parameters" id="toc-parameters" class="nav-link active" data-scroll-target="#parameters">Parameters</a></li>
   <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  <li><a href="#raises" id="toc-raises" class="nav-link" data-scroll-target="#raises">Raises</a></li>
   <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
@@ -346,7 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 <div class="doc-usage-source">
 <p>Usage</p>
-<p><a href="https://github.com/uriahf/polarstate/blob/master/src/polarstate/predict.py#L4-L106" target="_blank" rel="noopener">Source</a></p>
+<p><a href="https://github.com/uriahf/polarstate/blob/master/src/polarstate/predict.py#L41-L156" target="_blank" rel="noopener">Source</a></p>
 </div>
 <div class="doc-signature doc-Kind.FUNCTION">
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sig-name">predict_aj_estimates</span>(
@@ -381,6 +382,21 @@ If <code>True</code>, append estimates at every observed event time. Use the <co
 <dt><code> <span class="doc-parameter-annotation">pl.DataFrame</span></code></dt>
 <dd>
 Columns are <code>times</code>, state-occupancy probabilities for states 0, 1, and 2, and <code>estimate_origin</code>. State 0 means no absorbing event by the horizon. States 1 and 2 are the event of interest and optional competing event. The probabilities sum to one up to floating-point precision.
+</dd>
+</dl>
+</div>
+</section>
+<section id="raises" class="level2 doc-raises">
+<h2 class="doc-raises">Raises</h2>
+<div class="doc-definition-items">
+<dl>
+<dt><code> <span class="doc-parameter-annotation">TypeError</span></code></dt>
+<dd>
+<p>If inputs are not the documented Polars types, horizons are not numeric, or full_event_table is not boolean.</p>
+</dd>
+<dt><code> <span class="doc-parameter-annotation">ValueError</span></code></dt>
+<dd>
+If required event-table columns are missing, either input is empty, or horizons contain null, non-finite, or negative values.
 </dd>
 </dl>
 </div>

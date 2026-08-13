@@ -277,6 +277,12 @@ window.Quarto = {
  <span class="menu-text">Recipes</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/assumptions-limitations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assumptions and limitations</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -372,7 +378,7 @@ window.Quarto = {
 <li><code>at_risk</code> supplies <span class="math inline">Y(u)</span>.</li>
 <li><code>csh_1</code> and <code>csh_2</code> supply <span class="math inline">dN_j(u)/Y(u)</span>.</li>
 <li><code>previous_overall_survival</code> supplies <span class="math inline">\widehat S(u-)</span>.</li>
-<li><code>trainsition_probabilities_to_*_at_times</code> contains each weighted increment.</li>
+<li><code>transition_probabilities_to_*_at_times</code> contains each weighted increment.</li>
 <li><code>state_occupancy_probability_*_at_times</code> cumulatively sums those increments.</li>
 </ol>
 <section id="event-table-columns" class="level2">
@@ -426,7 +432,7 @@ window.Quarto = {
 <td>Survival immediately before the current time</td>
 </tr>
 <tr class="odd">
-<td><code>trainsition_probabilities_to_*_at_times</code></td>
+<td><code>transition_probabilities_to_*_at_times</code></td>
 <td>Probability mass entering each absorbing state at that time</td>
 </tr>
 <tr class="even">
@@ -435,7 +441,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>The <code>trainsition</code> spelling is retained for compatibility with the current public output schema.</p>
+<p>The historical <code>trainsition_probabilities_to_*_at_times</code> spelling remains as a backward-compatible alias. New code should use the correctly spelled name.</p>
 </section>
 </section>
 <section id="from-the-event-table-to-requested-horizons" class="level1">
