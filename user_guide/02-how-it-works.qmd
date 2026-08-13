@@ -49,7 +49,7 @@ The columns returned by `prepare_event_table()` expose each component of
 2. `at_risk` supplies $Y(u)$.
 3. `csh_1` and `csh_2` supply $dN_j(u)/Y(u)$.
 4. `previous_overall_survival` supplies $\widehat S(u-)$.
-5. `trainsition_probabilities_to_*_at_times` contains each weighted increment.
+5. `transition_probabilities_to_*_at_times` contains each weighted increment.
 6. `state_occupancy_probability_*_at_times` cumulatively sums those increments.
 
 ### Event-table columns
@@ -66,11 +66,11 @@ The columns returned by `prepare_event_table()` expose each component of
 | `conditional_survival` | Probability of avoiding either event at that time, conditional on being at risk |
 | `overall_survival` | Product of conditional-survival increments through that time |
 | `previous_overall_survival` | Survival immediately before the current time |
-| `trainsition_probabilities_to_*_at_times` | Probability mass entering each absorbing state at that time |
+| `transition_probabilities_to_*_at_times` | Probability mass entering each absorbing state at that time |
 | `state_occupancy_probability_*_at_times` | Cumulative probability of occupying each absorbing state |
 
-The `trainsition` spelling is retained for compatibility with the current
-public output schema.
+The historical `trainsition_probabilities_to_*_at_times` spelling remains as
+a backward-compatible alias. New code should use the correctly spelled name.
 
 ## From the event table to requested horizons
 
