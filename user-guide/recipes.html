@@ -74,6 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <link href="../user-guide/assumptions-limitations.html" rel="next">
 <link href="../user-guide/package-comparisons.html" rel="prev">
+<link href="../favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -114,6 +115,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const list = document.querySelector("#navbarCollapse .navbar-nav");
+  const brand = document.querySelector(".navbar-brand");
+  if (!list || !brand) return;
+
+  const root = new URL(brand.href);
+  const pages = [
+    ["Home", new URL(".", root).href],
+    ["How It Works", new URL("user-guide/how-it-works.html", root).href],
+    ["Package Comparisons", new URL("user-guide/package-comparisons.html", root).href],
+    ["Recipes", new URL("user-guide/recipes.html", root).href],
+  ];
+
+  const apiItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
+    item.textContent.trim().includes("API Reference")
+  );
+  const userGuideItem = [...list.querySelectorAll(":scope > .nav-item")].find((item) =>
+    item.textContent.trim().includes("User Guide")
+  );
+
+  for (const [label, href] of pages) {
+    const item = document.createElement("li");
+    item.className = "nav-item";
+
+    const link = document.createElement("a");
+    link.className = "nav-link";
+    link.href = href;
+    link.textContent = label;
+
+    const currentPath = window.location.pathname.replace(/index\.html$/, "");
+    const linkPath = new URL(href).pathname.replace(/index\.html$/, "");
+    if (currentPath === linkPath) {
+      link.classList.add("active");
+      link.setAttribute("aria-current", "page");
+    }
+
+    item.appendChild(link);
+    list.insertBefore(item, apiItem || null);
+  }
+
+  userGuideItem?.remove();
+});
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
@@ -122,10 +167,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<link rel="icon" type="image/x-icon" href="https://uriahf.github.io/polarstate/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="https://uriahf.github.io/polarstate/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://uriahf.github.io/polarstate/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://uriahf.github.io/polarstate/apple-touch-icon.png">
 <script src="../theme-init.js"></script>
+<meta name="gd-navbar-style" data-preset="sky">
+<meta name="gd-content-style" data-preset="mint" data-pages="all">
 
 
-<link rel="stylesheet" href="../docs.css">
+<link rel="stylesheet" href="../uriah-brand.css">
   <link rel="alternate" type="text/markdown" href="recipes.md">
   <link rel="canonical" href="https://uriahf.github.io/polarstate/user-guide/recipes.html">
   <meta property="og:type" content="website">
@@ -145,8 +196,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Polars State</span>
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../logo.png" alt="Polars State" class="navbar-logo light-content">
+    <img src="../logo.png" alt="Polars State" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class=""></div>
@@ -271,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Every example on this page is executed when the documentation builds. If an API change breaks a recipe, the documentation check fails with it.</p>
-<div id="9a9c70bd" class="cell" data-execution_count="1">
+<div id="e2d86e98" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> polarstate <span class="im">import</span> prepare_event_table, predict_aj_estimates</span></code></pre></div>
@@ -284,7 +336,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Use <code>0</code> for right-censoring and <code>1</code> for the event.</p>
-<div id="231bb6fe" class="cell" data-execution_count="2">
+<div id="4f5ef5c2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>single_event_data <span class="op">=</span> pl.DataFrame({</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>],</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
@@ -309,7 +361,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Encode the event of interest as <code>1</code> and the competing event as <code>2</code>.</p>
-<div id="d664b441" class="cell" data-execution_count="3">
+<div id="d96f4fd6" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>competing_data <span class="op">=</span> pl.DataFrame({</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"times"</span>: [<span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">8.0</span>, <span class="fl">10.0</span>, <span class="fl">12.0</span>],</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"reals"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
@@ -337,7 +389,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="return-horizons-and-event-times-together" class="level1">
 <h1>Return horizons and event times together</h1>
-<div id="cef5b501" class="cell" data-execution_count="4">
+<div id="c2eb3863" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>combined_result <span class="op">=</span> predict_aj_estimates(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    competing_table,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    pl.Series([<span class="fl">3.0</span>, <span class="fl">6.0</span>, <span class="fl">9.0</span>, <span class="fl">12.0</span>]),</span>
@@ -360,7 +412,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="estimate-within-groups" class="level1">
 <h1>Estimate within groups</h1>
 <p>The public functions operate on one cohort at a time.</p>
-<div id="75a320ca" class="cell" data-execution_count="5">
+<div id="52a4e682" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_with_groups <span class="op">=</span> competing_data.with_columns(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    pl.Series(<span class="st">"group"</span>, [<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -373,14 +425,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>{k: value.shape <span class="cf">for</span> k, value <span class="kw">in</span> estimates_by_group.items()}</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>{'B': (2, 5), 'A': (2, 5)}</code></pre>
+<pre><code>{'A': (2, 5), 'B': (2, 5)}</code></pre>
 </div>
 </div>
 <p>These are descriptive within-group estimates, not an adjusted regression model.</p>
 </section>
 <section id="convert-pandas-input" class="level1">
 <h1>Convert pandas input</h1>
-<div id="66423ec3" class="cell" data-execution_count="6">
+<div id="b4b2d331" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pandas_data <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"time"</span>: [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>],</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"event"</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>],</span>
@@ -792,7 +844,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
 <script src="../navbar-widgets.js"></script>
-<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"}}</script>
+<script id="gd-nav-icons-data" type="application/json">{"navbar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>","API Reference":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>"},"sidebar":{"User Guide":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"gd-nav-icon\" aria-hidden=\"true\"><path d=\"M12 7v14\"/><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\"/></svg>"}}</script>
 <script>/**
  * Navigation Icons for Great Docs
  *
@@ -884,13 +936,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 })();
 </script>
+<script src="../navbar-style.js"></script>
+<script src="../content-style.js"></script>
 <style>
 /* Great Docs: accent_color overrides */
 :root, html.quarto-light, :root[data-bs-theme='light'] {
-    --gd-accent: #2f6f8f;
+    --gd-accent: #1f5f82;
 }
 html.quarto-dark, :root[data-bs-theme='dark'] {
-    --gd-accent: #83bdd6;
+    --gd-accent: #73c7e8;
 }
 </style>
 

@@ -49,6 +49,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://uriahf.github.io/polarstate/assets/site-navigation.html</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://uriahf.github.io/polarstate/package-info.html</loc>
     <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
