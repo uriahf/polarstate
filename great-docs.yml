@@ -59,11 +59,11 @@ reference:
     The complete public API for preparing time-to-event tables and predicting
     state-occupancy probabilities, with or without competing events.
   sections:
-    - title: "Estimation"
-      desc: "Build an inspectable event table from time-to-event observations."
+    - title: "Event table"
+      desc: "Compute an inspectable Aalen-Johansen event table from time-to-event observations."
       contents:
         - prepare_event_table
-    - title: "Prediction"
-      desc: "Evaluate state-occupancy probabilities at fixed time horizons."
+    - title: "Time-horizon estimates"
+      desc: "Return state-occupancy estimates at requested time horizons."
       contents:
         - predict_aj_estimates

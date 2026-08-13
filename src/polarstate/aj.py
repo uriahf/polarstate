@@ -208,7 +208,7 @@ def add_state_occupancy_probabilities_at_times_columns(
 
 
 def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
-    """Build an inspectable Aalen-Johansen event table.
+    """Compute an inspectable Aalen-Johansen event table.
 
     Parameters
     ----------
