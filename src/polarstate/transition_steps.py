@@ -1,13 +1,28 @@
 """Discrete-step multistate Aalen–Johansen estimation."""
 
-from collections import namedtuple
-from typing import Any, Sequence
+from typing import Any, NamedTuple, Sequence
 import polars as pl
 
-TransitionTableSteps = namedtuple(
-    "TransitionTableSteps",
-    ["steps", "states", "initial", "transitions"],
-)
+
+class TransitionTableSteps(NamedTuple):
+    """Container for discrete-step transition table components.
+
+    Attributes
+    ----------
+    steps : tuple
+        Observed discrete integer steps.
+    states : tuple
+        Ordered states represented in the panel.
+    initial : tuple
+        Initial state occupancy probabilities at baseline.
+    transitions : pl.DataFrame
+        Aggregated transition counts between consecutive steps.
+    """
+
+    steps: tuple
+    states: tuple
+    initial: tuple
+    transitions: pl.DataFrame
 
 
 def prepare_transition_table_steps(
