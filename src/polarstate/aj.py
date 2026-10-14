@@ -234,9 +234,7 @@ def _validate_observations(times_and_reals: pl.DataFrame) -> None:
         raise ValueError("The 'times' column must contain only finite values.")
     if times_and_reals.select((pl.col("times") < 0).any()).item():
         raise ValueError("The 'times' column must contain non-negative values.")
-    if times_and_reals.select(
-        (~pl.col("reals").is_in([0, 1, 2])).any()
-    ).item():
+    if times_and_reals.select((~pl.col("reals").is_in([0, 1, 2])).any()).item():
         raise ValueError("The 'reals' column may contain only 0, 1, and 2.")
 
 
@@ -318,4 +316,3 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
         .pipe(add_state_occupancy_probabilities_at_times_columns)
         .pipe(_add_legacy_transition_aliases)
     )
-

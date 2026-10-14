@@ -384,12 +384,12 @@ def test_prepare_event_table() -> None:
     )
 
     assert_frame_equal(result.select(expected_output.columns), expected_output)
-    assert result[
-        "transition_probabilities_to_1_at_times"
-    ].equals(result["trainsition_probabilities_to_1_at_times"])
-    assert result[
-        "transition_probabilities_to_2_at_times"
-    ].equals(result["trainsition_probabilities_to_2_at_times"])
+    assert result["transition_probabilities_to_1_at_times"].equals(
+        result["trainsition_probabilities_to_1_at_times"]
+    )
+    assert result["transition_probabilities_to_2_at_times"].equals(
+        result["trainsition_probabilities_to_2_at_times"]
+    )
 
 
 def test_predict_aj_estimates() -> None:
@@ -432,4 +432,3 @@ def test_predict_aj_estimates() -> None:
     )
 
     assert_frame_equal(result, expected_output)
-
