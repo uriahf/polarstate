@@ -12,15 +12,8 @@
 #     - Unchanged consecutive states are retained with event = "(censor)".
 #     - Terminal dropouts end observation after the last complete step.
 #
-#   Estimand Analysis:
-#     1) Complete Panel (No Dropout):
-#        Standard counting-process survfit and discrete available-pair estimators
-#        yield 100% IDENTICAL state occupancy probabilities (max abs error = 0.0).
-#     2) Terminal Dropout Panel:
-#        survfit risk sets evaluate subjects entering interval (tstart, tstop].
-#        The available-pair estimator applies baseline population proportions pi(0)
-#        propagated through complete-pair transition matrices Q(k).
-#        First divergence occurs at step 1 due to subject F dropping out after step 0.
+# Requirements:
+#   install.packages("survival")
 
 suppressPackageStartupMessages({
   library(survival)
@@ -31,7 +24,7 @@ cat("R survival Discrete-Step Multistate Validation (EXECUTED)\n")
 cat("=================================================================\n\n")
 
 # -----------------------------------------------------------------
-# 1. Complete Panel Fixture
+# 1. Complete Panel Fixture Validation
 # -----------------------------------------------------------------
 cat("--- 1. Complete Panel Fixture Validation ---\n")
 panel_complete <- data.frame(
@@ -64,16 +57,19 @@ pairs_complete <- build_start_stop(panel_complete, 3)
 fit_comp <- survfit(Surv(tstart, tstop, event) ~ 1, data = pairs_complete, id = id, istate = from)
 sfit_comp <- summary(fit_comp)
 
-cat("\nComplete Panel R survfit pstate:\n")
-print(sfit_comp$pstate)
+actual_pstate_comp <- sfit_comp$pstate
+expected_pstate_comp <- matrix(c(0.25, 0.50, 0.25, 0.25, 0.50, 0.25), nrow = 2, byrow = TRUE)
 
-cat("\nExpected polarstate occupancy:\n")
-cat("Step 1: 0.25 0.50 0.25\n")
-cat("Step 2: 0.25 0.50 0.25\n")
-cat("Max Absolute Discrepancy (Complete Panel): 0.0\n\n")
+max_diff_comp <- max(abs(actual_pstate_comp - expected_pstate_comp))
+
+cat(sprintf("Computed Complete Panel Max Absolute Discrepancy: %e\n", max_diff_comp))
+
+# Executable numerical assertion
+stopifnot(max_diff_comp < 1e-12)
+cat("[ASSERTION PASSED] R survival complete panel predictions match expected (max_diff < 1e-12).\n\n")
 
 # -----------------------------------------------------------------
-# 2. Terminal Dropout Fixture
+# 2. Terminal Dropout Fixture Validation
 # -----------------------------------------------------------------
 cat("--- 2. Terminal Dropout Fixture Validation ---\n")
 panel_dropout <- data.frame(
@@ -86,10 +82,18 @@ pairs_dropout <- build_start_stop(panel_dropout, 2)
 fit_drop <- survfit(Surv(tstart, tstop, event) ~ 1, data = pairs_dropout, id = id, istate = from)
 sfit_drop <- summary(fit_drop)
 
-cat("\nTerminal Dropout R survfit pstate:\n")
-print(sfit_drop$pstate)
+actual_pstate_drop <- sfit_drop$pstate
+polarstate_pstate_drop <- matrix(c(7/12, 5/12, 5/24, 19/24), nrow = 2, byrow = TRUE)
 
-cat("\nTerminal Dropout polarstate pi(k):\n")
-cat("Step 1: 0.5833333 0.4166667 (7/12, 5/12)\n")
-cat("Step 2: 0.2083333 0.7916667 (5/24, 19/24)\n")
-cat("Discrepancy at Step 1: |0.5833 - 0.6000| = 0.0166667 (caused by interval-entry vs baseline population risk set definition under dropout)\n")
+diff_drop <- abs(actual_pstate_drop - polarstate_pstate_drop)
+
+cat("Actual R survfit pstate (counting-process interval-entry risk set):\n")
+print(actual_pstate_drop)
+
+cat("\nExpected polarstate pi(k) (baseline population risk set):\n")
+print(polarstate_pstate_drop)
+
+cat("\nComputed Absolute Discrepancy Matrix (survfit vs available-pair):\n")
+print(diff_drop)
+
+cat(sprintf("\nStep 1 Discrepancy: %f (survfit evaluates 5 subjects entering interval 1, excluding subject F)\n", diff_drop[1, 1]))

@@ -1,10 +1,10 @@
-# Reproducible R Validation Script using R's Hmisc and Base R
+# Reproducible R Validation Script using R's Base R and Hmisc
 #
 # STATUS: EXECUTED
 #
 # Description:
 #   This script computes empirical state occupancy proportions and
-#   consecutive transition matrices using base R and Hmisc functions.
+#   consecutive transition matrices using base R and Hmisc table utilities.
 #
 # Requirements:
 #   install.packages("Hmisc")
@@ -14,7 +14,7 @@ suppressPackageStartupMessages({
 })
 
 cat("=================================================================\n")
-cat("R Hmisc / Base-R Discrete-Step Multistate Validation (EXECUTED)\n")
+cat("R Base-R / Hmisc Discrete-Step Multistate Validation (EXECUTED)\n")
 cat("=================================================================\n\n")
 
 # Complete panel fixture dataset
@@ -24,24 +24,39 @@ panel <- data.frame(
   state = factor(c(1, 2, 3, 1, 1, 2, 2, 3, 2, 3, 2, 1))
 )
 
-cat("--- Base-R: Empirical State Occupancy Proportions by Step ---\n")
+cat("--- 1. Empirical State Occupancy Proportions by Step ---\n")
 props <- prop.table(table(Step = panel$step, State = panel$state), margin = 1)
 print(props)
 
-cat("\n--- Base-R / Hmisc: Consecutive Step Transition Matrices ---\n")
+expected_props <- matrix(
+  c(0.50, 0.25, 0.25,
+    0.25, 0.50, 0.25,
+    0.25, 0.50, 0.25),
+  nrow = 3, byrow = TRUE
+)
+
+max_diff_props <- max(abs(props - expected_props))
+stopifnot(max_diff_props < 1e-12)
+cat(sprintf("[ASSERTION PASSED] Empirical occupancy proportions match expected (max_diff = %e).\n\n", max_diff_props))
+
+cat("--- 2. Consecutive Step Transition Probability Matrices Q(k) ---\n")
 panel_order <- panel[order(panel$id, panel$step), ]
 panel_order$prev_state <- ave(as.character(panel_order$state), panel_order$id, FUN = function(x) c(NA, x[-length(x)]))
 
 pairs <- panel_order[!is.na(panel_order$prev_state), ]
 
-for (s in sort(unique(pairs$step))) {
-  cat(sprintf("\nStep %d Transitions (from Step %d):\n", s, s - 1))
-  sub_pairs <- pairs[pairs$step == s, ]
+# Step 1 Q matrix
+sub_pairs_1 <- pairs[pairs$step == 1, ]
+q1_actual <- prop.table(table(From = sub_pairs_1$prev_state, To = sub_pairs_1$state), margin = 1)
+expected_q1 <- matrix(c(0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0), nrow = 3, byrow = TRUE)
+diff_q1 <- max(abs(q1_actual - expected_q1))
+stopifnot(diff_q1 < 1e-12)
+cat(sprintf("[ASSERTION PASSED] Q1 transition matrix matches expected (max_diff = %e).\n", diff_q1))
 
-  trans_counts <- table(From = sub_pairs$prev_state, To = sub_pairs$state)
-  cat("Transition Counts:\n")
-  print(trans_counts)
-
-  cat("Conditional Transition Probabilities Q(k):\n")
-  print(prop.table(trans_counts, margin = 1))
-}
+# Step 2 Q matrix
+sub_pairs_2 <- pairs[pairs$step == 2, ]
+q2_actual <- prop.table(table(From = sub_pairs_2$prev_state, To = sub_pairs_2$state), margin = 1)
+expected_q2 <- matrix(c(0.0, 1.0, 0.0, 0.5, 0.0, 0.5, 0.0, 1.0, 0.0), nrow = 3, byrow = TRUE)
+diff_q2 <- max(abs(q2_actual - expected_q2))
+stopifnot(diff_q2 < 1e-12)
+cat(sprintf("[ASSERTION PASSED] Q2 transition matrix matches expected (max_diff = %e).\n", diff_q2))
