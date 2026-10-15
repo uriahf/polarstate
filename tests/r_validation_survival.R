@@ -1,7 +1,16 @@
 # Reproducible R Validation Script using R's survival package
 #
-# Note: R is unavailable in this execution environment. This script serves as
-# an independent reference for external execution and verification.
+# STATUS: NOT EXECUTED (R environment unavailable in sandbox)
+#
+# Description:
+#   This script converts a discrete-step panel dataset into a counting-process
+#   start-stop format (tstart, tstop, status) suitable for survival::survfit().
+#
+#   Survival Event History Convention for Discrete Steps:
+#     - Explicit censor/no-event status is defined as level 1: "(censor)".
+#     - Transitions to a different state are coded as destination state events.
+#     - Unchanged consecutive states are retained with status = "(censor)".
+#     - Terminal dropouts end observation after the last complete step.
 #
 # Requirements:
 #   install.packages("survival")
@@ -10,37 +19,56 @@ suppressPackageStartupMessages({
   library(survival)
 })
 
-# Define reference panel dataset (long format: id, step, state)
+cat("=================================================================\n")
+cat("R survival Discrete-Step Multistate Validation (NOT EXECUTED)\n")
+cat("=================================================================\n\n")
+
+# Complete panel fixture dataset
 panel <- data.frame(
   id = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4),
-  step = c(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3),
-  state = factor(c("A", "B", "C", "A", "A", "B", "B", "B", "B", "A", "C", "C"))
+  step = c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2),
+  state = factor(c(1, 2, 3, 1, 1, 2, 2, 3, 2, 3, 2, 1))
 )
 
-# Convert discrete step panel to start-stop (tstart, tstop, event) for survival::survfit
-# For step k-1 to step k:
-# tstart = step - 1, tstop = step
-# status = target state at step k
-build_start_stop <- function(df) {
+build_multistate_start_stop <- function(df) {
   df <- df[order(df$id, df$step), ]
+
+  # Lag step and state per subject
   df$prev_step <- ave(df$step, df$id, FUN = function(x) c(NA, x[-length(x)]))
   df$prev_state <- ave(as.character(df$state), df$id, FUN = function(x) c(NA, x[-length(x)]))
 
   pairs <- df[!is.na(df$prev_step), ]
   pairs$tstart <- pairs$prev_step
   pairs$tstop <- pairs$step
-  pairs$event <- factor(pairs$state, levels = levels(df$state))
-  pairs$from <- factor(pairs$prev_state, levels = levels(df$state))
+
+  # Event status: level 1 is "(censor)" for no change, followed by state levels
+  state_levels <- levels(df$state)
+  all_levels <- c("(censor)", state_levels)
+
+  # Destination state event iff state changes; otherwise "(censor)"
+  event_status <- ifelse(as.character(pairs$state) != pairs$prev_state,
+                         as.character(pairs$state),
+                         "(censor)")
+
+  pairs$event <- factor(event_status, levels = all_levels)
+  pairs$from <- factor(pairs$prev_state, levels = state_levels)
 
   return(pairs)
 }
 
-start_stop_data <- build_start_stop(panel)
+start_stop_df <- build_multistate_start_stop(panel)
 
-cat("--- R survival multistate fit ---\n")
-# Fit multistate Aalen-Johansen using survival::survfit
-fit <- survfit(Surv(tstart, tstop, event) ~ 1, data = start_stop_data, id = id, istate = from)
+# Fit Aalen-Johansen multistate model with initial states (istate)
+fit <- survfit(Surv(tstart, tstop, event) ~ 1, data = start_stop_df, id = id, istate = from)
 
-print(fit)
-cat("\nState occupancy probabilities (pstate):\n")
+cat("--- Summary Table: State Occupancy Probabilities (pstate) ---\n")
 print(fit$pstate)
+
+cat("\n--- Summary Table: At-Risk Denominators (n.risk) ---\n")
+print(fit$n.risk)
+
+cat("\n--- Summary Table: Event Counts (n.event) ---\n")
+print(fit$n.event)
+
+cat("\n--- Summary Table: Censoring Counts (n.censor) ---\n")
+print(fit$n.censor)

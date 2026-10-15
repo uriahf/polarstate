@@ -9,6 +9,159 @@ from polarstate import (
 )
 
 
+def test_exact_complete_panel_fixture() -> None:
+    """Test exact complete panel fixture with 4 subjects across steps 0, 1, 2.
+
+    Fixture Data:
+    ID 1: 1 -> 2 -> 3
+    ID 2: 1 -> 1 -> 2
+    ID 3: 2 -> 3 -> 2
+    ID 4: 3 -> 2 -> 1
+
+    Initial occupancy pi(0) = (1/2, 1/4, 1/4)
+    Q1 = [[1/2, 1/2, 0], [0, 0, 1], [0, 1, 0]]
+    Q2 = [[0, 1, 0], [1/2, 0, 1/2], [0, 1, 0]]
+    pi(1) = (1/4, 1/2, 1/4)
+    pi(2) = (1/4, 1/2, 1/4)
+    """
+    observations = pl.DataFrame(
+        {
+            "id": [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4],
+            "step": [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
+            "reals": [1, 2, 3, 1, 1, 2, 2, 3, 2, 3, 2, 1],
+        }
+    )
+
+    table = prepare_transition_table_steps(observations, state_order=[1, 2, 3])
+    assert table.steps == (0, 1, 2)
+    assert table.states == (1, 2, 3)
+
+    # Initial occupancy assertion
+    expected_pi0 = (1 / 2, 1 / 4, 1 / 4)
+    for p_est, p_exp in zip(table.initial, expected_pi0):
+        assert abs(p_est - p_exp) < 1e-12
+
+    # Assert transition counts
+    # Step 1 transitions: (1->2:1, 1->1:1), (2->3:1), (3->2:1)
+    trans_s1 = table.transitions.filter(pl.col("step") == 1)
+    c_11 = trans_s1.filter((pl.col("from_state") == 1) & (pl.col("to_state") == 1))[
+        "count"
+    ].item()
+    c_12 = trans_s1.filter((pl.col("from_state") == 1) & (pl.col("to_state") == 2))[
+        "count"
+    ].item()
+    c_23 = trans_s1.filter((pl.col("from_state") == 2) & (pl.col("to_state") == 3))[
+        "count"
+    ].item()
+    c_32 = trans_s1.filter((pl.col("from_state") == 3) & (pl.col("to_state") == 2))[
+        "count"
+    ].item()
+    assert (c_11, c_12, c_23, c_32) == (1, 1, 1, 1)
+
+    # Predictions
+    estimates = predict_aj_estimates(table)
+
+    def get_pi(step: int) -> tuple[float, float, float]:
+        df_s = estimates.filter(pl.col("step") == step).sort("state")
+        return tuple(df_s["state_occupancy_probability"].to_list())
+
+    pi0 = get_pi(0)
+    pi1 = get_pi(1)
+    pi2 = get_pi(2)
+
+    assert all(abs(a - b) < 1e-12 for a, b in zip(pi0, (1 / 2, 1 / 4, 1 / 4)))
+    assert all(abs(a - b) < 1e-12 for a, b in zip(pi1, (1 / 4, 1 / 2, 1 / 4)))
+    assert all(abs(a - b) < 1e-12 for a, b in zip(pi2, (1 / 4, 1 / 2, 1 / 4)))
+
+    # Empirical state proportion equality on complete uncensored panel
+    N = 4
+    for step_val, expected_vector in [
+        (0, (1 / 2, 1 / 4, 1 / 4)),
+        (1, (1 / 4, 1 / 2, 1 / 4)),
+        (2, (1 / 4, 1 / 2, 1 / 4)),
+    ]:
+        emp = observations.filter(pl.col("step") == step_val).group_by("reals").len()
+        for st, exp_p in zip([1, 2, 3], expected_vector):
+            row = emp.filter(pl.col("reals") == st)
+            emp_p = row["len"].item() / N if row.height > 0 else 0.0
+            assert abs(emp_p - exp_p) < 1e-12
+
+
+def test_exact_estimable_terminal_dropout_fixture() -> None:
+    """Test exact estimable terminal dropout fixture with 6 subjects A-F across steps 0, 1, 2.
+
+    Fixture Data:
+    ID A: 1 -> 1 -> 2
+    ID B: 1 -> 2 -> 2
+    ID C: 1 -> 1 -> (dropped out)
+    ID D: 2 -> 2 -> 1
+    ID E: 2 -> 1 -> (dropped out)
+    ID F: 2 -> (dropped out)
+
+    Available-pair transition matrices:
+    pi0 = (1/2, 1/2)
+    Q1 = [[2/3, 1/3], [1/2, 1/2]]
+    pi1 = (7/12, 5/12)
+    Q2 = [[0, 1], [1/2, 1/2]]
+    pi2 = (5/24, 19/24)
+
+    Note on Statistical Validity:
+    The available-pair complete-interval estimator computes transition probabilities among subjects
+    observed across consecutive steps. This estimator is valid under the assumption that dropout/censoring
+    between step k-1 and step k is non-informative with respect to transitions conditional on state at step k-1.
+    It diverges from raw unadjusted observed-case proportions at step 2 (1/3, 2/3), which suffer from loss to follow-up bias.
+    """
+    observations = pl.DataFrame(
+        {
+            "id": [
+                "A",
+                "A",
+                "A",
+                "B",
+                "B",
+                "B",
+                "C",
+                "C",
+                "D",
+                "D",
+                "D",
+                "E",
+                "E",
+                "F",
+            ],
+            "step": [0, 1, 2, 0, 1, 2, 0, 1, 0, 1, 2, 0, 1, 0],
+            "reals": [1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 2],
+        }
+    )
+
+    table = prepare_transition_table_steps(observations, state_order=[1, 2])
+    assert table.steps == (0, 1, 2)
+    assert table.states == (1, 2)
+
+    # pi(0)
+    for p_est, p_exp in zip(table.initial, (1 / 2, 1 / 2)):
+        assert abs(p_est - p_exp) < 1e-12
+
+    estimates = predict_aj_estimates(table)
+
+    def get_pi(step: int) -> tuple[float, float]:
+        df_s = estimates.filter(pl.col("step") == step).sort("state")
+        return tuple(df_s["state_occupancy_probability"].to_list())
+
+    pi0 = get_pi(0)
+    pi1 = get_pi(1)
+    pi2 = get_pi(2)
+
+    assert all(abs(a - b) < 1e-12 for a, b in zip(pi0, (1 / 2, 1 / 2)))
+    assert all(abs(a - b) < 1e-12 for a, b in zip(pi1, (7 / 12, 5 / 12)))
+    assert all(abs(a - b) < 1e-12 for a, b in zip(pi2, (5 / 24, 19 / 24)))
+
+    # Compare with raw unadjusted observed-case proportions at step 2
+    # At step 2, observed subjects are A(2), B(2), D(1) -> raw proportions: (1/3, 2/3) = (8/24, 16/24)
+    raw_step2_state1 = 1 / 3
+    assert abs(pi2[0] - raw_step2_state1) > 0.05  # pi2[0] = 5/24 = 0.20833 != 0.33333
+
+
 def test_complete_panel_and_empirical_occupancy() -> None:
     """Test uncensored complete panel against direct empirical proportions."""
     observations = pl.DataFrame(
@@ -123,8 +276,8 @@ def test_nonadjacent_jumps_and_simultaneous_transitions() -> None:
     assert pytest.approx(s2_state3) == 2 / 3
 
 
-def test_terminal_right_censoring() -> None:
-    """Test panel with subject dropouts (right censoring) after step 1 and step 2."""
+def test_terminal_right_censoring_error() -> None:
+    """Test panel with subject dropouts (right censoring) causing positive occupancy but zero transitions."""
     observations = pl.DataFrame(
         {
             "id": [1, 1, 1, 2, 2, 3],
@@ -134,26 +287,14 @@ def test_terminal_right_censoring() -> None:
     )
 
     table = prepare_transition_table_steps(observations)
-    # At step 1: id 1=1, id 2=1, id 3=2. Baseline: P(1)=2/3, P(2)=1/3.
     assert table.initial == (2 / 3, 1 / 3)
 
-    # Transitions step 1 -> step 2:
-    # id 1 (state 1) -> state 1
-    # id 2 (state 1) -> state 2
-    # id 3 (state 2) -> dropped out (censored)
-    # At risk at step 2 from state 1: Y_1(2) = 2. Transitions: 1->1 (1), 1->2 (1).
-    # At risk at step 2 from state 2: Y_2(2) = 0. State 2 occupancy at step 1 is 1/3 > 0.
-    # Therefore, no observed transitions from state 2 at step 2 despite positive occupancy!
     with pytest.raises(ValueError, match="No observed transitions from state 2"):
         predict_aj_estimates(table)
 
 
 def test_zero_risk_set_with_zero_occupancy() -> None:
     """Test state with 0 occupancy and 0 at-risk transitions handled gracefully via identity row."""
-    # State 3 is observed at step 1 (id 3 = state 3), but moves to state 2 at step 2.
-    # At step 2, no subjects remain in state 3.
-    # At step 3, no subjects are in state 3 at step 2, so Y_3(3) = 0.
-    # Since occupancy of state 3 at step 2 is 0.0, zero risk set is handled via identity row.
     observations = pl.DataFrame(
         {
             "id": [1, 1, 1, 2, 2, 2, 3, 3, 3],
@@ -216,7 +357,6 @@ def test_explicit_nonlexical_state_ordering() -> None:
     assert table.states == ("low", "medium", "high")
 
     estimates = predict_aj_estimates(table)
-    # Check that rows for each step are output in custom_order
     step1_states = estimates.filter(pl.col("step") == 1)["state"].to_list()
     assert step1_states == custom_order
 
@@ -250,11 +390,9 @@ def test_all_step_and_selected_horizons() -> None:
     table = prepare_transition_table_steps(observations)
     assert table.steps == (10, 11, 12)
 
-    # Default horizons = all steps
     all_est = predict_aj_estimates(table)
     assert sorted(all_est["step"].unique().to_list()) == [10, 11, 12]
 
-    # Selected horizons
     selected = predict_aj_estimates(table, pl.Series([10, 12]))
     assert sorted(selected["step"].unique().to_list()) == [10, 12]
 
@@ -270,13 +408,11 @@ def test_invalid_horizons() -> None:
     )
     table = prepare_transition_table_steps(observations)
 
-    # Horizon not in observed step grid
     with pytest.raises(
         ValueError, match="fixed_time_horizons must contain observed integer steps"
     ):
         predict_aj_estimates(table, pl.Series([1, 99]))
 
-    # Non-integer horizons
     with pytest.raises(TypeError, match="integer dtype"):
         predict_aj_estimates(table, pl.Series([1.0, 2.0]))
 
@@ -308,33 +444,28 @@ def test_row_order_invariance() -> None:
 
 def test_empty_and_invalid_inputs() -> None:
     """Test error handling for empty DataFrame, missing columns, non-integer steps, non-consecutive grid."""
-    # Empty DataFrame
     with pytest.raises(ValueError, match="observations DataFrame is empty"):
         prepare_transition_table_steps(pl.DataFrame())
 
-    # Missing column
     with pytest.raises(ValueError, match="Missing columns"):
         prepare_transition_table_steps(pl.DataFrame({"id": [1], "step": [1]}))
 
-    # Float step
     with pytest.raises(TypeError, match="step_col must have an integer dtype"):
         prepare_transition_table_steps(
             pl.DataFrame({"id": [1], "step": [1.5], "reals": [1]})
         )
 
-    # Non-consecutive grid
     with pytest.raises(ValueError, match="observed step grid must be consecutive"):
         prepare_transition_table_steps(
             pl.DataFrame(
                 {
                     "id": [1, 1, 2, 2],
-                    "step": [1, 3, 1, 3],  # Overall grid is [1, 3] missing step 2
+                    "step": [1, 3, 1, 3],
                     "reals": [1, 2, 1, 2],
                 }
             )
         )
 
-    # Missing baseline observation for a subject
     with pytest.raises(
         ValueError, match="Every subject must have a baseline observation"
     ):
@@ -342,7 +473,7 @@ def test_empty_and_invalid_inputs() -> None:
             pl.DataFrame(
                 {
                     "id": [1, 1, 2],
-                    "step": [1, 2, 2],  # Subject 2 missing step 1
+                    "step": [1, 2, 2],
                     "reals": [1, 2, 2],
                 }
             )
