@@ -1,20 +1,13 @@
-# Reproducible R Validation Script using R's Base R and Hmisc
+# Reproducible Base-R Empirical Validation Script
 #
 # STATUS: EXECUTED
 #
 # Description:
 #   This script computes empirical state occupancy proportions and
-#   consecutive transition matrices using base R and Hmisc table utilities.
-#
-# Requirements:
-#   install.packages("Hmisc")
-
-suppressPackageStartupMessages({
-  library(Hmisc)
-})
+#   consecutive transition matrices using Base R table utilities.
 
 cat("=================================================================\n")
-cat("R Base-R / Hmisc Discrete-Step Multistate Validation (EXECUTED)\n")
+cat("Base-R Empirical Discrete-Step Multistate Validation (EXECUTED)\n")
 cat("=================================================================\n\n")
 
 # Complete panel fixture dataset
@@ -24,7 +17,7 @@ panel <- data.frame(
   state = factor(c(1, 2, 3, 1, 1, 2, 2, 3, 2, 3, 2, 1))
 )
 
-cat("--- 1. Empirical State Occupancy Proportions by Step ---\n")
+cat("--- 1. Base-R: Empirical State Occupancy Proportions by Step ---\n")
 props <- prop.table(table(Step = panel$step, State = panel$state), margin = 1)
 print(props)
 
@@ -39,7 +32,7 @@ max_diff_props <- max(abs(props - expected_props))
 stopifnot(max_diff_props < 1e-12)
 cat(sprintf("[ASSERTION PASSED] Empirical occupancy proportions match expected (max_diff = %e).\n\n", max_diff_props))
 
-cat("--- 2. Consecutive Step Transition Probability Matrices Q(k) ---\n")
+cat("--- 2. Base-R: Consecutive Step Transition Probability Matrices Q(k) ---\n")
 panel_order <- panel[order(panel$id, panel$step), ]
 panel_order$prev_state <- ave(as.character(panel_order$state), panel_order$id, FUN = function(x) c(NA, x[-length(x)]))
 

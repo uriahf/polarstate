@@ -57,16 +57,27 @@ pairs_complete <- build_start_stop(panel_complete, 3)
 fit_comp <- survfit(Surv(tstart, tstop, event) ~ 1, data = pairs_complete, id = id, istate = from)
 sfit_comp <- summary(fit_comp)
 
-actual_pstate_comp <- sfit_comp$pstate
+# Explicit time and state dimension alignment and verification
+actual_times <- sfit_comp$time
+actual_states <- fit_comp$states
+
+stopifnot(identical(actual_times, c(1, 2)))
+stopifnot(identical(actual_states, c("1", "2", "3")))
+stopifnot(all(is.finite(sfit_comp$pstate)))
+stopifnot(identical(dim(sfit_comp$pstate), c(2L, 3L)))
+
+actual_pstate_comp <- sfit_comp$pstate[order(actual_times), order(as.numeric(actual_states))]
 expected_pstate_comp <- matrix(c(0.25, 0.50, 0.25, 0.25, 0.50, 0.25), nrow = 2, byrow = TRUE)
 
 max_diff_comp <- max(abs(actual_pstate_comp - expected_pstate_comp))
 
+cat(sprintf("Verified Times: %s\n", paste(actual_times, collapse = ", ")))
+cat(sprintf("Verified States: %s\n", paste(actual_states, collapse = ", ")))
 cat(sprintf("Computed Complete Panel Max Absolute Discrepancy: %e\n", max_diff_comp))
 
 # Executable numerical assertion
 stopifnot(max_diff_comp < 1e-12)
-cat("[ASSERTION PASSED] R survival complete panel predictions match expected (max_diff < 1e-12).\n\n")
+cat("[ASSERTION PASSED] R survival complete panel predictions match expected with verified time/state alignment (max_diff < 1e-12).\n\n")
 
 # -----------------------------------------------------------------
 # 2. Terminal Dropout Fixture Validation
@@ -82,7 +93,14 @@ pairs_dropout <- build_start_stop(panel_dropout, 2)
 fit_drop <- survfit(Surv(tstart, tstop, event) ~ 1, data = pairs_dropout, id = id, istate = from)
 sfit_drop <- summary(fit_drop)
 
-actual_pstate_drop <- sfit_drop$pstate
+actual_drop_times <- sfit_drop$time
+actual_drop_states <- fit_drop$states
+
+stopifnot(identical(actual_drop_times, c(1, 2)))
+stopifnot(identical(actual_drop_states, c("1", "2")))
+stopifnot(all(is.finite(sfit_drop$pstate)))
+
+actual_pstate_drop <- sfit_drop$pstate[order(actual_drop_times), order(as.numeric(actual_drop_states))]
 polarstate_pstate_drop <- matrix(c(7/12, 5/12, 5/24, 19/24), nrow = 2, byrow = TRUE)
 
 diff_drop <- abs(actual_pstate_drop - polarstate_pstate_drop)

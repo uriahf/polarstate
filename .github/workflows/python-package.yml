@@ -33,12 +33,12 @@ jobs:
       - name: Install R and R packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y r-base r-cran-survival r-cran-hmisc
+          sudo apt-get install -y r-base r-cran-survival
 
       - name: Run R survival validation
         run: Rscript tests/r_validation_survival.R
 
-      - name: Run R Hmisc validation
+      - name: Run Base-R empirical validation
         run: Rscript tests/r_validation_hmisc.R
 
   publish:
