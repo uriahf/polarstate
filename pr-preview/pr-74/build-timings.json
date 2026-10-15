@@ -1,55 +1,55 @@
 {
-  "build_time": "2026-10-15T06:52:10Z",
-  "total_seconds": 14.138,
+  "build_time": "2026-10-15T07:04:48Z",
+  "total_seconds": 11.833,
   "pages": [
     {
       "page": "user-guide/recipes.qmd",
-      "seconds": 6.44,
+      "seconds": 4.634,
       "frozen": true
     },
     {
       "page": "index.qmd",
-      "seconds": 3.032,
-      "frozen": false
-    },
-    {
-      "page": "user-guide/package-comparisons.qmd",
-      "seconds": 0.887,
+      "seconds": 2.79,
       "frozen": false
     },
     {
       "page": "package-info.qmd",
-      "seconds": 0.81,
+      "seconds": 0.855,
       "frozen": false
     },
     {
-      "page": "user-guide/how-it-works.qmd",
-      "seconds": 0.581,
-      "frozen": false
-    },
-    {
-      "page": "reference/prepare_event_table.qmd",
-      "seconds": 0.506,
-      "frozen": false
-    },
-    {
-      "page": "reference/predict_aj_estimates.qmd",
-      "seconds": 0.505,
-      "frozen": false
-    },
-    {
-      "page": "user-guide/assumptions-limitations.qmd",
-      "seconds": 0.492,
-      "frozen": false
-    },
-    {
-      "page": "skills.qmd",
-      "seconds": 0.46,
+      "page": "user-guide/package-comparisons.qmd",
+      "seconds": 0.739,
       "frozen": false
     },
     {
       "page": "reference/index.qmd",
-      "seconds": 0.425,
+      "seconds": 0.713,
+      "frozen": false
+    },
+    {
+      "page": "user-guide/how-it-works.qmd",
+      "seconds": 0.461,
+      "frozen": false
+    },
+    {
+      "page": "reference/predict_aj_estimates.qmd",
+      "seconds": 0.427,
+      "frozen": false
+    },
+    {
+      "page": "reference/prepare_event_table.qmd",
+      "seconds": 0.411,
+      "frozen": false
+    },
+    {
+      "page": "user-guide/assumptions-limitations.qmd",
+      "seconds": 0.402,
+      "frozen": false
+    },
+    {
+      "page": "skills.qmd",
+      "seconds": 0.401,
       "frozen": false
     }
   ]
