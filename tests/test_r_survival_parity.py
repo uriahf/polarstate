@@ -4,7 +4,8 @@ Provenance & Metadata:
 - R Version: R version 4.3.3 (2024-02-29)
 - Package Version: survival 3.5-8
 - Conversion Convention: Discrete-step counting process start-stop (tstart, tstop, event)
-  where events occur at interval ends (tstop). Unchanged states are assigned (censor) status.
+  where events occur at interval ends (tstop). Unchanged states and baseline-only subjects
+  (censored at tstop = step + 0.5) are assigned (censor) status.
   Initial state distribution p0 reflects the full original baseline cohort at min(step).
 - Audit Commit SHA: 8c2cacd05f7d02b27958ee16c95efaeae7956096
 - Target Absolute Tolerance: 1e-10
@@ -43,9 +44,11 @@ PARITY_FIXTURES: list[dict[str, Any]] = [
             [3, 0],
             [2, 1],
         ],
-        "ref_n_event": [
-            [0, 1],
-            [0, 1],
+        "ref_directed_transitions": [
+            {"step": 1, "from": 1, "to": 2, "count": 1},
+            {"step": 1, "from": 2, "to": 1, "count": 0},
+            {"step": 2, "from": 1, "to": 2, "count": 1},
+            {"step": 2, "from": 2, "to": 1, "count": 0},
         ],
         "ref_pstate": [
             [2 / 3, 1 / 3],
@@ -69,9 +72,19 @@ PARITY_FIXTURES: list[dict[str, Any]] = [
             [2, 1, 1],
             [1, 2, 1],
         ],
-        "ref_n_event": [
-            [0, 2, 1],
-            [1, 2, 1],
+        "ref_directed_transitions": [
+            {"step": 1, "from": 1, "to": 2, "count": 1},
+            {"step": 1, "from": 1, "to": 3, "count": 0},
+            {"step": 1, "from": 2, "to": 1, "count": 0},
+            {"step": 1, "from": 2, "to": 3, "count": 1},
+            {"step": 1, "from": 3, "to": 1, "count": 0},
+            {"step": 1, "from": 3, "to": 2, "count": 1},
+            {"step": 2, "from": 1, "to": 2, "count": 1},
+            {"step": 2, "from": 1, "to": 3, "count": 0},
+            {"step": 2, "from": 2, "to": 1, "count": 1},
+            {"step": 2, "from": 2, "to": 3, "count": 1},
+            {"step": 2, "from": 3, "to": 1, "count": 0},
+            {"step": 2, "from": 3, "to": 2, "count": 1},
         ],
         "ref_pstate": [
             [0.25, 0.5, 0.25],
@@ -127,9 +140,19 @@ PARITY_FIXTURES: list[dict[str, Any]] = [
             [2, 2, 1],
             [2, 2, 1],
         ],
-        "ref_n_event": [
-            [1, 1, 1],
-            [1, 1, 2],
+        "ref_directed_transitions": [
+            {"step": 1, "from": "A", "to": "B", "count": 1},
+            {"step": 1, "from": "A", "to": "C", "count": 0},
+            {"step": 1, "from": "B", "to": "A", "count": 0},
+            {"step": 1, "from": "B", "to": "C", "count": 1},
+            {"step": 1, "from": "C", "to": "A", "count": 1},
+            {"step": 1, "from": "C", "to": "B", "count": 0},
+            {"step": 2, "from": "A", "to": "B", "count": 1},
+            {"step": 2, "from": "A", "to": "C", "count": 1},
+            {"step": 2, "from": "B", "to": "A", "count": 1},
+            {"step": 2, "from": "B", "to": "C", "count": 1},
+            {"step": 2, "from": "C", "to": "A", "count": 0},
+            {"step": 2, "from": "C", "to": "B", "count": 0},
         ],
         "ref_pstate": [
             [0.4, 0.4, 0.2],
@@ -153,9 +176,11 @@ PARITY_FIXTURES: list[dict[str, Any]] = [
             [2, 0],
             [1, 1],
         ],
-        "ref_n_event": [
-            [0, 1],
-            [1, 1],
+        "ref_directed_transitions": [
+            {"step": 2, "from": "H", "to": "S", "count": 1},
+            {"step": 2, "from": "S", "to": "H", "count": 0},
+            {"step": 3, "from": "H", "to": "S", "count": 1},
+            {"step": 3, "from": "S", "to": "H", "count": 1},
         ],
         "ref_pstate": [
             [0.5, 0.5],
@@ -178,8 +203,13 @@ PARITY_FIXTURES: list[dict[str, Any]] = [
         "ref_n_risk": [
             [3, 0, 0],
         ],
-        "ref_n_event": [
-            [0, 1, 2],
+        "ref_directed_transitions": [
+            {"step": 2, "from": 1, "to": 2, "count": 1},
+            {"step": 2, "from": 1, "to": 3, "count": 2},
+            {"step": 2, "from": 2, "to": 1, "count": 0},
+            {"step": 2, "from": 2, "to": 3, "count": 0},
+            {"step": 2, "from": 3, "to": 1, "count": 0},
+            {"step": 2, "from": 3, "to": 2, "count": 0},
         ],
         "ref_pstate": [
             [0.0, 1 / 3, 2 / 3],
@@ -217,13 +247,39 @@ PARITY_FIXTURES: list[dict[str, Any]] = [
             [3, 2],
             [1, 2],
         ],
-        "ref_n_event": [
-            [1, 1],
-            [1, 1],
+        "ref_directed_transitions": [
+            {"step": 1, "from": 1, "to": 2, "count": 1},
+            {"step": 1, "from": 2, "to": 1, "count": 1},
+            {"step": 2, "from": 1, "to": 2, "count": 1},
+            {"step": 2, "from": 2, "to": 1, "count": 1},
         ],
         "ref_pstate": [
             [7 / 12, 5 / 12],
             [5 / 24, 19 / 24],
+        ],
+    },
+    {
+        "name": "9. Minimal Estimable Baseline-Only Subject Diagnostic",
+        "observations": pl.DataFrame(
+            {
+                "id": ["A", "B", "B", "C", "C"],
+                "step": [0, 0, 1, 0, 1],
+                "reals": [1, 1, 2, 2, 2],
+            }
+        ),
+        "states": [1, 2],
+        "is_complete_panel": False,
+        "ref_initial_p0": [2 / 3, 1 / 3],
+        "ref_steps": [1],
+        "ref_n_risk": [
+            [1, 1],
+        ],
+        "ref_directed_transitions": [
+            {"step": 1, "from": 1, "to": 2, "count": 1},
+            {"step": 1, "from": 2, "to": 1, "count": 0},
+        ],
+        "ref_pstate": [
+            [0.0, 1.0],
         ],
     },
 ]
@@ -237,7 +293,7 @@ def test_r_survival_parity_and_invariants(fixture: dict[str, Any]) -> None:
     ref_initial_p0: list[float] = fixture["ref_initial_p0"]
     ref_steps: list[int] = fixture["ref_steps"]
     ref_n_risk: list[list[int]] = fixture["ref_n_risk"]
-    ref_n_event: list[list[int]] = fixture["ref_n_event"]
+    ref_directed_transitions: list[dict[str, Any]] = fixture["ref_directed_transitions"]
     ref_pstate: list[list[float]] = fixture["ref_pstate"]
 
     table = prepare_transition_table_steps(obs, state_order=states)
@@ -262,22 +318,23 @@ def test_r_survival_parity_and_invariants(fixture: dict[str, Any]) -> None:
                 f"got {calc_risk}, expected {ref_risk}"
             )
 
-    # 3. Off-diagonal transition counts parity against R survfitms$n.event
-    # R's n.event matrix reports counts of transitions into destination state (excluding censor events)
-    for s_idx, step_val in enumerate(ref_steps):
-        for to_idx, to_st in enumerate(states):
-            ref_events = ref_n_event[s_idx][to_idx]
-            # Off-diagonal transitions to `to_st` at `step_val`
-            sub = trans_df.filter(
-                (pl.col("step") == step_val)
-                & (pl.col("from_state") != to_st)
-                & (pl.col("to_state") == to_st)
-            )
-            calc_events = sub["count"].sum() if sub.height > 0 else 0
-            assert calc_events == ref_events, (
-                f"Off-diagonal transition count mismatch at step {step_val}, destination {to_st}: "
-                f"got {calc_events}, expected {ref_events}"
-            )
+    # 3. Directed off-diagonal transition counts parity (step, from_state, to_state)
+    for trans_ref in ref_directed_transitions:
+        step_val = trans_ref["step"]
+        from_st = trans_ref["from"]
+        to_st = trans_ref["to"]
+        expected_cnt = trans_ref["count"]
+
+        sub = trans_df.filter(
+            (pl.col("step") == step_val)
+            & (pl.col("from_state") == from_st)
+            & (pl.col("to_state") == to_st)
+        )
+        calc_cnt = sub["count"].item() if sub.height > 0 else 0
+        assert calc_cnt == expected_cnt, (
+            f"Directed transition count mismatch at step {step_val}, "
+            f"from {from_st} to {to_st}: got {calc_cnt}, expected {expected_cnt}"
+        )
 
     # 4. AJ State Occupancy parity against R survfit pstate (at 1e-10 tolerance)
     estimates = predict_aj_estimates(table)
@@ -364,16 +421,6 @@ def test_r_survival_parity_and_invariants(fixture: dict[str, Any]) -> None:
 @pytest.mark.parametrize(
     ("fixture_name", "obs"),
     [
-        (
-            "9. Minimal Baseline-only Subject Diagnostic",
-            pl.DataFrame(
-                {
-                    "id": [1, 1, 2],
-                    "step": [0, 1, 0],
-                    "reals": [1, 2, 2],
-                }
-            ),
-        ),
         (
             "Terminal Dropout With Positive Occupancy and Zero Transitions",
             pl.DataFrame(
