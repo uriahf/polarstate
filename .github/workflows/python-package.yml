@@ -24,6 +24,23 @@ jobs:
       - name: Run tests using uv
         run: uv run pytest tests
 
+  r-validation:
+    name: R Statistical Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install R and R packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y r-base r-cran-survival r-cran-hmisc
+
+      - name: Run R survival validation
+        run: Rscript tests/r_validation_survival.R
+
+      - name: Run R Hmisc validation
+        run: Rscript tests/r_validation_hmisc.R
+
   publish:
     name: Upload release to PyPI
     runs-on: ubuntu-latest

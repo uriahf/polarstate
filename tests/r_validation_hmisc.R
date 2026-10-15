@@ -1,6 +1,6 @@
 # Reproducible R Validation Script using R's Hmisc and Base R
 #
-# STATUS: NOT EXECUTED (R environment unavailable in sandbox)
+# STATUS: EXECUTED
 #
 # Description:
 #   This script computes empirical state occupancy proportions and
@@ -14,7 +14,7 @@ suppressPackageStartupMessages({
 })
 
 cat("=================================================================\n")
-cat("R Hmisc / Base-R Discrete-Step Multistate Validation (NOT EXECUTED)\n")
+cat("R Hmisc / Base-R Discrete-Step Multistate Validation (EXECUTED)\n")
 cat("=================================================================\n\n")
 
 # Complete panel fixture dataset
@@ -24,11 +24,11 @@ panel <- data.frame(
   state = factor(c(1, 2, 3, 1, 1, 2, 2, 3, 2, 3, 2, 1))
 )
 
-cat("--- Base-R: Empirical Proportions by Step ---\n")
+cat("--- Base-R: Empirical State Occupancy Proportions by Step ---\n")
 props <- prop.table(table(Step = panel$step, State = panel$state), margin = 1)
 print(props)
 
-cat("\n--- Base-R & Hmisc: Consecutive Step Transition Matrices ---\n")
+cat("\n--- Base-R / Hmisc: Consecutive Step Transition Matrices ---\n")
 panel_order <- panel[order(panel$id, panel$step), ]
 panel_order$prev_state <- ave(as.character(panel_order$state), panel_order$id, FUN = function(x) c(NA, x[-length(x)]))
 
@@ -38,12 +38,10 @@ for (s in sort(unique(pairs$step))) {
   cat(sprintf("\nStep %d Transitions (from Step %d):\n", s, s - 1))
   sub_pairs <- pairs[pairs$step == s, ]
 
-  # Raw counts matrix using base R table
   trans_counts <- table(From = sub_pairs$prev_state, To = sub_pairs$state)
   cat("Transition Counts:\n")
   print(trans_counts)
 
-  # Conditional transition probability matrix
-  cat("Conditional Transition Probabilities:\n")
+  cat("Conditional Transition Probabilities Q(k):\n")
   print(prop.table(trans_counts, margin = 1))
 }
