@@ -27,7 +27,7 @@ Compute an inspectable Aalen-Johansen event table from time-to-event observation
 
 Return state-occupancy estimates at requested time horizons.
 
-- `predict_aj_estimates`: Evaluate state-occupancy probabilities at fixed time horizons
+- `predict_aj_estimates`: Evaluate state-occupancy probabilities at fixed time horizons or scheduled steps
 
 ## Resources
 

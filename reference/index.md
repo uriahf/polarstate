@@ -21,4 +21,4 @@ Return state-occupancy estimates at requested time horizons.
 
 
 [predict_aj_estimates()](predict_aj_estimates.md#polarstate.predict_aj_estimates)  
-Evaluate state-occupancy probabilities at fixed time horizons.
+Evaluate state-occupancy probabilities at fixed time horizons or scheduled steps.

@@ -14,4 +14,4 @@
 #### Time-horizon estimates
 > Return state-occupancy estimates at requested time horizons.
 
-- [predict_aj_estimates](https://uriahf.github.io/polarstate/reference/predict_aj_estimates.html): Evaluate state-occupancy probabilities at fixed time horizons
+- [predict_aj_estimates](https://uriahf.github.io/polarstate/reference/predict_aj_estimates.html): Evaluate state-occupancy probabilities at fixed time horizons or scheduled steps
