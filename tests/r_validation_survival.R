@@ -4,13 +4,20 @@
 #
 # Description:
 #   This script converts a discrete-step panel dataset into a counting-process
-#   start-stop format (tstart, tstop, status) suitable for survival::survfit().
+#   start-stop format (tstart, tstop, event) suitable for survival::survfit().
 #
 #   Survival Event History Convention for Discrete Steps:
-#     - Explicit censor/no-event status is defined as level 1: "(censor)".
-#     - Transitions to a different state are coded as destination state events.
-#     - Unchanged consecutive states are retained with status = "(censor)".
+#     - Level 1 is explicit censor/no-event status: "(censor)".
+#     - Destination state events are emitted only for real state changes.
+#     - Unchanged consecutive states are retained with event = "(censor)".
 #     - Terminal dropouts end observation after the last complete step.
+#
+#   Estimand Comparison Note:
+#     Standard counting-process survfit risk sets include all subjects under
+#     observation in interval (tstart, tstop]. In contrast, the available-pair
+#     discrete estimator excludes subjects dropping out before step k.
+#     If dropout occurs, risk sets and transition estimates between counting process
+#     survfit and available-pair estimators can diverge at the first dropout step.
 #
 # Requirements:
 #   install.packages("survival")
@@ -33,7 +40,6 @@ panel <- data.frame(
 build_multistate_start_stop <- function(df) {
   df <- df[order(df$id, df$step), ]
 
-  # Lag step and state per subject
   df$prev_step <- ave(df$step, df$id, FUN = function(x) c(NA, x[-length(x)]))
   df$prev_state <- ave(as.character(df$state), df$id, FUN = function(x) c(NA, x[-length(x)]))
 
@@ -41,11 +47,9 @@ build_multistate_start_stop <- function(df) {
   pairs$tstart <- pairs$prev_step
   pairs$tstop <- pairs$step
 
-  # Event status: level 1 is "(censor)" for no change, followed by state levels
   state_levels <- levels(df$state)
   all_levels <- c("(censor)", state_levels)
 
-  # Destination state event iff state changes; otherwise "(censor)"
   event_status <- ifelse(as.character(pairs$state) != pairs$prev_state,
                          as.character(pairs$state),
                          "(censor)")
@@ -58,17 +62,28 @@ build_multistate_start_stop <- function(df) {
 
 start_stop_df <- build_multistate_start_stop(panel)
 
-# Fit Aalen-Johansen multistate model with initial states (istate)
 fit <- survfit(Surv(tstart, tstop, event) ~ 1, data = start_stop_df, id = id, istate = from)
 
-cat("--- Summary Table: State Occupancy Probabilities (pstate) ---\n")
-print(fit$pstate)
+# Structured Machine-Readable Reference Export Format:
+# Build long-format table mapping time/step, state, pstate, n.risk, n.event, n.censor
+states <- colnames(fit$pstate)
+times <- fit$time
 
-cat("\n--- Summary Table: At-Risk Denominators (n.risk) ---\n")
-print(fit$n.risk)
+results_list <- list()
+for (i in seq_along(times)) {
+  for (j in seq_along(states)) {
+    results_list[[length(results_list) + 1]] <- data.frame(
+      time = times[i],
+      state = states[j],
+      pstate = fit$pstate[i, j],
+      n_risk = if (is.matrix(fit$n.risk)) fit$n.risk[i, j] else fit$n.risk[i],
+      n_event = if (is.matrix(fit$n.event)) fit$n.event[i, j] else fit$n.event[i],
+      n_censor = if (is.matrix(fit$n.censor)) fit$n.censor[i, j] else fit$n.censor[i]
+    )
+  }
+}
 
-cat("\n--- Summary Table: Event Counts (n.event) ---\n")
-print(fit$n.event)
+structured_results <- do.call(rbind, results_list)
 
-cat("\n--- Summary Table: Censoring Counts (n.censor) ---\n")
-print(fit$n.censor)
+cat("--- Machine-Readable Reference Table (Step / State Aligned) ---\n")
+print(structured_results, row.names = FALSE)

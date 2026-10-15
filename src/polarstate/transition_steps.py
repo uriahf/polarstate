@@ -17,12 +17,18 @@ class TransitionTableSteps(NamedTuple):
         Initial state occupancy probabilities at baseline.
     transitions : pl.DataFrame
         Aggregated transition counts between consecutive steps.
+    step_dtype : pl.DataType, optional
+        Data type of the original step column.
+    state_dtype : pl.DataType, optional
+        Data type of the original state column.
     """
 
     steps: tuple
     states: tuple
     initial: tuple
     transitions: pl.DataFrame
+    step_dtype: Any = pl.Int64
+    state_dtype: Any = pl.String
 
 
 def prepare_transition_table_steps(
@@ -52,7 +58,7 @@ def prepare_transition_table_steps(
     -------
     TransitionTableSteps
         Named tuple containing observed steps grid, ordered states, baseline occupancy probabilities,
-        and aggregated transition counts.
+        aggregated transition counts, and original column data types.
 
     Raises
     ------
@@ -82,6 +88,9 @@ def prepare_transition_table_steps(
     missing = required - set(observations.columns)
     if missing:
         raise ValueError(f"Missing columns: {sorted(missing)}")
+
+    step_dt = observations.schema[step_col]
+    state_dt = observations.schema[state_col]
 
     df = observations.select(id_col, step_col, state_col)
 
@@ -165,6 +174,8 @@ def prepare_transition_table_steps(
         states=states,
         initial=initial,
         transitions=transitions,
+        step_dtype=step_dt,
+        state_dtype=state_dt,
     )
 
 
@@ -178,7 +189,7 @@ def _predict_transition_steps(
     n = len(states)
 
     if horizons is None:
-        requested = list(steps)
+        requested = sorted(steps)
     else:
         if not isinstance(horizons, pl.Series):
             raise TypeError("fixed_time_horizons must be a Polars Series")
@@ -189,10 +200,11 @@ def _predict_transition_steps(
         if horizons.null_count() > 0:
             raise ValueError("fixed_time_horizons must not contain null values")
 
-        requested = horizons.to_list()
+        requested_list = horizons.to_list()
         step_set = set(steps)
-        if any(s not in step_set for s in requested):
+        if any(s not in step_set for s in requested_list):
             raise ValueError("fixed_time_horizons must contain observed integer steps")
+        requested = sorted(set(requested_list))
 
     index = {state: i for i, state in enumerate(states)}
 
@@ -235,6 +247,7 @@ def _predict_transition_steps(
             "step": step,
             "state": state,
             "state_occupancy_probability": estimates[step][i],
+            "_state_rank": i,
         }
         for step in requested
         for i, state in enumerate(states)
@@ -242,12 +255,12 @@ def _predict_transition_steps(
 
     res_df = pl.DataFrame(records)
     if not res_df.is_empty():
-        # Schema conversion if needed
-        step_dtype = (
-            table.transitions.schema["step"]
-            if table.transitions.height > 0
-            else pl.Int64
-        )
-        res_df = res_df.with_columns(pl.col("step").cast(step_dtype))
+        step_dt = getattr(table, "step_dtype", pl.Int64)
+        state_dt = getattr(table, "state_dtype", None)
 
-    return res_df
+        res_df = res_df.sort("step", "_state_rank").drop("_state_rank")
+        res_df = res_df.with_columns(pl.col("step").cast(step_dt))
+        if state_dt is not None:
+            res_df = res_df.with_columns(pl.col("state").cast(state_dt))
+
+    return res_df.select("step", "state", "state_occupancy_probability")

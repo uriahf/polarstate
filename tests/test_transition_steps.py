@@ -42,7 +42,6 @@ def test_exact_complete_panel_fixture() -> None:
         assert abs(p_est - p_exp) < 1e-12
 
     # Assert transition counts
-    # Step 1 transitions: (1->2:1, 1->1:1), (2->3:1), (3->2:1)
     trans_s1 = table.transitions.filter(pl.col("step") == 1)
     c_11 = trans_s1.filter((pl.col("from_state") == 1) & (pl.col("to_state") == 1))[
         "count"
@@ -62,7 +61,7 @@ def test_exact_complete_panel_fixture() -> None:
     estimates = predict_aj_estimates(table)
 
     def get_pi(step: int) -> tuple[float, float, float]:
-        df_s = estimates.filter(pl.col("step") == step).sort("state")
+        df_s = estimates.filter(pl.col("step") == step)
         return tuple(df_s["state_occupancy_probability"].to_list())
 
     pi0 = get_pi(0)
@@ -104,12 +103,6 @@ def test_exact_estimable_terminal_dropout_fixture() -> None:
     pi1 = (7/12, 5/12)
     Q2 = [[0, 1], [1/2, 1/2]]
     pi2 = (5/24, 19/24)
-
-    Note on Statistical Validity:
-    The available-pair complete-interval estimator computes transition probabilities among subjects
-    observed across consecutive steps. This estimator is valid under the assumption that dropout/censoring
-    between step k-1 and step k is non-informative with respect to transitions conditional on state at step k-1.
-    It diverges from raw unadjusted observed-case proportions at step 2 (1/3, 2/3), which suffer from loss to follow-up bias.
     """
     observations = pl.DataFrame(
         {
@@ -138,14 +131,13 @@ def test_exact_estimable_terminal_dropout_fixture() -> None:
     assert table.steps == (0, 1, 2)
     assert table.states == (1, 2)
 
-    # pi(0)
     for p_est, p_exp in zip(table.initial, (1 / 2, 1 / 2)):
         assert abs(p_est - p_exp) < 1e-12
 
     estimates = predict_aj_estimates(table)
 
     def get_pi(step: int) -> tuple[float, float]:
-        df_s = estimates.filter(pl.col("step") == step).sort("state")
+        df_s = estimates.filter(pl.col("step") == step)
         return tuple(df_s["state_occupancy_probability"].to_list())
 
     pi0 = get_pi(0)
@@ -157,9 +149,66 @@ def test_exact_estimable_terminal_dropout_fixture() -> None:
     assert all(abs(a - b) < 1e-12 for a, b in zip(pi2, (5 / 24, 19 / 24)))
 
     # Compare with raw unadjusted observed-case proportions at step 2
-    # At step 2, observed subjects are A(2), B(2), D(1) -> raw proportions: (1/3, 2/3) = (8/24, 16/24)
     raw_step2_state1 = 1 / 3
-    assert abs(pi2[0] - raw_step2_state1) > 0.05  # pi2[0] = 5/24 = 0.20833 != 0.33333
+    assert abs(pi2[0] - raw_step2_state1) > 0.05
+
+
+def test_out_of_order_horizons_and_output_sorting() -> None:
+    """Test passing unsorted horizons (e.g. [2, 0]) returns step-ascending sorted output."""
+    observations = pl.DataFrame(
+        {
+            "id": [1, 1, 1, 2, 2, 2],
+            "step": [0, 1, 2, 0, 1, 2],
+            "reals": [1, 2, 2, 1, 1, 2],
+        }
+    )
+
+    table = prepare_transition_table_steps(observations, state_order=[1, 2])
+
+    estimates = predict_aj_estimates(table, pl.Series([2, 0]))
+
+    # Step column must be sorted ascending [0, 0, 2, 2]
+    assert estimates["step"].to_list() == [0, 0, 2, 2]
+    assert estimates.filter(pl.col("step") == 0)["state"].to_list() == [1, 2]
+    assert estimates.filter(pl.col("step") == 2)["state"].to_list() == [1, 2]
+
+
+def test_preserved_dtypes_int32_and_categorical() -> None:
+    """Test that Int32 step dtypes and Categorical state dtypes are strictly preserved."""
+    observations = pl.DataFrame(
+        {
+            "id": [1, 1, 2, 2],
+            "step": pl.Series([0, 1, 0, 1], dtype=pl.Int32),
+            "reals": pl.Series(["A", "B", "A", "A"], dtype=pl.Categorical),
+        }
+    )
+
+    table = prepare_transition_table_steps(observations)
+    estimates = predict_aj_estimates(table)
+
+    assert estimates.schema["step"] == pl.Int32
+    assert estimates.schema["state"] == pl.Categorical
+
+
+def test_nonlexical_state_ordering() -> None:
+    """Test that custom non-lexical state_order is strictly preserved in row output order."""
+    observations = pl.DataFrame(
+        {
+            "id": [1, 1, 2, 2],
+            "step": [1, 2, 1, 2],
+            "reals": ["high", "low", "medium", "low"],
+        }
+    )
+
+    custom_order = ["medium", "high", "low"]
+    table = prepare_transition_table_steps(observations, state_order=custom_order)
+    estimates = predict_aj_estimates(table)
+
+    step1_states = estimates.filter(pl.col("step") == 1)["state"].to_list()
+    step2_states = estimates.filter(pl.col("step") == 2)["state"].to_list()
+
+    assert step1_states == custom_order
+    assert step2_states == custom_order
 
 
 def test_complete_panel_and_empirical_occupancy() -> None:
@@ -180,7 +229,6 @@ def test_complete_panel_and_empirical_occupancy() -> None:
 
     estimates = predict_aj_estimates(table)
 
-    # Direct Polars empirical group_by calculation
     N = observations["id"].n_unique()
     empirical = (
         observations.group_by("step", "reals")
@@ -188,7 +236,6 @@ def test_complete_panel_and_empirical_occupancy() -> None:
         .with_columns((pl.col("count") / N).alias("expected_prob"))
     )
 
-    # Check each step and state in estimates
     for row in estimates.iter_rows(named=True):
         step = row["step"]
         state = row["state"]
@@ -232,19 +279,16 @@ def test_stable_and_reversible_transitions() -> None:
     table = prepare_transition_table_steps(observations)
     estimates = predict_aj_estimates(table)
 
-    # Step 1: id 1=health, id 2=health -> P(health)=1.0, P(sick)=0.0
     s1_health = estimates.filter((pl.col("step") == 1) & (pl.col("state") == "health"))[
         "state_occupancy_probability"
     ].item()
     assert pytest.approx(s1_health) == 1.0
 
-    # Step 2: id 1->sick, id 2->health -> P(health)=0.5, P(sick)=0.5
     s2_health = estimates.filter((pl.col("step") == 2) & (pl.col("state") == "health"))[
         "state_occupancy_probability"
     ].item()
     assert pytest.approx(s2_health) == 0.5
 
-    # Step 3: id 1 sick->health, id 2 health->sick -> P(health)=0.5, P(sick)=0.5
     s3_health = estimates.filter((pl.col("step") == 3) & (pl.col("state") == "health"))[
         "state_occupancy_probability"
     ].item()
@@ -264,7 +308,6 @@ def test_nonadjacent_jumps_and_simultaneous_transitions() -> None:
     table = prepare_transition_table_steps(observations)
     estimates = predict_aj_estimates(table)
 
-    # Step 2: from state 1 at step 1 (3 subjects), 2 jumped to state 3, 1 moved to state 2
     s2_state2 = estimates.filter((pl.col("step") == 2) & (pl.col("state") == 2))[
         "state_occupancy_probability"
     ].item()
@@ -317,7 +360,7 @@ def test_intermittent_gaps_error() -> None:
     observations = pl.DataFrame(
         {
             "id": [1, 1, 2, 2],
-            "step": [1, 3, 1, 2],  # Subject 1 skips step 2
+            "step": [1, 3, 1, 2],
             "reals": [1, 2, 1, 2],
         }
     )
@@ -333,32 +376,13 @@ def test_duplicate_subject_step_error() -> None:
     observations = pl.DataFrame(
         {
             "id": [1, 1, 1, 2],
-            "step": [1, 1, 2, 1],  # Subject 1 has duplicate step 1
+            "step": [1, 1, 2, 1],
             "reals": [1, 2, 1, 2],
         }
     )
 
     with pytest.raises(ValueError, match="Duplicate subject-step observations"):
         prepare_transition_table_steps(observations)
-
-
-def test_explicit_nonlexical_state_ordering() -> None:
-    """Test custom state ordering."""
-    observations = pl.DataFrame(
-        {
-            "id": [1, 1, 2, 2],
-            "step": [1, 2, 1, 2],
-            "reals": ["high", "low", "medium", "low"],
-        }
-    )
-
-    custom_order = ["low", "medium", "high"]
-    table = prepare_transition_table_steps(observations, state_order=custom_order)
-    assert table.states == ("low", "medium", "high")
-
-    estimates = predict_aj_estimates(table)
-    step1_states = estimates.filter(pl.col("step") == 1)["state"].to_list()
-    assert step1_states == custom_order
 
 
 def test_invalid_state_order_error() -> None:
