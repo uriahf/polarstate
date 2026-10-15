@@ -432,4 +432,3 @@ def test_predict_aj_estimates() -> None:
     )
 
     assert_frame_equal(result, expected_output)
-

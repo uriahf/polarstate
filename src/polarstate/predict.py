@@ -1,5 +1,10 @@
 import polars as pl
 
+from .transition_steps import (
+    TransitionTableSteps,
+    _predict_transition_steps,
+)
+
 
 def _validate_prediction_inputs(
     event_table: pl.DataFrame,
@@ -21,8 +26,7 @@ def _validate_prediction_inputs(
     missing = required - set(event_table.columns)
     if missing:
         raise ValueError(
-            "event_table is missing required column(s): "
-            + ", ".join(sorted(missing))
+            "event_table is missing required column(s): " + ", ".join(sorted(missing))
         )
     if event_table.is_empty():
         raise ValueError("event_table must contain at least one row.")
@@ -39,66 +43,51 @@ def _validate_prediction_inputs(
 
 
 def predict_aj_estimates(
-    event_table: pl.DataFrame,
-    fixed_time_horizons: pl.Series,
+    event_table: pl.DataFrame | TransitionTableSteps,
+    fixed_time_horizons: pl.Series | None = None,
     full_event_table: bool = False,
 ) -> pl.DataFrame:
-    """Evaluate state-occupancy probabilities at fixed time horizons.
+    """Evaluate state-occupancy probabilities at fixed time horizons or scheduled steps.
 
     Parameters
     ----------
-    event_table : pl.DataFrame
-        Event table returned by ``prepare_event_table``.
-    fixed_time_horizons : pl.Series
-        Numeric horizons to evaluate. Horizons may be unsorted and need not
-        coincide with observed event times.
+    event_table : pl.DataFrame or TransitionTableSteps
+        Event table returned by ``prepare_event_table`` or transition table returned
+        by ``prepare_transition_table_steps``.
+    fixed_time_horizons : pl.Series, optional
+        Numeric horizons to evaluate for time-based event tables, or integer step horizons
+        for step transition tables. If omitted for step transition tables, occupancy for
+        all observed steps is returned.
     full_event_table : bool, default False
         If ``True``, append estimates at every observed event time. Use the
         ``estimate_origin`` column to distinguish those rows from requested
-        horizons.
+        horizons. Only supported for continuous event tables.
 
     Returns
     -------
     pl.DataFrame
-        Columns are ``times``, state-occupancy probabilities for states 0, 1,
-        and 2, and ``estimate_origin``. State 0 means no absorbing event by the
-        horizon. States 1 and 2 are the event of interest and optional
-        competing event. The probabilities sum to one up to floating-point
-        precision.
+        For competing risk event tables: columns are ``times``, state-occupancy probabilities for
+        states 0, 1, and 2, and ``estimate_origin``.
+        For discrete step transition tables: columns are ``step``, ``state``, and ``state_occupancy_probability``.
 
     Raises
     ------
     TypeError
-        If inputs are not the documented Polars types, horizons are not
-        numeric, or full_event_table is not boolean.
+        If inputs are not the documented Polars/polarstate types, horizons are not of
+        expected numeric/integer dtypes, or full_event_table is not boolean.
     ValueError
         If required event-table columns are missing, either input is empty,
-        or horizons contain null, non-finite, or negative values.
-
-    Notes
-    -----
-    Estimates are step functions. At a horizon between observed times, the
-    latest estimate at or before that horizon is returned. Horizons before
-    the first observed time receive probabilities ``(1, 0, 0)``.
-
-    Examples
-    --------
-    >>> import polars as pl
-    >>> from polarstate import prepare_event_table, predict_aj_estimates
-    >>> observations = pl.DataFrame(
-    ...     {"times": [2.0, 4.0, 5.0], "reals": [1, 0, 1]}
-    ... )
-    >>> table = prepare_event_table(observations)
-    >>> predict_aj_estimates(table, pl.Series([1.0, 3.0])).shape
-    (2, 5)
-
-    See Also
-    --------
-    prepare_event_table : Build the event table from subject-level data.
+        or horizons contain null, non-finite, invalid, or unobserved step values.
     """
+    if isinstance(event_table, TransitionTableSteps):
+        if full_event_table:
+            raise ValueError("full_event_table is not supported for step panels")
+        return _predict_transition_steps(event_table, fixed_time_horizons)
 
     _validate_prediction_inputs(
-        event_table, fixed_time_horizons, full_event_table
+        event_table,
+        fixed_time_horizons,
+        full_event_table,  # type: ignore[arg-type]
     )
 
     estimate_origin_enum = pl.Enum(["fixed_time_horizons", "event_table"])

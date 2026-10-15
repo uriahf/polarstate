@@ -318,4 +318,3 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
         .pipe(add_state_occupancy_probabilities_at_times_columns)
         .pipe(_add_legacy_transition_aliases)
     )
-
