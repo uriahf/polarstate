@@ -218,13 +218,14 @@ def _validate_observations(times_and_reals: pl.DataFrame) -> None:
             "times_and_reals is missing required column(s): "
             + ", ".join(sorted(missing))
         )
-    if times_and_reals.is_empty():
-        raise ValueError("times_and_reals must contain at least one observation.")
 
     if not times_and_reals.schema["times"].is_numeric():
         raise TypeError("The 'times' column must have a numeric dtype.")
     if not times_and_reals.schema["reals"].is_integer():
-        raise TypeError("The 'reals' column must have an integer dtype.")
+        if not times_and_reals.schema["reals"].is_numeric():
+            raise TypeError("The 'reals' column must contain integer-valued numeric codes.")
+        if times_and_reals.select((pl.col("reals") != pl.col("reals").round(0)).any()).item():
+            raise ValueError("The 'reals' column must contain integer-valued numeric codes.")
 
     if times_and_reals.select(pl.col("times").is_null().any()).item():
         raise ValueError("The 'times' column must not contain null values.")
@@ -306,6 +307,27 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     """
 
     _validate_observations(times_and_reals)
+
+    if times_and_reals.is_empty():
+        return pl.DataFrame(schema={
+            "times": pl.Float64,
+            "count_0": pl.Int64,
+            "count_1": pl.Int64,
+            "count_2": pl.Int64,
+            "events_at_times": pl.Int64,
+            "at_risk": pl.Int64,
+            "csh_1": pl.Float64,
+            "csh_2": pl.Float64,
+            "conditional_survival": pl.Float64,
+            "overall_survival": pl.Float64,
+            "previous_overall_survival": pl.Float64,
+            "transition_probabilities_to_1_at_times": pl.Float64,
+            "transition_probabilities_to_2_at_times": pl.Float64,
+            "state_occupancy_probability_1_at_times": pl.Float64,
+            "state_occupancy_probability_2_at_times": pl.Float64,
+            "trainsition_probabilities_to_1_at_times": pl.Float64,
+            "trainsition_probabilities_to_2_at_times": pl.Float64,
+        })
 
     return (
         times_and_reals.pipe(group_reals_by_times)
