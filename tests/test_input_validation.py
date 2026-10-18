@@ -62,3 +62,23 @@ def test_fractional_code_is_rejected() -> None:
         prepare_event_table(
             pl.DataFrame({"times": [1.0, 2.0], "reals": [0.0, 1.5]})
         )
+
+
+def test_nonempty_aj_reference_values_and_empty_schema() -> None:
+    observations = pl.DataFrame(
+        {"times": [1.0, 2.0, 3.0, 4.0], "reals": [1, 2, 0, 1]}
+    )
+    table = prepare_event_table(observations)
+    horizons = pl.Series([0.0, 1.0, 2.0, 4.0])
+    result = predict_aj_estimates(table, horizons)
+    assert result["state_occupancy_probability_1"].to_list() == pytest.approx(
+        [0.0, 0.25, 0.25, 0.75]
+    )
+    assert result["state_occupancy_probability_2"].to_list() == pytest.approx(
+        [0.0, 0.0, 0.25, 0.25]
+    )
+    empty = prepare_event_table(
+        pl.DataFrame(schema={"times": pl.Float64, "reals": pl.Int64})
+    )
+    assert empty.columns == table.columns
+    assert empty.schema == table.schema
