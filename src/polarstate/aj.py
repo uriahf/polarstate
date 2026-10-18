@@ -218,13 +218,10 @@ def _validate_observations(times_and_reals: pl.DataFrame) -> None:
             "times_and_reals is missing required column(s): "
             + ", ".join(sorted(missing))
         )
-    if times_and_reals.is_empty():
-        raise ValueError("times_and_reals must contain at least one observation.")
-
     if not times_and_reals.schema["times"].is_numeric():
         raise TypeError("The 'times' column must have a numeric dtype.")
-    if not times_and_reals.schema["reals"].is_integer():
-        raise TypeError("The 'reals' column must have an integer dtype.")
+    if not times_and_reals.schema["reals"].is_numeric():
+        raise TypeError("The 'reals' column must have a numeric dtype.")
 
     if times_and_reals.select(pl.col("times").is_null().any()).item():
         raise ValueError("The 'times' column must not contain null values.")
@@ -261,7 +258,7 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     ----------
     times_and_reals : pl.DataFrame
         Subject-level observations containing a numeric ``times`` column and
-        an integer ``reals`` column. Outcome code ``0`` means follow-up ended
+        a numeric ``reals`` column containing discrete event codes. Outcome code ``0`` means follow-up ended
         without an observed event (right-censoring), ``1`` means the event of
         interest, and optional ``2`` means a competing event. A simple event/censoring analysis uses only ``0`` and ``1``.
 
@@ -277,14 +274,17 @@ def prepare_event_table(times_and_reals: pl.DataFrame) -> pl.DataFrame:
     ------
     TypeError
         If the input is not a Polars DataFrame, times is not numeric, or
-        reals is not integer-valued.
+        reals is not numeric.
     ValueError
-        If required columns are missing, the input is empty, values are null,
+        If required columns are missing, values are null,
         times are non-finite or negative, or outcome codes are outside
         {0, 1, 2}.
 
     Notes
     -----
+    Empty input is supported for backward compatibility. Integer-valued
+    floating codes (0.0, 1.0, 2.0) are also accepted; other codes are rejected.
+
     Input rows need not be sorted. Extra columns are ignored. Duplicate times
     are allowed and are aggregated into a single event-table row.
 
