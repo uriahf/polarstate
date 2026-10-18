@@ -28,8 +28,6 @@ def _validate_prediction_inputs(
         raise ValueError(
             "event_table is missing required column(s): " + ", ".join(sorted(missing))
         )
-    if event_table.is_empty():
-        raise ValueError("event_table must contain at least one row.")
     if fixed_time_horizons.is_empty():
         raise ValueError("fixed_time_horizons must contain at least one value.")
     if not fixed_time_horizons.dtype.is_numeric():
